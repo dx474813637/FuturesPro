@@ -1,0 +1,3 @@
+- 本项目是用uniapp+vue3+vite的框架开发的h5和微信小程序项目
+- UI组件用的uview-plus和nutui-uniapp，主要是nutui-uniapp，组件库相对丰富以及细节完善，会用到uviewplus自带衍生的js工具库，组件互补。
+- h5主要结合微信公众号在微信浏览器下运行，其中需要用到微信付费订阅相关的功能
