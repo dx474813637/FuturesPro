@@ -7,11 +7,19 @@
 					<!-- <up-icon name="arrow-right" size="16" color="#ccc" ></up-icon> -->
 				</view>
 				<view class="u-flex u-flex-items-start">
-					<view class="u-flex u-flex-items-center  u-p-6 u-p-l-20 u-p-r-20 u-m-r-20 u-p-b-14" style="border-radius: 0px 10px 0 0; background-color: #f5f9fd;color: #21469F">
-						<view class="u-font-14 text-thin">生产商</view>
-						<!-- <view class="u-m-l-10 u-p-6" style="background-color: #e2e2e2;">
-							<up-icon name="arrow-right" size="10" ></up-icon>
-						</view> -->
+					<view class="u-flex u-flex-items-center  u-p-6 u-p-l-20 u-p-r-20 u-m-r-10 u-p-b-14" 
+						style="border-radius: 0px 10px 0 0; background-color: #f5f9fd;color: #21469F"
+						@click="showZf = false"
+					>
+						<up-icon name="star-fill" color="#ffb963"></up-icon>
+						<view class="u-font-14 text-thin u-m-l-6">生产商</view> 
+					</view>
+					<view class="u-flex u-flex-items-center  u-p-6 u-p-l-20 u-p-r-20 u-m-r-20 u-p-b-14" 
+						style="border-radius: 10px 10px 0 0; background-color: #fdf4f3;color: #21469F"
+						@click="showZf = true"
+					>
+						<nut-icon name="toupiao" font-class-name="custom-icon" class-prefix="custom-icon" size="14" custom-color="#ff292c" ></nut-icon>
+						<view class="u-font-14 text-thin u-m-l-6">近期涨幅</view> 
 					</view>
 					<view class="u-flex u-flex-items-center u-info-light-bg u-radius-20 text-base u-p-6 u-p-l-20 u-p-r-10">
 						<view class="u-font-14 text-thin">情报</view>
@@ -31,7 +39,45 @@
 			</view>
 			
 		</view>
-		<view class="scs-row u-flex box-border">
+		<view v-if="showZf" class="u-flex box-border u-flex-between" style="border-radius: 0 0 10px 10px; overflow: hidden;height: 50px">
+			<view class="u-p-10 u-error-light-bg u-text-center u-flex-1">
+				<view class="u-font-12 text-base u-m-b-10 ">近5天</view>
+				<view class="u-flex u-flex-items-center u-flex-center"> 
+					<view class="u-font-20 text-error">3.86%</view>
+				</view>
+			</view>
+			<view class="u-p-10 u-success-light-bg u-text-center u-flex-1">
+				<view class="u-font-12 text-base u-m-b-10 ">近10天</view>
+				<view class="u-flex u-flex-items-center u-flex-center"> 
+					<view class="u-font-20 u-success">103.86%</view>
+				</view>
+			</view>
+			<view class="u-p-10 u-info-light-bg u-text-center u-flex-1">
+				<view class="u-font-12 text-base u-m-b-10 ">近20天</view>
+				<view class="u-flex u-flex-items-center u-flex-center"> 
+					<view class="u-font-20 text-info">0%</view>
+				</view>
+			</view>
+			<view class="u-p-10 u-success-light-bg u-text-center u-flex-1">
+				<view class="u-font-12 text-base u-m-b-10 ">近30天</view>
+				<view class="u-flex u-flex-items-center u-flex-center"> 
+					<view class="u-font-20 u-success">103.86%</view>
+				</view>
+			</view>
+			<view class="u-p-10 u-error-light-bg u-text-center u-flex-1">
+				<view class="u-font-12 text-base u-m-b-10 ">近60天</view>
+				<view class="u-flex u-flex-items-center u-flex-center"> 
+					<view class="u-font-20 text-error">103.86%</view>
+				</view>
+			</view>
+			<view class="u-p-10 u-error-light-bg u-text-center u-flex-1">
+				<view class="u-font-12 text-base u-m-b-10 ">近90天</view>
+				<view class="u-flex u-flex-items-center u-flex-center"> 
+					<view class="u-font-20 text-error">103.86%</view>
+				</view>
+			</view>
+		</view>
+		<view class="scs-row u-flex u-flex-items-center box-border" v-else>
 			<scroll-view scroll-x class="main box-border" >
 				<view class="list u-flex u-flex-items-center u-p-15 u-p-l-20 u-p-r-20" :class="{'all': showAll}">
 					<view class="list-item tag">
@@ -51,25 +97,7 @@
 					</view> 
 					<view class="list-item tag">
 						<view>盛新锂能（002240）</view>
-					</view> 
-					<view class="list-item tag">
-						<view>天齐锂业（002466）</view>
-					</view> 
-					<view class="list-item tag">
-						<view>天华新能（300390）</view>
-					</view>  
-					<view class="list-item tag">
-						<view>赣锋锂业（002460）</view>
-					</view> 
-					<view class="list-item tag">
-						<view>盛新锂能（002240）</view>
-					</view> 
-					<view class="list-item tag">
-						<view>天齐锂业（002466）</view>
-					</view> 
-					<view class="list-item tag">
-						<view>天华新能（300390）</view>
-					</view>  
+					</view>   
 				</view>
 			</scroll-view>
 			<view class="main-right u-flex u-flex-items-center u-flex-center u-font-14 text-thin " @click="showAll = !showAll">
@@ -102,6 +130,7 @@
 	})
 	const emits = defineEmits(['cardClick'])
 	const showAll = ref(false)
+	const showZf = ref(false) 
 	function gotoDetail() {
 		return
 		base.handleGoto({
@@ -128,6 +157,7 @@
 	}
 	.scs-row {
 		width: 100%;
+		min-height: 50px;
 		background-color: #f5f9fd;
 		border-radius: 0 0 10px 10px;
 		.main {

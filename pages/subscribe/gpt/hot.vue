@@ -2,13 +2,13 @@
 	<view class="w u-flex-column"> 
 		<NavBar bgColor="#1777FF" title="2月26日热点选股" titleStyle="color: #fff" customColor="#fff" placeholder ></NavBar>
 		<view class="u-flex u-flex-between u-flex-items-center u-p-l-30 u-p-t-20 u-p-b-20 sub-w box-border">
-			<view class="u-flex u-flex-items-center text-white ">
-				<view>选股类型</view>
+			<view class="u-flex u-flex-items-center text-white " @click="handleChangeShow1(true)">
+				<view>选股模式</view>
 				<view class="u-m-l-6"> 
 					<up-icon name="arrow-down-fill" color="#fff" size="10"></up-icon>
 				</view>
 			</view>
-			<view class="u-flex u-flex-items-center text-white u-p-8 u-p-l-20 u-p-r-20" style="background-color: rgba(0,0,0,.15); border-radius: 14px 0 0 14px;">
+			<view @click="handleChangeShow3(true)" class="u-flex u-flex-items-center text-white u-p-8 u-p-l-20 u-p-r-20" style="background-color: rgba(0,0,0,.15); border-radius: 14px 0 0 14px;">
 				<up-icon name="file-text" color="#f8f8f8"></up-icon>
 				<view class="u-font-13 u-m-l-4 text-thin">使用指南</view>
 			</view>
@@ -35,8 +35,11 @@
 					@click="tabsEvent"	
 				>
 					<template #right>
-						<view class="u-flex u-flex-items-center u-p-l-20"  @click="$u.toast('插槽被点击')" > 
-							<nut-icon name="shaixuan-xianxing" font-class-name="custom-icon" class-prefix="custom-icon" size="18" ></nut-icon>
+						<view class="u-flex u-flex-items-center u-p-l-20"  @click="handleChangeShow2(true)" > 
+							<view style="position: relative;">
+								<nut-icon name="shaixuan-xianxing" font-class-name="custom-icon" class-prefix="custom-icon" size="18" ></nut-icon>
+								<up-badge type="error" isDot absolute :offset="[-1,-2]"></up-badge>
+							</view> 
 							<view class="u-font-14 text-base u-m-l-10">筛选</view>
 						</view>
 					</template>
@@ -68,12 +71,36 @@
 	</view>
 	<!-- <u-safe-bottom></u-safe-bottom>
 	<MenusBar></MenusBar> -->
+	<!-- 选股模式popup -->
+	<GptCatePopup
+		:show="gptCateShow"
+		title="选股模式"  
+		mode="1"
+		:onUpdateShow="handleChangeShow1"
+	></GptCatePopup>
+	<!-- 筛选popup -->
+	<GptHotFilterPopup
+		:show="gptHotFilterShow"
+		title="热点商品搜索"   
+		:onUpdateShow="handleChangeShow2"
+		@submit="submitFilterEvent"
+	></GptHotFilterPopup>
+	<!-- 使用指南popup -->
+	<GptHotHelpPopup
+		:show="gptHotHelpShow"
+		title="热点选股使用指南"   
+		:onUpdateShow="handleChangeShow3"
+	></GptHotHelpPopup>
 </template>
 
 <script setup> 
 	import {useCateStore, baseStore} from '@/stores/base.js'  
 	const base = baseStore() 
 	const {themeColor} = toRefs(base)
+	const gptCateShow = ref(false)
+	const gptHotFilterShow = ref(false) 
+	const gptHotHelpShow = ref(false)
+	
 	const tabValue = ref('5')
 	const tabIndex = computed(() => {
 		tabslist.value.findIndex(ele => ele.value == tabValue.value)
@@ -136,7 +163,23 @@
 		{ title: '涨幅', key: 'age' }
 	])
 	
+	onLoad(() => { 
+		
+	}) 
 	
+	function handleChangeShow1(data) {
+		gptCateShow.value = data
+	} 
+	function handleChangeShow2(data) {
+		gptHotFilterShow.value = data
+	}
+	function handleChangeShow3(data) {
+		gptHotHelpShow.value = data
+	}
+	function submitFilterEvent(data) {
+		console.log(data)
+		handleChangeShow2(false)
+	}
 	function tabsEvent (obj) { 
 		if(obj.disabled) {
 			messageManager.showText('敬请期待'); 
