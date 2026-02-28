@@ -12,7 +12,12 @@
  * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
  */
 @import 'uview-plus/theme.scss';
+@import "nutui-uniapp/styles/variables.scss";
 /* 颜色变量 */
+$u-primary: #1576E8;
+$primary-color: #1576E8; 
+$u-error: #F12E24; 
+
 $page-bg: #1d2237;
 $page-bg2: #f8f8f8;
 $page-text-sub: #5d6376;
@@ -96,5 +101,3 @@ $uni-color-subtitle: #555555; // 二级标题颜色
 $uni-font-size-subtitle:26px;
 $uni-color-paragraph: #3F536E; // 文章段落颜色
 $uni-font-size-paragraph:15px;
-
-@import "nutui-uniapp/styles/variables.scss";

@@ -1,11 +1,11 @@
 <template>
-	<view class="w u-flex-column"> 
-		<NavBar bgColor="#1777FF" title="2月26日热点选股" titleStyle="color: #fff" customColor="#fff" placeholder ></NavBar>
+	<view class="w u-flex-column box-border"> 
+		<NavBar :bgColor="themeColor" title="2月26日热点选股" titleStyle="color: #fff" customColor="#fff" placeholder ></NavBar>
 		<view class="u-flex u-flex-between u-flex-items-center u-p-l-30 u-p-t-20 u-p-b-20 sub-w box-border">
 			<view class="u-flex u-flex-items-center text-white " @click="handleChangeShow1(true)">
 				<view>选股模式</view>
 				<view class="u-m-l-6"> 
-					<up-icon name="arrow-down-fill" color="#fff" size="10"></up-icon>
+					<up-icon name="list-dot" color="#fff" size="18"></up-icon>
 				</view>
 			</view>
 			<view @click="handleChangeShow3(true)" class="u-flex u-flex-items-center text-white u-p-8 u-p-l-20 u-p-r-20" style="background-color: rgba(0,0,0,.15); border-radius: 14px 0 0 14px;">
@@ -36,11 +36,11 @@
 				>
 					<template #right>
 						<view class="u-flex u-flex-items-center u-p-l-20"  @click="handleChangeShow2(true)" > 
-							<view style="position: relative;">
+							<view class="u-m-t-10" style="position: relative;">
 								<nut-icon name="shaixuan-xianxing" font-class-name="custom-icon" class-prefix="custom-icon" size="18" ></nut-icon>
 								<up-badge type="error" isDot absolute :offset="[-1,-2]"></up-badge>
 							</view> 
-							<view class="u-font-14 text-base u-m-l-10">筛选</view>
+							<view class="u-font-16 text-base u-m-l-10">筛选</view>
 						</view>
 					</template>
 				</up-tabs>
@@ -190,15 +190,11 @@
 		// 	swiperRef.value.to(obj.index)
 		// })
 	}
-</script>
-
+</script> 
 <style lang="scss" scoped>
-page {
-	background-color: #1777FF;
-	// height: 100vh; 
-}
 .w {
 	height: 100vh;
+	background-color: $u-primary;
 	.sub-w {
 		height: 50px;
 	}
@@ -208,7 +204,9 @@ page {
 	}
 	.data-box-w {
 		background-color: #fff;
-		height: calc(100vh - 177px );
+		height: calc(100vh - 177px - 0);
+		height: calc(100vh - 177px - constant(safe-area-inset-bottom));
+		height: calc(100vh - 177px - env(safe-area-inset-bottom));
 		::v-deep {
 			.u-table2 .u-table-header {
 				background-color: #fff;

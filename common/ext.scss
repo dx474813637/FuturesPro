@@ -1,5 +1,4 @@
 
-$u-error: #F12E24; 
 .vip-color {
 	color: $vip-color
 }
@@ -25,7 +24,7 @@ $u-error: #F12E24;
 	background-color: #fff!important;
 }
 .bg-primary {
-	background-color: #3294ff!important;
+	background-color: $primary-color!important;
 }
 .bg-warning {
 	background-color: #ff7903!important;

@@ -5,7 +5,7 @@
 				<view class="u-flex u-flex-between u-flex-items-start u-flex-1 u-p-20 u-info-light-bg u-radius-4 u-m-b-10">
 					<view>天数</view>
 					<view class="u-flex-1 u-flex u-flex-wrap u-flex-end">
-						<view class="u-m-l-20 u-m-b-20" v-for="item in tabslist" >
+						<view class="u-m-l-20 u-m-b-20" v-for="item in tabslist" :key="item.value" >
 							<up-tag borderColor="#d2e0ff" :text="item.name" plainFill :plain="!item.checked" type="primary" :name="item.value" @click="radioClick"></up-tag> 
 						</view>
 					</view>

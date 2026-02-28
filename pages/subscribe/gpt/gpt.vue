@@ -1,5 +1,5 @@
 <template>
-	<NavBar bgColor="#1777FF" title="股票通" titleStyle="color: #fff" customColor="#fff" placeholder ></NavBar>
+	<NavBar :bgColor="themeColor" title="股票通" titleStyle="color: #fff" customColor="#fff" placeholder ></NavBar>
 	<view>
 		
 	</view>
@@ -8,6 +8,9 @@
 </template>
 
 <script setup> 
+	import {useCateStore, baseStore} from '@/stores/base.js'  
+	const base = baseStore() 
+	const {themeColor} = toRefs(base)
 </script>
 
 <style lang="scss" scoped>

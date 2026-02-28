@@ -1,5 +1,5 @@
 <template>
-	<NavBar bgColor="#1777FF" title="我的订阅" titleStyle="color: #fff" customColor="#fff" placeholder ></NavBar>
+	<NavBar :bgColor="themeColor"  title="我的订阅" titleStyle="color: #fff" customColor="#fff" placeholder ></NavBar>
 	<view>
 		
 	</view>
@@ -7,16 +7,13 @@
 	<MenusBar></MenusBar>
 </template>
 
-<script>
-	export default {
-		data() {
-			return {
-				
-			};
-		}
-	}
+
+<script setup> 
+	import {useCateStore, baseStore} from '@/stores/base.js'  
+	const base = baseStore() 
+	const {themeColor} = toRefs(base)
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 </style>

@@ -27,7 +27,8 @@ export const baseStore = defineStore('base', {
 				'shareother': uni.getStorageSync('share_other') || '',
 			},
 			share_other: '',
-			themeColor: '#1777FF',
+			// themeColor: '#1777FF',
+			themeColor: '#1576E8',
 			empty: 'https://wx.rawmex.cn/Public/memu/data1.png',
 			online: {
 				count: 0, 

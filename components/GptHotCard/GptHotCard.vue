@@ -39,47 +39,49 @@
 			</view>
 			
 		</view>
+		<!-- 涨幅行 -->
 		<view v-if="showZf" class="u-flex box-border u-flex-between" style="border-radius: 0 0 10px 10px; overflow: hidden;height: 50px">
-			<view class="u-p-10 u-error-light-bg u-text-center u-flex-1">
+			<view class="u-p-10 u-error-light-bg u-text-center u-flex-1 box-border">
 				<view class="u-font-12 text-base u-m-b-10 ">近5天</view>
 				<view class="u-flex u-flex-items-center u-flex-center"> 
 					<view class="u-font-20 text-error">3.86%</view>
 				</view>
 			</view>
-			<view class="u-p-10 u-success-light-bg u-text-center u-flex-1">
+			<view class="u-p-10 u-success-light-bg u-text-center u-flex-1 box-border">
 				<view class="u-font-12 text-base u-m-b-10 ">近10天</view>
 				<view class="u-flex u-flex-items-center u-flex-center"> 
 					<view class="u-font-20 u-success">103.86%</view>
 				</view>
 			</view>
-			<view class="u-p-10 u-info-light-bg u-text-center u-flex-1">
+			<view class="u-p-10 u-info-light-bg u-text-center u-flex-1 box-border">
 				<view class="u-font-12 text-base u-m-b-10 ">近20天</view>
 				<view class="u-flex u-flex-items-center u-flex-center"> 
 					<view class="u-font-20 text-info">0%</view>
 				</view>
 			</view>
-			<view class="u-p-10 u-success-light-bg u-text-center u-flex-1">
+			<view class="u-p-10 u-success-light-bg u-text-center u-flex-1 box-border">
 				<view class="u-font-12 text-base u-m-b-10 ">近30天</view>
 				<view class="u-flex u-flex-items-center u-flex-center"> 
 					<view class="u-font-20 u-success">103.86%</view>
 				</view>
 			</view>
-			<view class="u-p-10 u-error-light-bg u-text-center u-flex-1">
+			<view class="u-p-10 u-error-light-bg u-text-center u-flex-1 box-border">
 				<view class="u-font-12 text-base u-m-b-10 ">近60天</view>
 				<view class="u-flex u-flex-items-center u-flex-center"> 
 					<view class="u-font-20 text-error">103.86%</view>
 				</view>
 			</view>
-			<view class="u-p-10 u-error-light-bg u-text-center u-flex-1">
+			<view class="u-p-10 u-error-light-bg u-text-center u-flex-1 box-border">
 				<view class="u-font-12 text-base u-m-b-10 ">近90天</view>
 				<view class="u-flex u-flex-items-center u-flex-center"> 
 					<view class="u-font-20 text-error">103.86%</view>
 				</view>
 			</view>
 		</view>
+		<!-- 生产商推荐 -->
 		<view class="scs-row u-flex u-flex-items-center box-border" v-else>
 			<scroll-view scroll-x class="main box-border" >
-				<view class="list u-flex u-flex-items-center u-p-15 u-p-l-20 u-p-r-20" :class="{'all': showAll}">
+				<view class="list u-flex u-flex-items-center u-p-10 box-border" :class="{'all': showAll}">
 					<view class="list-item tag">
 						<view>赣锋锂业（002460）</view>
 					</view> 
@@ -164,22 +166,37 @@
 			width: calc(100% - 50px);
 			flex: 0 0 calc(100% - 50px);
 			.list {
+				height: 50px;
+				width: 100%;
 				&.all {
+					width: 100%;
 					flex-wrap: wrap;
+					height: auto;
+					padding-top: 12px!important;
+					// padding-bottom: 5px;
 					.list-item {
 						margin-bottom: 5px;
+						flex: 0 0 48%;
+						width: 48%;
+						// margin-left: 2%
+						// margin-left: 3%;
+						&:nth-of-type(2n+1) {
+							margin-left: 0;
+						}
 					}
 				}
 				.list-item {
 					white-space: nowrap;
 					// background-color: #dae8ff;
 					background-color: #ece0ff;
-					margin-right: 10px;
+					margin-left: 5px;
 					border-radius: 6px;
-					padding: 5px 10px; 
+					padding: 4px 10px; 
 					color: #544cc3;
 					// color: #4c81c3;
 					font-size: 14px; 
+					box-sizing: border-box;
+					text-align: center;
 				}
 			}
 			

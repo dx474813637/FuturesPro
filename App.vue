@@ -139,8 +139,8 @@
 <style lang="scss">
 	@import "uview-plus/index.scss";
 	@import "nutui-uniapp/styles/index.scss";
-	@import '@/common/ext.scss';
 	@import '@/common/iconfont.css';
+	@import '@/common/ext.scss';
 	/*每个页面公共css */
 	$u-error: #F12E24;
 	

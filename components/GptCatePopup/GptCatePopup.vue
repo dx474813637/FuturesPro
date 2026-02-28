@@ -4,10 +4,22 @@
 			<view class="list-w bg-white ">   
 				<view class="u-flex u-flex-between u-flex-items-center u-flex-1 u-p-20">
 					<view class="u-flex-1 u-p-20">
-						<up-button type="primary" :plain="mode == '1' ?  true: false "  shape="circle" :text="`热点选股${mode == '1' ? '（当前模式）' : ''}`" ></up-button>
+						<up-button 
+							:type="mode == '1' ?  'error': 'primary'" 
+							:plain="mode == '1' ?  true: false "  
+							shape="circle" 
+							:text="`热点选股${mode == '1' ? '（当前模式）' : ''}`" 
+							@click="handleGo(1)"
+						></up-button>
 					</view>
 					<view class="u-flex-1 u-p-20">
-						<up-button  type="primary"   :plain="mode == '2' ?  true: false " shape="circle" :text="`季度选股${mode == '2' ? '（当前模式）' : ''}`" ></up-button>
+						<up-button 
+							:type="mode == '2' ?  'error': 'primary'"  
+							:plain="mode == '2' ?  true: false " 
+							shape="circle" 
+							:text="`季度选股${mode == '2' ? '（当前模式）' : ''}`"  
+							@click="handleGo(2)"
+						></up-button>
 					</view>
 				</view>
 			</view>  
@@ -37,10 +49,20 @@
 			default: '0'
 		}
 	})   
-	onMounted(async () => { 
-		console.log(props.mode)
+	onMounted(async () => {  
 	})  
-	 
+	function handleGo(m) {
+		console.log(m,  props.mode)
+		if(m == props.mode) return;
+		if(m == 1) {
+			base.handleGoto({url: '/pages/subscribe/gpt/hot', type: 'redirect'})
+			return
+		}
+		if(m == 2) {
+			base.handleGoto({url: '/pages/subscribe/gpt/season', type: 'redirect'}) 
+			return
+		}
+	}
 </script>
 
 <style lang="scss" scoped>
