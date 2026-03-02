@@ -1,6 +1,6 @@
 <template>
 	<view class="w u-flex-column box-border"> 
-		<NavBar :bgColor="themeColor" title="季报选股" titleStyle="color: #fff" customColor="#fff" placeholder ></NavBar>
+		<NavBar :bgColor="themeColor" title="氧化镨" titleStyle="color: #fff" customColor="#fff" placeholder ></NavBar>
 		<view class="u-flex u-flex-between u-flex-items-center u-p-l-30 u-p-t-20 u-p-b-20 sub-w box-border">
 			<view class="u-flex u-flex-items-center text-white " @click="handleChangeShow1(true)">
 				<view>选股模式</view>
@@ -13,10 +13,17 @@
 				<view class="u-font-13 u-m-l-4 text-thin">使用指南</view>
 			</view>
 		</view>
+		
+		<!-- 价格走势 -->
+		<view class="  u-radius-16 u-m-l-20 u-m-r-20 box-border u-m-b-20" > 
+			<view class="  box-border u-radius-10" style=" height: 380px; overflow: hidden;">
+				<up-image width="100%" mode="widthFix" src="http://dingxiang.netsun.testwebsite.cn/public/img/data-pic.png"></up-image>
+			</view>  
+		</view>
 		<view class="filter-box-w bg-white u-p-20 box-border u-flex u-flex-items-center" @click="handleChangeShow2(true)"> 
 			<view class="u-flex-1">
-				<text class="u-primary-light-bg text-base u-radius-6 u-p-2 u-p-l-20 u-p-r-20 u-m-r-10 text-primary">2026-01-01 至 2026-02-27</text>
-				<text class="u-primary-light-bg text-base u-radius-6 u-p-2 u-p-l-20 u-p-r-20 text-primary">涨幅≥20%</text> 
+				<text class="u-primary-light-bg text-base u-radius-6 u-p-2 u-p-l-20 u-p-r-20 u-m-r-10 text-primary">90天股价位置≤高位</text>
+				<text class="u-primary-light-bg text-base u-radius-6 u-p-2 u-p-l-20 u-p-r-20 text-primary">PriceSeek评分≥1</text> 
 			</view>
 			<view class="u-flex u-flex-items-center u-p-l-20"  >
 				<view class="u-m-t-10" style="position: relative;">
@@ -33,12 +40,7 @@
 					:class="{
 						active: resultAllShow
 					}"
-				>
-					<view class="u-p-10 u-p-l-20 u-info">
-						在设定周期内符合 “涨幅≥10%” 的商品有
-						<text class="u-error text-bold u-p-5 u-font-18" style="font-style: italic;">33</text>
-						个
-					</view>
+				> 
 					<view class="u-flex u-flex-wrap u-flex-items-start u-p-10">
 						<view class="item-w u-flex u-flex-items-center u-flex-center box-border u-p-10"
 							v-for="(item, index) in tabslist"
@@ -87,21 +89,42 @@
 			
 		</view>
 		<view class="data-box-w u-flex-1">
-			<scroll-view
-				scroll-y
-				class="box-border u-p-10"
-				style="height: 100%"
-			>
+			<view  class="box-border u-p-10"  >
 				<!-- 价格走势 -->
-				<view class="  u-radius-16 u-m-l-20 u-m-r-20 box-border" style="background: linear-gradient(to bottom, #F3FBFE 60px, transparent, #F3FBFE);">
-					<view class="u-p-20" style="color: #1E283F">价格走势</view>
-					<view class="u-m-20 box-border u-radius-10" style=" height: 360px; overflow: hidden;">
-						<up-image width="100%" mode="widthFix" src="http://dingxiang.netsun.testwebsite.cn/public/img/data-pic.png"></up-image>
+				<view class="  u-radius-16 u-m-l-20 u-m-r-20 box-border u-p-b-20 u-p-t-20 u-m-b-20" style="background: linear-gradient(to bottom, #F3FBFE 60px, transparent, #F3FBFE);">
+					<view class="u-m-20 box-border u-radius-10" style=" overflow: hidden;">
+						<up-image width="100%" mode="widthFix" src="http://dingxiang.netsun.testwebsite.cn/public/img/data-pic2.png"></up-image>
+					</view> 
+					<view class="u-p-20 u-flex u-flex-wrap u-flex-items-start">
+						<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
+							<view class="text-base">最新股价</view>
+							<view class="u-font-16 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">9.040</view>
+						</view>
+						<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
+							<view class="text-base">90天位置</view>
+							<view class="u-font-16 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">高位</view>
+						</view>
+						<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
+							<view class="text-base">最小值</view>
+							<view class="u-font-16 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">5.870</view>
+						</view>
+						<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
+							<view class="text-base">最大值</view>
+							<view class="u-font-16 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">9.040</view>
+						</view>
+						<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
+							<view class="text-base">中位值</view>
+							<view class="u-font-16 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">7.46</view>
+						</view>
+						<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
+							<view class="text-base">平均值</view>
+							<view class="u-font-16 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">7.02</view>
+						</view>
+						<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
+							<view class="text-base">PriceSeek评分</view>
+							<view class="u-font-16 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">2.5</view>
+						</view>
 					</view>
-					<view class="u-p-20 box-border">
-						<GptSearchCard></GptSearchCard>
-					</view>
-					
 				</view>
 				<!-- 生产商基本面评析 -->
 				<view class="u-p-20">
@@ -121,7 +144,7 @@
 					</view>
 				</view>
 				
-			</scroll-view> 
+			</view> 
 		</view>
 	</view>
 	<!-- <u-safe-bottom></u-safe-bottom>
@@ -129,17 +152,15 @@
 	<!-- 选股模式popup -->
 	<GptCatePopup
 		:show="gptCateShow"
-		title="选股模式"  
-		mode="2"
+		title="选股模式"   
 		:onUpdateShow="handleChangeShow1"
 	></GptCatePopup>
 	<!-- 筛选popup -->
-	<GptSeasonFilterPopup
-		:show="gptSeasonFilterShow"
-		title="季报选股筛选"   
-		:onUpdateShow="handleChangeShow2"
-		@submit="submitFilterEvent"
-	></GptSeasonFilterPopup>
+	<GptSearchPopup
+		:show="gptSearchShow"
+		title="股票筛选"   
+		:onUpdateShow="handleChangeShow2" 
+	></GptSearchPopup>
 	<!-- 使用指南popup -->
 	<GptHotHelpPopup
 		:show="gptHotHelpShow"
@@ -153,7 +174,7 @@
 	const base = baseStore() 
 	const {themeColor} = toRefs(base)
 	const gptCateShow = ref(false)
-	const gptSeasonFilterShow = ref(false) 
+	const gptSearchShow = ref(false) 
 	const gptHotHelpShow = ref(false)
 	const resultAllShow = ref(false)
 	
@@ -163,53 +184,29 @@
 	});
 	const tabslist = ref([
 		{
-			name: '氧化镨',
+			name: '中国稀土',
 			value: '1'
 		}, 
 		{
-			name: '氧化钕',
+			name: '北方稀土',
 			value: '2'
 		}, 
 		{
-			name: '金属镨',
+			name: '盛和资源',
 			value: '3'
 		}, 
 		{
-			name: '镨钕合金',
+			name: '中色股份',
 			value: '4'
 		}, 
 		{
-			name: '氢氧化锂(工业级)',
+			name: '中色股份',
 			value: '5'
 		}, 
 		{
-			name: '金属钕',
+			name: '中国稀土',
 			value: '6'
-		},  
-		{
-			name: '氧化镨',
-			value: '7'
-		}, 
-		{
-			name: '氧化钕',
-			value: '8'
-		}, 
-		{
-			name: '金属镨',
-			value: '9'
-		}, 
-		{
-			name: '镨钕合金',
-			value: '10'
-		}, 
-		{
-			name: '氢氧化锂(工业级)',
-			value: '60'
-		}, 
-		{
-			name: '金属钕',
-			value: '90'
-		},  
+		},   
 	])
 	
 	const tableData = ref([
@@ -233,7 +230,7 @@
 		gptCateShow.value = data
 	} 
 	function handleChangeShow2(data) {
-		gptSeasonFilterShow.value = data
+		gptSearchShow.value = data
 	}
 	function handleChangeShow3(data) {
 		gptHotHelpShow.value = data
@@ -351,9 +348,9 @@
 	}
 	.data-box-w {
 		background-color: #fff;
-		height: calc(100vh - 215px - 0);
-		height: calc(100vh - 215px - constant(safe-area-inset-bottom));
-		height: calc(100vh - 215px - env(safe-area-inset-bottom));
+		// height: calc(100vh - 215px - 0);
+		// height: calc(100vh - 215px - constant(safe-area-inset-bottom));
+		// height: calc(100vh - 215px - env(safe-area-inset-bottom));
 		::v-deep {
 			.u-table2 .u-table-header {
 				background-color: #fff;

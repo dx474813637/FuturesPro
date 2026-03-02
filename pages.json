@@ -50,6 +50,13 @@
 				"navigationStyle": "custom",
 				"navigationBarTitleText": ""
 			}
+		},
+		{
+			"path": "pages/subscribe/gpt/analysis",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": ""
+			}
 		}
 	],
 	"globalStyle": {

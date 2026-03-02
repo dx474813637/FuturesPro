@@ -1,5 +1,5 @@
 <template>
-	<view class="u-p-20 card-w u-radius-12">
+	<view class="u-p-20 card-w u-radius-12 bg-white">
 		<view class=" " @click.stop="cardClick">
 			<view class="u-flex u-flex-items-center u-flex-between u-m-b-18">
 				<view class="u-flex u-flex-items-baseline u-flex-between  ">
