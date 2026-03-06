@@ -1,5 +1,8 @@
 <template>
-	<NavBar bgColor="#16182C" title="订阅中心" titleStyle="color: #fff" customColor="#fff" placeholder ></NavBar>
+	<view>
+		<NavBar bgColor="#16182C" title="订阅中心" titleStyle="color: #fff" customColor="#fff" placeholder ></NavBar>
+	</view>
+	
 	<view class="u-p-10 "> 
 		<view class="box-user u-p-20 u-p-t-30 u-p-b-30 u-flex u-flex-items-start u-radius-15">
 			<nut-avatar custom-color="rgb(245, 106, 0)" size="50" bg-color="rgb(253, 227, 207)">
@@ -121,7 +124,7 @@
 							<view class="u-m-l-10 text-bold u-font-18">期货通</view>
 						</view>
 						<view class="u-p-10 u-p-l-40 u-p-r-40 u-p-b-10" style="word-break: break-all; color: #D9CCAD;">
-							是指客户通过订阅的方式查看生意社商品基准价与期货价格的价差（基差）表格，及对应50+期货商品的现货历史价格、每日最新价格、期现基差、行情动态和基差分析工具！
+							现货价格决定期货价格，期货价格影响现货价格；因此关注基差变化（基差=现货价格-期货价格），发现期货投资机会。
 						</view>
 						<view class=" u-p-l-40 u-p-r-40">
 							<nut-divider >
@@ -153,6 +156,14 @@
 								</nut-avatar>
 								<view class="u-m-l-20  " style="color: #DACCB1">个人期货投资者</view>
 							</view>
+						</view>
+						<view class=" u-p-l-40 u-p-r-40">
+							<nut-divider >
+								<view style="color:#9899BD">投资策略</view>
+							</nut-divider>
+							<view class="tag-style u-radius-6 u-p-10 u-p-l-20 u-p-r-20 u-m-b-20">
+								利用1个关键指标+1个辅助指标，发现期货开仓方向。1个关键指标是指不同周期的基差5档位置，1个辅助指标是现货价格的30/60/90周期5档位置。
+							</view> 
 						</view>
 					</view>
 				</view>
@@ -215,14 +226,8 @@
 								<view style="color:#9899BD">投资策略</view>
 							</nut-divider>
 							<view class="tag-style u-radius-6 u-p-10 u-p-l-20 u-p-r-20 u-m-b-20">
-								投资者利用"1个关键指标+2个辅助指标"规则进行选股投资， 
-							</view>
-							<view class="tag-style u-radius-6 u-p-10 u-p-l-20 u-p-r-20 u-m-b-20">
-								1个关键指标是指商品价格周期涨幅(如5/5，即5天涨幅超5%),
-							</view>
-							<view class="tag-style u-radius-6 u-p-10 u-p-l-20 u-p-r-20">
-								2个辅助指标是指股价90天内的5档位置与AI大模型财报评级。
-							</view>
+								投资者利用"1个关键指标+2个辅助指标"规则进行选股投资，1个关键指标是指商品价格周期涨幅(如5/5，即5天涨幅超5%)，2个辅助指标是指股价90天内的5档位置与AI大模型财报评级。
+							</view> 
 						</view>
 					</view>
 				</view>
@@ -293,10 +298,27 @@
 			<view class="u-p-t-40 u-p-l-40 u-p-r-40 text-thin" style="color: #d4d0e7;" v-if="tabValue == 'gp'">
 				买卖周期股，就用生意社股票通!一年只需300元，获取N多投资机会!
 			</view>
+			<view class="u-p-t-40 u-p-l-40 u-p-r-40 text-thin" style="color: #d4d0e7;" v-if="tabValue == 'qh'">
+				关注基差变化，把握投资机会！一年只需1999元，即可关注50+期货商品。
+			</view>
 			<view class="u-p-t-40 u-p-l-40 u-p-r-40  u-flex u-flex-items-center checkbox" style="color: #d4d0e7;" v-if="tabValue == 'xh'">
 				<view class="text-white">订阅类型：</view>
 				<nut-checkbox v-model="xhCheck" shape="button"><view >现货通（手机端 + 电脑端）</view></nut-checkbox>
 			</view>
+			<view class="u-p-30"  v-if="tabValue == 'qh'">
+				<up-button 
+					class="custom-style"  
+					size="large"
+					:customStyle="{borderRadius: '14px'}"
+					color="linear-gradient(to right, #FFE19B, #FDEBBF, #FFD385)"
+					:disabled="btnDisabled"
+					@click="base.handleGoto('/pages/subscribe/qht/qht')"
+				>
+					<view class="u-font-18" style="color: #312A2F;">
+						查 看
+					</view>
+				</up-button>
+			</view> 
 			<view class="u-p-30">
 				<up-button 
 					class="custom-style"  
@@ -304,6 +326,7 @@
 					:customStyle="{borderRadius: '14px'}"
 					color="linear-gradient(to right, #FFE19B, #FDEBBF, #FFD385)"
 					:disabled="btnDisabled"
+					@click="base.handleGoto('/pages/order/order')"
 				>
 					<view class="u-font-18" style="color: #312A2F;">
 						{{btnText}}
@@ -320,7 +343,7 @@
 	import { baseStore } from '@/stores/base.js'
 	const base = baseStore() 
 	const tabIndex = computed(() => {
-		tabslist.value.findIndex(ele => ele.value == tabValue.value)
+		return tabslist.value.findIndex(ele => ele.value == tabValue.value)
 	});
 	const tabValue = ref('gp');
 	const xhCheck = ref(false)
@@ -330,15 +353,15 @@
 			name: '股票通',
 			value: 'gp'
 		},
-		{
-			name: '现货通',
-			value: 'xh',
-			disabled: true,
-		},
+		// {
+		// 	name: '现货通',
+		// 	value: 'xh',
+		// 	disabled: true,
+		// },
 		{
 			name: '期货通',
 			value: 'qh',
-			disabled: true,
+			disabled: false,
 		}, 
 	])
 	const btnDisabled = computed(() => {
@@ -384,8 +407,14 @@
 	}
 </style>
 <style lang="scss" scoped>
-	.tabs-w {
+	.tags-w {
 		::v-deep {
+			--nut-tag-border-width: 0; 
+		}
+		
+	}
+	.tabs-w {
+		::v-deep { 
 			
 			.u-tabs__wrapper__nav__item__text--disabled {
 				color: #8088af!important

@@ -2,7 +2,7 @@
 	<view class="u-p-t-14 card-w u-radius-20">
 		<view class="u-flex u-flex-items-center u-flex-between u-p-r-20" @click.stop="cardClick">
 			<view class=" ">
-				<view class="u-flex u-flex-items-baseline u-m-b-14 u-p-l-20 ">
+				<view class="u-flex u-flex-items-baseline u-m-b-14 u-p-l-20 " @click="base.handleGoto('/pages/subscribe/gpt/analysis')">
 					<view class="u-font-32 u-m-r-10">氢氧化锂(工业级)</view>
 					<!-- <up-icon name="arrow-right" size="16" color="#ccc" ></up-icon> -->
 				</view>
@@ -82,22 +82,22 @@
 		<view class="scs-row u-flex u-flex-items-center box-border" v-else>
 			<scroll-view scroll-x class="main box-border" >
 				<view class="list u-flex u-flex-items-center u-p-10 box-border" :class="{'all': showAll}">
-					<view class="list-item tag">
+					<view class="list-item tag" @click="base.handleGoto('/pages/subscribe/gpt/analysis')">
 						<view>赣锋锂业（002460）</view>
 					</view> 
-					<view class="list-item tag">
+					<view class="list-item tag" @click="base.handleGoto('/pages/subscribe/gpt/analysis')">
 						<view>盛新锂能（002240）</view>
 					</view> 
-					<view class="list-item tag">
+					<view class="list-item tag" @click="base.handleGoto('/pages/subscribe/gpt/analysis')">
 						<view>天齐锂业（002466）</view>
 					</view> 
-					<view class="list-item tag">
+					<view class="list-item tag" @click="base.handleGoto('/pages/subscribe/gpt/analysis')">
 						<view>天华新能（300390）</view>
 					</view>  
-					<view class="list-item tag">
+					<view class="list-item tag" @click="base.handleGoto('/pages/subscribe/gpt/analysis')">
 						<view>赣锋锂业（002460）</view>
 					</view> 
-					<view class="list-item tag">
+					<view class="list-item tag" @click="base.handleGoto('/pages/subscribe/gpt/analysis')">
 						<view>盛新锂能（002240）</view>
 					</view>   
 				</view>

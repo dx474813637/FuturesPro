@@ -1,20 +1,39 @@
 <template>
 	<view class="w u-flex-column box-border"> 
-		<NavBar :bgColor="themeColor" title="2月26日热点选股" titleStyle="color: #fff" customColor="#fff" placeholder ></NavBar>
+		<NavBar :bgColor="themeColor" title="期货通" titleStyle="color: #fff" customColor="#fff" placeholder ></NavBar>
 		<view class="u-flex u-flex-between u-flex-items-center u-p-l-30 u-p-t-20 u-p-b-20 sub-w box-border">
-			<view class="u-flex u-flex-items-center text-white " @click="handleChangeShow1(true)">
-				<view>选股模式</view>
-				<view class="u-m-l-6"> 
+			<view class="u-flex u-flex-items-center text-white ">
+				<view class="u-m-r-12"> 
 					<up-icon name="list-dot" color="#fff" size="18"></up-icon>
 				</view>
+				<view>生意社:3月3日商品现货与期货价格对比表</view>
 			</view>
-			<view @click="handleChangeShow3(true)" class="u-flex u-flex-items-center text-white u-p-8 u-p-l-20 u-p-r-20" style="background-color: rgba(0,0,0,.15); border-radius: 14px 0 0 14px;">
+			<!-- <view @click="handleChangeShow3(true)" class="u-flex u-flex-items-center text-white u-p-8 u-p-l-20 u-p-r-20" style="background-color: rgba(0,0,0,.15); border-radius: 14px 0 0 14px;">
 				<up-icon name="file-text" color="#f8f8f8"></up-icon>
 				<view class="u-font-13 u-m-l-4 text-thin">使用指南</view>
-			</view>
+			</view> -->
 		</view>
-		<view class="filter-box-w bg-white u-p-20 box-border">
-			<view class="tabs-w">
+		<view class="filter-box-w bg-white u-p-20 box-border u-flex u-flex-items-center u-p-l-40 u-p-r-40"> 
+				<up-datetime-picker
+					hasInput 
+					:show="qhtFilterShow" 
+					v-model="date" 
+					mode="date"
+					title="日期筛选"
+					placeholder ="日期筛选"
+					closeOnClickOverlay
+					:inputProps="{
+						prefixIcon: 'calendar',
+						inputAlign: 'center', 
+						customStyle: {
+							backgroundColor: '#F4F8FC',
+							border: `0!important`,
+						}
+					}"
+					@close="qhtFilterShow = false" 
+					@cancel="qhtFilterShow = false" 
+				></up-datetime-picker> 
+			<!-- <view class="tabs-w">
 				<up-tabs 
 					:list="tabslist" 
 					:current="tabIndex" 
@@ -44,7 +63,7 @@
 						</view>
 					</template>
 				</up-tabs>
-			</view>
+			</view> -->
 		</view>
 		<view class="data-box-w u-flex-1">
 			<scroll-view
@@ -53,9 +72,9 @@
 				style="height: 100%"
 			>
 				<view class="item   u-p-10 " v-for="item in tableData" :key="item.id">
-					<GptHotCard
+					<QhtCard
 						:origin="item"
-					></GptHotCard>
+					></QhtCard>
 				</view>
 			</scroll-view>
 			<!-- <u-table2
@@ -68,29 +87,15 @@
 				</template>
 			</u-table2> -->
 		</view>
+		<u-safe-bottom></u-safe-bottom>
 	</view>
-	<!-- <u-safe-bottom></u-safe-bottom>
-	<MenusBar></MenusBar> -->
-	<!-- 选股模式popup -->
-	<GptCatePopup
-		:show="gptCateShow"
-		title="选股模式"  
-		mode="1"
-		:onUpdateShow="handleChangeShow1"
-	></GptCatePopup>
-	<!-- 筛选popup -->
-	<GptHotFilterPopup
-		:show="gptHotFilterShow"
-		title="热点商品搜索"   
-		:onUpdateShow="handleChangeShow2"
-		@submit="submitFilterEvent"
-	></GptHotFilterPopup>
+	<MenusBar></MenusBar>  
 	<!-- 使用指南popup -->
-	<GptHotHelpPopup
+	<!-- <GptHotHelpPopup
 		:show="gptHotHelpShow"
 		title="热点选股使用指南"   
 		:onUpdateShow="handleChangeShow3"
-	></GptHotHelpPopup>
+	></GptHotHelpPopup> -->
 </template>
 
 <script setup> 
@@ -98,9 +103,9 @@
 	const base = baseStore() 
 	const {themeColor} = toRefs(base)
 	const gptCateShow = ref(false)
-	const gptHotFilterShow = ref(false) 
+	const qhtFilterShow = ref(false) 
 	const gptHotHelpShow = ref(false)
-	
+	const date = ref(new Date().getTime()-60*60*24*1000)
 	const tabValue = ref('5')
 	const tabIndex = computed(() => {
 		tabslist.value.findIndex(ele => ele.value == tabValue.value)
@@ -170,7 +175,7 @@
 		gptCateShow.value = data
 	} 
 	function handleChangeShow2(data) {
-		gptHotFilterShow.value = data
+		qhtFilterShow.value = data
 	}
 	function handleChangeShow3(data) {
 		gptHotHelpShow.value = data
@@ -194,18 +199,19 @@
 .w {
 	height: 100vh;
 	background-color: $u-primary;
+	padding-bottom: 60px;
 	.sub-w {
 		height: 50px;
 	}
 	.filter-box-w {
 		border-radius: 10px 10px 0 0;
-		height: 80px;
+		height: 60px;
 	}
 	.data-box-w {
-		background-color: #fff;
-		height: calc(100vh - 177px - 0);
-		height: calc(100vh - 177px - constant(safe-area-inset-bottom));
-		height: calc(100vh - 177px - env(safe-area-inset-bottom));
+		background-color: #fff; 
+		height: calc(100% - 157px - 0);
+		height: calc(100% - 157px - constant(safe-area-inset-bottom));
+		height: calc(100% - 157px - env(safe-area-inset-bottom));
 		::v-deep {
 			.u-table2 .u-table-header {
 				background-color: #fff;

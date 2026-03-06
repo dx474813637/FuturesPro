@@ -225,8 +225,7 @@
 		{ title: '涨幅', key: 'age' }
 	])
 	
-	onLoad(() => { 
-		
+	onLoad(() => {  
 	}) 
 	
 	function handleChangeShow1(data) {

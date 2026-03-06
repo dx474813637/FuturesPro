@@ -92,14 +92,14 @@ export default function($ws = null) {
 		config.params = {
 			...config.params,
 			share_other: base.share_other
-		}
-
+		} 
+		// #ifdef MP-WEIXIN
 		// 登录接口和刷新token接口绕过
-		if (config.url.indexOf('xcx_login') >= 0) {
+		if (config.url.indexOf('login_cancel') >= 0) {
 			return config
 		}
-		// if (!token) {
-		if (!getNewUserid.value) {
+		if (!token) {
+		// if (!getNewUserid.value) {
 			// 立即刷新token
 			if (!isRefreshing) {
 				console.log('刷新token ing', config.url)
@@ -122,7 +122,7 @@ export default function($ws = null) {
 					http.setToken({
 						userid: userid
 					})
-					getNewUserid.value = true
+					// getNewUserid.value = true
 					// }
 					// if(res.login == 0) { 
 					// 	getCurrentPages().length > 0 && uni.setStorageSync('prePage', getCurrentPages()[getCurrentPages().length - 1].$page.fullPath)  
@@ -147,7 +147,7 @@ export default function($ws = null) {
 			})
 
 		}
-
+		// #endif
 		return config
 	}, config => { // 可使用async await 做异步操作
 		return Promise.reject(config)
@@ -155,6 +155,7 @@ export default function($ws = null) {
 
 	// 响应拦截
 	http.interceptors.response.use((response) => {
+					console.log(response)
 		uni.hideNavigationBarLoading();
 		uni.hideLoading({
 			fail: () => {},

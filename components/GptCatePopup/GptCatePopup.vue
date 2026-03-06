@@ -51,8 +51,7 @@
 	})   
 	onMounted(async () => {  
 	})  
-	function handleGo(m) {
-		console.log(m,  props.mode)
+	function handleGo(m) { 
 		if(m == props.mode) return;
 		if(m == 1) {
 			base.handleGoto({url: '/pages/subscribe/gpt/hot', type: 'redirect'})

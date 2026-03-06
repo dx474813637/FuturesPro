@@ -57,11 +57,60 @@
 				"navigationStyle": "custom",
 				"navigationBarTitleText": ""
 			}
+		},
+		{
+			"path": "pages/order/order",
+			"style": {
+				"navigationBarBackgroundColor": "#1576E8",
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "订单详情"
+			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/login/code",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/login/register",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/login/resetPwd",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/login/xieyi",
+			"style": { 
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/subscribe/qht/qht",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": ""
+			}
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
+		"navigationBarTitleText": "生意社财富通",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},

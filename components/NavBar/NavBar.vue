@@ -30,12 +30,18 @@
 	import { computed } from 'vue'
 	import { baseStore } from '@/stores/base.js'
 	const base = baseStore()  
+	const props = defineProps({
+		backBtn: {
+			type: Boolean,
+			default: true
+		}
+	})
 	const backBtnShow = computed(() => {
 		// 获取当前页面栈数量
 		// const pages = uni.$u.pages()
-		const pages = getCurrentPages()
-		// 如果页面栈数量大于1，则显示返回按钮，否则不显示
-		return pages.length > 1
+		// const pages = getCurrentPages()
+		// 如果页面栈数量大于1，则显示返回按钮，否则不显示  
+		return (getCurrentPages().length > 1) && props.backBtn
 	})
 	function goBack() {
 		uni.navigateBack()

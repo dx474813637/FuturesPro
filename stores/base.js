@@ -14,7 +14,7 @@ export const baseStore = defineStore('base', {
 	state: () => {
 		return {
 			sys: uni.getSystemInfoSync(),
-			configBaseURL: 'https://s.sunmaxx.cn/Ppi/',
+			configBaseURL: 'https://wx.rawmex.cn/Ppi/',
 			configHeader: {
 				'content-type': 'application/x-www-form-urlencoded',
 				// 'content-type': 'application/json',
@@ -185,7 +185,7 @@ export const menusStore = defineStore('menus', {
 			new_memu: [],
 			news: 0,
 			currPage: {
-				route: '/pages/index/home',
+				route: '/pages/index/index',
 				options: {}
 			},
 			cpy_type_origin: [[]],
@@ -201,14 +201,16 @@ export const menusStore = defineStore('menus', {
 			// console.log('saveCurPage', data)
 			this.currPage = data;
 		},
-		async getMenusData($http) {   
+		async getMenusData() {   
 			const res = await apis.memu()  
 			if(res.code == 1) {  
-				let user = userStore()
+				const user = userStore()
+				const {login} = toRefs(user)
+				login.value = res.login 
 				// user.saveUserInfo(res.info)
-				user.getUserInfo(res.info)
+				// user.getUserInfo(res.info)
 				//获取底部导航菜单
-				this.menus = res.memu.map((ele, index) => {
+				this.menus = res.list.map((ele, index) => {
 					let paramsStr = ele.url.split('?')[1] || ''
 					let paramsObj = {}
 					paramsStr && paramsStr.split('&').forEach(item => {
@@ -223,10 +225,10 @@ export const menusStore = defineStore('menus', {
 				})   
 				// this.menus_51xp = res.list.memu
 				// 获取个人中心基础菜单
-				this.menus_wd = res.list
-				this.menus_wd1 = res.list1
-				this.menus_ad = res.ad || {}
-				this.menus_xr = res.xr || {}
+				// this.menus_wd = res.list
+				// this.menus_wd1 = res.list1
+				// this.menus_ad = res.ad || {}
+				// this.menus_xr = res.xr || {}
 				 
 			} 
 		},

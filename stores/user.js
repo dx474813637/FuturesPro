@@ -5,6 +5,7 @@ import apis from '@/config/apis/index';
 export const userStore = defineStore('user', {
 	state: () => {
 		return { 
+			login: '0',
 			getNewUserid: false,
 			// 微信openID的相关信息
 			user: uni.getStorageSync('user') || {},
@@ -98,11 +99,12 @@ export const userStore = defineStore('user', {
 		// 	return res
 		// },
 		clearLogout() {
+			this.login = '0'
 			this.user = {}
 			this.user_info = {}
-			this.mall_user_info = {}
+			// this.mall_user_info = {}
 			uni.removeStorageSync('user')
-			uni.removeStorageSync('mall_user')
+			// uni.removeStorageSync('mall_user')
 			uni.removeStorageSync('poster')
 			uni.removeStorageSync('userid')
 			uni.removeStorageSync('WebSocketInfo')
@@ -113,13 +115,13 @@ export const userStore = defineStore('user', {
 			// }
 			
 		},
-		// async logout() {
-		// 	uni.showLoading()
-		// 	const res = await apis.sign_out();
-		// 	if(res.code == 1) {
-		// 		this.clearLogout()
-		// 	}
-		// },
+		async logout() {
+			uni.showLoading()
+			const res = await apis.logout();
+			if(res.code == 1) {
+				this.clearLogout()
+			}
+		},
 		saveUserInfo(data) {
 			this.user = data; 
 			uni.setStorageSync('poster', data.poster) 
@@ -143,7 +145,7 @@ export const userStore = defineStore('user', {
 			try{
 				let code = await this.get_xcx_code();
 				console.log('code打印:',code)
-				return apis.xcx_login({params: {code}}) 
+				return apis.login_cancel({params: {code}}) 
 			}catch(e){
 				return e
 			}

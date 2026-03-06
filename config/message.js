@@ -11,9 +11,11 @@ class MessageManager {
 
 	// 显示文本消息
 	showText(message) { 
+		// console.log(message, this.toastInstance)
 		if (this.toastInstance) {
 			this.toastInstance.showText(message);
 		} else {
+			// console.log('x')
 			// 后备方案：如果没有注册实例，使用uni.showToast
 			uni.showToast({
 				title: message,

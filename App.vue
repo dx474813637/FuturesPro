@@ -19,39 +19,43 @@
 	const userS = userStore() 
 	const {user} = toRefs(userS)
 	onLaunch(async () => {   
+		// #ifdef H5
 		if(window._userid) {
 			uni.setStorageSync('userid', window._userid)
 			uni.setStorageSync('poster', window._poster) 
 		}
-		// if (uni.canIUse('getUpdateManager')) {
-		// 	const updateManager = uni.getUpdateManager();
-		// 	updateManager.onCheckForUpdate(function(res) {
-		// 		// 请求完新版本信息的回调
-		// 		if (res.hasUpdate) {
-		// 			updateManager.onUpdateReady(function() {
-		// 				uni.showModal({
-		// 					title: '更新提示',
-		// 					content: '新版本已经准备好，是否重启应用？',
-		// 					success: function(res) {
-		// 						console.log('success====', res);
-		// 						// res: {errMsg: "showModal: ok", cancel: false, confirm: true}
-		// 						if (res.confirm) {
-		// 							// 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
-		// 							updateManager.applyUpdate();
-		// 						}
-		// 					}
-		// 				});
-		// 			});
-		// 			updateManager.onUpdateFailed(function() {
-		// 				// 新的版本下载失败
-		// 				uni.showModal({
-		// 					title: '已经有新版本了哟~',
-		// 					content: '新版本已经上线啦~，请您删除当前小程序，重新搜索打开哟~'
-		// 				});
-		// 			});
-		// 		}
-		// 	});
-		// } 
+		// #endif
+		// #ifdef MP-WEIXIN
+		if (uni.canIUse('getUpdateManager')) {
+			const updateManager = uni.getUpdateManager();
+			updateManager.onCheckForUpdate(function(res) {
+				// 请求完新版本信息的回调
+				if (res.hasUpdate) {
+					updateManager.onUpdateReady(function() {
+						uni.showModal({
+							title: '更新提示',
+							content: '新版本已经准备好，是否重启应用？',
+							success: function(res) {
+								console.log('success====', res);
+								// res: {errMsg: "showModal: ok", cancel: false, confirm: true}
+								if (res.confirm) {
+									// 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
+									updateManager.applyUpdate();
+								}
+							}
+						});
+					});
+					updateManager.onUpdateFailed(function() {
+						// 新的版本下载失败
+						uni.showModal({
+							title: '已经有新版本了哟~',
+							content: '新版本已经上线啦~，请您删除当前小程序，重新搜索打开哟~'
+						});
+					});
+				}
+			});
+		} 
+		// #endif
 		// let options = uni.getLaunchOptionsSync() 
 		routingIntercept({$http}) 
 		// userS.getNewToken()
@@ -65,11 +69,14 @@
 		// 		url: '/pages/noWxBrowser/noWxBrowser'
 		// 	})
 		// }
+		
+		// #ifdef H5
 		if(window._userid) {
 			uni.setStorageSync('userid', window._userid)
 			uni.setStorageSync('poster', window._poster) 
 			uni.setStorageSync('_operator', window._operator) 
 		} 
+		// #endif
 		if(options.query.hasOwnProperty('scene')) { 
 			let arr = decodeURIComponent(options.query.scene).split('&') 
 			arr.forEach(item => {
@@ -77,7 +84,7 @@
 				options.query[arr2[0]] = arr2[1]
 			})
 		} 
-		console.log('opt', options) 
+		// console.log('opt', options) 
 		if(options.query?.share_other) {
 			if(options.query.hasOwnProperty('scene')) {
 				$http.setToken({

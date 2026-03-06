@@ -18,22 +18,22 @@ export default {
 				})
 			}
 		}
-		console.log('页面加载了 - 来自全局 mixin')
+		// console.log('页面加载了 - 来自全局 mixin')
 		// 这里可以写全局的页面生命周期逻辑
 	},
 
 	onShow() {
-		console.log('页面显示 - 来自全局 mixin')
-		// 比如友盟统计、页面曝光等
+		// console.log('页面显示 - 来自全局 mixin')
+		// 比如友盟统计、页面曝光等 
 	},
 	onReady() {
 		const {
 			proxy
 		} = getCurrentInstance();
-		console.log('onReady - 来自全局 mixin')
-		if (proxy.$refs.globalToast) {
+		// console.log('onReady - 来自全局 mixin', proxy.$refs )
+		if (proxy.$refs.globalToast ) {
 			messageManager.registerToast(proxy.$refs.globalToast)
-			console.log('GlobalToast实例已注册到消息管理器')
+			// console.log('GlobalToast实例已注册到消息管理器')
 		}
 	},
 	methods: {

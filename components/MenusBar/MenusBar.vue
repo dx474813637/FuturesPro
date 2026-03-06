@@ -11,10 +11,10 @@
 					}"
 					@click="tabsClick(index)"
 				>
-					<template v-if="item.icon">
+					<!-- <template v-if="item.icon">
 						<nut-icon :name="item.icon"></nut-icon>
-					</template>
-					<!-- <template v-if="menusActive == index">
+					</template> -->
+					<template v-if="menusActive == index">
 						<image
 							class="u-page__item__slot-icon" 
 							:src="item.white_icon_2  || item.icon"
@@ -25,7 +25,7 @@
 							class="u-page__item__slot-icon" 
 							:src="item.white_icon_1  || item.icon"
 						></image> 
-					</template> -->
+					</template>
 					<view class="u-font-28 u-m-t-5">
 						{{item.name}}
 					</view>	
@@ -60,49 +60,8 @@
 	const menusByMode = computed(() => {  
 		return menus.value
 	}) 
-	onMounted(() => { 
-		menus.value = [
-			{
-				name: '首页',
-				icon: 'home',
-				url: '/pages/index/index',
-				route: '/pages/index/index'
-			},
-			{
-				name: '现货通',
-				icon: 'category',
-				url: '/pages/subscribe/center/center?tabValue=xh',
-				route: '/pages/subscribe/center/center',
-				options: {
-					tabValue: 'xh'
-				}
-			},
-			{
-				name: '期货通',
-				icon: 'horizontal',
-				url: '/pages/subscribe/center/center?tabValue=qh',
-				route: '/pages/subscribe/center/center',
-				options: {
-					tabValue: 'qh'
-				}
-			},
-			{
-				name: '股票通',
-				icon: 'footprint',
-				url: '/pages/subscribe/center/center?tabValue=gp',
-				route: '/pages/subscribe/center/center',
-				options: {
-					tabValue: 'gp'
-				}
-			},
-			{
-				name: '订阅',
-				icon: 'my',
-				url: '/pages/subscribe/index/index',
-				route: '/pages/subscribe/index/index',
-			},
-		]
-		// menusstore.getMenusData($http) 
+	onMounted(() => {  
+		menusstore.getMenusData($http) 
 		let routeObj = getCurrentPages()[getCurrentPages().length - 1]
 		console.log(routeObj)
 		menusstore.saveCurPage({
