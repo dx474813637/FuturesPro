@@ -106,6 +106,20 @@
 				"navigationStyle": "custom",
 				"navigationBarTitleText": ""
 			}
+		},
+		{
+			"path": "pages/analysis/analysis",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/analysis/analysis_detail",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": ""
+			}
 		}
 	],
 	"globalStyle": {

@@ -3,13 +3,36 @@
 		<PopupNormal v-bind="$attrs" > 
 			<view class="list-w bg-white">   
 				<scroll-view class="main-list  u-p-30" scroll-y >
-					<view class="u-flex u-flex-items-start u-m-b-20 u-font-30"
+					<view class="  u-p-10"> 
+						<text class="text-bold text-black">热点选股策略样例：</text>
+						<text class="">5/5+中位/2.5</text>
+					</view>
+					<view class="text-base u-p-10">
+						5/5，是指查询最近5天内且涨幅超过5％的周期股；
+					</view>
+					<view class="text-base u-p-10">
+						中位/2.5，是指对上述查询结果列表，再按股价5档位置以及AI财报评级进行筛选。
+					</view>
+					<view class=" u-p-10 u-m-t-40"> 
+						<text class="text-bold text-black">季报选股策略样例：</text>
+						<text class="">季报开始日-当前日期/20％+中位/2.5</text>
+					</view>
+					<view class="text-base u-p-10">
+						季报开始日-当前日/20％，是指查询周期内涨幅超过20％的周期股；
+					</view>
+					<view class="text-base u-p-10">
+						中位/2.5，是指对上述查询结果列表，再按股价5档位置与AI财报评级进行筛选。
+					</view>
+					<view class=" u-p-10 u-m-t-40"> 
+						<text class="text-bold text-black">用户可以根据上述指南，设定适合自己的选股策略。</text> 
+					</view>
+					<!-- <view class="u-flex u-flex-items-start u-m-b-20 u-font-30"
 						v-for="(item, index) in list"
 						:key="index"
 					>
 						<view class="u-info text-nowrap">{{item.name}}：</view>
 						<view class="u-flex-1">{{item.value}}</view> 
-					</view>
+					</view> -->
 				</scroll-view> 
 			</view>  
 		</PopupNormal>

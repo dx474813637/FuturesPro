@@ -53,7 +53,7 @@
 			
 		</view>
 	</view>
-	<view class="u-p-20"><u-button @click="user.logout">退出</u-button></view>
+	<!-- <view class="u-p-20"><u-button @click="user.logout">退出</u-button></view> -->
 	<!-- #ifdef H5 -->
 	<up-sticky >  
 	<!-- #endif -->
