@@ -14,7 +14,7 @@ export const baseStore = defineStore('base', {
 	state: () => {
 		return {
 			sys: uni.getSystemInfoSync(),
-			configBaseURL: 'https://wx.rawmex.cn/Ppi/',
+			configBaseURL: 'https://p.cft.100ppi.com/Ppi/',
 			configHeader: {
 				'content-type': 'application/x-www-form-urlencoded',
 				// 'content-type': 'application/json',
@@ -45,6 +45,22 @@ export const baseStore = defineStore('base', {
 				show: false,
 				content: ''
 			},
+			analysisModeList:[
+				{
+					value: '1',
+					name: '热点选股',
+					themeColor: '#1678FF',
+					apiName: 'gpt',
+					bgHeaderImage: 'https://wx.rawmex.cn/Public/rdxg-bg/rdxg-bg.png',
+				},
+				{
+					value: '2',
+					name: '季报选股',
+					themeColor: '#E62C3A',
+					apiName: 'gpt_analysis',
+					bgHeaderImage: 'https://wx.rawmex.cn/Public/rdxg-bg/jbxg-top.png',
+				}
+			]
 		};
 	}, 
 	actions: { 

@@ -1,7 +1,8 @@
 <template>
 	<view class="w box-border" :class="{w1: mode == 1, w2: mode == 2}" :style="{backgroundColor: analysisConfig.themeColor }">
 		<!-- <view class="bg" :style="{backgroundColor: analysisConfig.themeColor}"></view> -->
-		<view class="bg-img u-flex" >
+		<view class="bg-img " >
+			<up-status-bar></up-status-bar>
 			<up-image width="100%" :src="analysisConfig.bgHeaderImage" mode="widthFix"></up-image>
 		</view>
 		<NavBar :bgColor="bgColor"  title="" :backBtn="false" customColor="#fff" :titleStyle="`color: #fff`" placeholder ></NavBar>
@@ -53,6 +54,7 @@
 								type="primary" 
 								shape="circle"  
 								:customStyle="{width: '70vw', fontSize: '17px', background:`linear-gradient(to top, #1678FF, #54a7ff )`}"
+								@click="gotoAnalysisDetail"
 							>搜 索</up-button> 
 						</view>
 						<view class="u-flex u-flex-items-center u-flex-center u-p-t-20">
@@ -93,14 +95,14 @@
 						<view class="u-flex u-flex-between u-flex-items-center u-flex-1 u-p-10 u-p-l-12 u-p-r-12 u-radius-4  ">
 							<view class="u-m-r-20">日期</view>
 							<view class="u-flex-1 u-flex u-flex-items-center ">
-								<view class="u-flex u-flex-items-center u-border u-p-12 u-radius-4 u-flex-1" @click="date1Show = true" style="border-color: #e6d9d9!important">
+								<view class="u-flex u-flex-items-center u-border u-p-12 u-radius-4 u-flex-1" @click="sdateShow = true" style="border-color: #e6d9d9!important">
 									<up-icon name="calendar" size="18" color="#666"></up-icon> 
-									<view class="u-flex-1 u-font-13 u-p-5 text-nowrap" >{{date1}}</view>
+									<view class="u-flex-1 u-font-13 u-p-5 text-nowrap" >{{sdate}}</view>
 								</view> 
 								<view class="u-p-5 u-m-l-10 u-m-r-10">至</view>
-								<view class="u-flex u-flex-items-center u-border u-p-12 u-radius-4 u-flex-1" @click="date2Show = true" style="border-color: #e6d9d9!important">
+								<view class="u-flex u-flex-items-center u-border u-p-12 u-radius-4 u-flex-1" @click="edateShow = true" style="border-color: #e6d9d9!important">
 									<up-icon name="calendar" size="18" color="#666"></up-icon> 
-									<view class="u-flex-1 u-font-13 u-p-5 text-nowrap" >{{date2String}}</view>
+									<view class="u-flex-1 u-font-13 u-p-5 text-nowrap" >{{edateString}}</view>
 								</view> 
 							</view>
 						</view>
@@ -145,6 +147,7 @@
 								type="error" 
 								shape="circle"  
 								:customStyle="{width: '70vw', fontSize: '17px', background:`linear-gradient(to top, #E62C3B, #ff5d68 )`}"
+								@click="gotoAnalysisDetail"
 							>搜 索</up-button> 
 						</view> 
 					</view>
@@ -218,20 +221,20 @@
 	>
 	</up-action-sheet>
 	<up-action-sheet 
-		:show="date1Show"
+		:show="sdateShow"
 	 	title="起始日期"
 		safeAreaInsetBottom
-	 	:actions="date1List"
+	 	:actions="sdateList"
 		closeOnClickOverlay
-		@close="date1Show = false"
+		@close="sdateShow = false"
 		@select="(item) => { 
-			date1 = item.value
+			sdate = item.value
 		}"
 	>
 	</up-action-sheet>
 	<up-datetime-picker  
-		:show="date2Show" 
-		v-model="date2" 
+		:show="edateShow" 
+		v-model="edate" 
 		mode="date"
 		title="截止日期"
 		:maxDate="Number(new Date()) - 60*60*24*1000"
@@ -246,11 +249,11 @@
 			}
 		}"
 		@confirm="(item) => { 
-			date2 = item.value
-			date2Show = false
+			edate = item.value
+			edateShow = false
 		}" 
-		@close="date2Show = false" 
-		@cancel="date2Show = false" 
+		@close="edateShow = false" 
+		@cancel="edateShow = false" 
 	></up-datetime-picker> 
 	 
 	<!-- 使用指南popup -->
@@ -268,7 +271,7 @@
 	const $api = inject('$api')  
 	const user = userStore() 
 	const base = baseStore() 
-	const {themeColor} = toRefs(base)
+	const {themeColor, analysisModeList} = toRefs(base)
 	const top = ref(true)
 	const bgColor = computed(() => {
 		if(top.value) return 'transparent'
@@ -279,7 +282,7 @@
 	const activeNames = ref([]);
 	const activeNames2 = ref([]);
 	const activeNames3 = ref([]);
-	const mode = ref('2')
+	const mode = ref('1')
 	const riqi = ref('')
 	const zf1 = ref('5')
 	const byShow = ref(false)
@@ -313,9 +316,9 @@
 	])
 	
 	const zf2 = ref('20')
-	const date1 = ref('2026-01-01')
-	const date1Show = ref(false)
-	const date1List = ref([
+	const sdate = ref('2026-01-01')
+	const sdateShow = ref(false)
+	const sdateList = ref([
 		{
 			name: '2026-01-01',
 			value: '2026-01-01',
@@ -334,9 +337,9 @@
 		}, 
 	])
 	
-	const date2Show = ref(false)
-	const date2 = ref(Number(new Date()) - 60*60*24*1000)
-	const date2String = computed(() => timeFormat(date2.value, 'yyyy-mm-dd')) 
+	const edateShow = ref(false)
+	const edate = ref(Number(new Date()) - 60*60*24*1000)
+	const edateString = computed(() => timeFormat(edate.value, 'yyyy-mm-dd')) 
 	const tabslist = ref([
 		{
 			name: '按涨幅',
@@ -351,23 +354,21 @@
 	const tabIndex = computed(() => {
 		return tabslist.value.findIndex(ele => ele.value == tabValue.value)
 	});
-	 
-	const analysisModeList = ref([
-		{
-			value: '1',
-			name: '热点选股',
-			themeColor: '#1678FF',
-			// apiName: 'gpt',
-			bgHeaderImage: 'https://wx.rawmex.cn/Public/rdxg-bg/rdxg-bg.png',
-		},
-		{
-			value: '2',
-			name: '季报选股',
-			themeColor: '#E62C3A',
-			// apiName: 'gpt_analysis',
-			bgHeaderImage: 'https://wx.rawmex.cn/Public/rdxg-bg/jbxg-top.png',
-		}
-	])
+	const routeParams = computed(() => {
+		if(mode.value == '1') {
+			return {
+				mode: mode.value,
+				by: by.value,
+				zf: zf1.value,
+			}
+		} 
+		return {
+			mode: mode.value, 
+			zf: zf2.value,
+			sdate: sdate.value,
+			edate: edate.value,
+		} 
+	})  
 	const analysisConfig = computed(() => analysisModeList.value.filter(ele => ele.value == mode.value)[0] )
 	onLoad((options) => {
 		if(options.hasOwnProperty('mode')) {
@@ -423,6 +424,15 @@
 	}
 	function handleChangeShow(data) {
 		gptHelpShow.value = data
+	}
+	
+	function gotoAnalysisDetail() {
+		base.handleGoto({
+			url: '/pages/analysis/analysis_detail',
+			params: {
+				...routeParams.value
+			}
+		})
 	}
 </script>
 

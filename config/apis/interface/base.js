@@ -52,3 +52,5 @@ export const gpt_analysis = (data) => uni.$u.http.get('gpt_analysis', data)
 
 // gpt_analysis_detail 详细页
 export const gpt_analysis_detail = (data) => uni.$u.http.get('gpt_analysis_detail', data) 
+// get_share_url  
+export const get_share_url = (data) => uni.$u.http.get('get_share_url', data) 

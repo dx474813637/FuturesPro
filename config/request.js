@@ -154,8 +154,7 @@ export default function($ws = null) {
 	})
 
 	// 响应拦截
-	http.interceptors.response.use((response) => {
-					console.log(response)
+	http.interceptors.response.use((response) => { 
 		uni.hideNavigationBarLoading();
 		uni.hideLoading({
 			fail: () => {},
