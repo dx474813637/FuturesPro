@@ -135,14 +135,14 @@
 					<view class="loading-w u-flex u-flex-items-start u-flex-center u-p-t-80" style="background-color: rgba(255,255,255,.5)" v-if="loading_product || loading_stock">
 						 <nut-icon name="loading" size="20" custom-color="#f00"></nut-icon>
 					</view>
-					<view class="main-left">
+					<view class="main-left" v-if="cpylist.length > 0">
 						<view class="cpy-list">
 							<view 
 								class="cpy-item u-p-10 u-p-t-15 u-p-b-15"
 								v-for="item in cpylist"
-								:key="item.cid"
+								:key="item.cid || item.stockcode"
 								:class="{
-									active: item.cid == cpyValue
+									active: (item.cid || item.stockcode) == cpyValue
 								}"
 								@click="cpyEvent(item)"	
 							>
@@ -152,14 +152,26 @@
 						</view>
 					</view>
 					<view class="main-right">
-						<view class="u-p-15 main-base-info" >
+						<view v-if="cpylist.length == 0">
+							<view class="u-p-20">
+								<u-empty
+									mode="data"
+									:icon="empty"
+									text="当前筛选条件下无生产商"
+								>
+								</u-empty> 
+								<view class="u-flex u-flex-center u-p-20"><view class="u-font-13 u-warning" @click="resetSearchEvent">重置条件</view></view>
+								
+							</view>
+						</view>
+						<view class="u-p-15 main-base-info"  v-if="cpyActive">
 							<view class="u-flex u-flex-items-start u-flex-between u-m-b-10">
 								<view class="u-font-30">
 									<view class="">{{cpyActive.stock}}</view>
 									<view class="u-error">{{cpyActive.stockcode}}</view> 
 								</view>
 								<view> 
-									<view class=" u-flex-column u-flex-items-end" v-if="cpyActive">
+									<view class=" u-flex-column u-flex-items-end">
 										<view class="u-flex u-flex-items-center u-m-b-5 u-font-13"> 
 											<view class="text-base">营收占比</view>
 											<view class="u-error u-m-l-10"> 
@@ -196,7 +208,7 @@
 								style="width: 100%; height: 220px; border: none!important"
 								src="https://www.100ppi.com/graph/cindex.php?f=graph_stock_k&code=000301&sdate=2026-01-01"></web-view>
 						</view>
-						<view class="u-p-20 u-flex u-flex-wrap u-flex-items-start">
+						<view class="u-p-20 u-flex u-flex-wrap u-flex-items-start"  v-if="cpyActive">
 							<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
 								<view class="text-base u-font-13">最新股价</view>
 								<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{cpyDataSinfo.price}}</view>
@@ -292,21 +304,28 @@
 							<view class="u-flex-column u-flex-items-end u-flex-1">
 								<view class="u-flex u-flex-items-center  u-flex-1 u-m-b-10" style="flex: 0 0 40%">
 									<view class="text-nowrap text-white u-font-14 u-m-r-10">90天股价位置 ≤ </view>
-									<view class="u-flex u-flex-items-center u-border u-p-4 u-radius-8 u-flex-1 bg-white" style="width: 60px; flex: 0 0 60px" @click="positionShow = true">
-										<view class="u-flex-1 u-font-13  u-error u-text-center" >{{positionLabel}}</view>
-										<up-icon name="list-dot" size="10" color="#aaa"></up-icon> 
+									<view class="u-flex u-flex-items-center u-border u-p-4 u-radius-8 u-flex-1 bg-white u-info"
+										style="width: 60px; flex: 0 0 60px; border-color: #fff!important" 
+										@click="positionShow = true"
+									>
+										<view class="u-flex-1 u-font-13 u-text-center" :class="{'u-error': terms_position}" >{{positionLabel || '请选择'}}</view>
+										<!-- <up-icon name="list-dot" size="10" color="#aaa"></up-icon> -->
 									</view>
 								</view>
 								<view class="u-flex u-flex-items-center  u-flex-1  " style="flex: 0 0 40%">
 									<view class="text-nowrap text-white u-font-14 u-m-r-10">PriceSeek评分 ≥ </view>
-									<view class="u-flex u-flex-items-center u-border u-p-4 u-radius-8 u-flex-1 bg-white" style="width: 60px; flex: 0 0 60px" @click="scoreShow = true">
-										<view class="u-flex-1 u-font-13  u-error u-text-center" >{{terms_score}} 分</view>
-										<up-icon name="list-dot" size="10" color="#aaa"></up-icon> 
+									<view class="u-flex u-flex-items-center u-border u-p-4 u-radius-8 u-flex-1 bg-white u-info" 
+										style="width: 60px; flex: 0 0 60px; border-color: #fff!important" 
+										@click="scoreShow = true"
+									>
+										<view class="u-flex-1 u-font-13 u-text-center" :class="{'u-error': terms_score}">{{terms_score?terms_score+' 分' : '请选择'}}</view>
+										<!-- <up-icon name="list-dot" size="10" color="#aaa"></up-icon> -->
 									</view>
 								</view> 
 							</view>
 							<view class="u-m-l-20 u-m-r-20">
 								<up-button  size="mini" shape="circle" color="transparent" :customStyle="{borderColor: '#fff', height: '30px'}" @click="stockFilterBtn">搜索</up-button>
+								
 							</view>
 						</view>
 					</view>
@@ -332,7 +351,7 @@
 	const $api = inject('$api')  
 	const user = userStore() 
 	const base = baseStore() 
-	const {themeColor, analysisModeList} = toRefs(base)
+	const {themeColor, analysisModeList, empty} = toRefs(base)
 	const top = ref(true)
 	// const gptHotFilterShow = ref(false) 
 	const bgColor = computed(() => {
@@ -399,21 +418,22 @@
 	})
 	
 	const cpyValue = ref('')
-	const cpyIndex = computed(() => cpylist.value.findIndex(ele => ele.cid == cpyValue.value));
+	const cpyIndex = computed(() => cpylist.value.findIndex(ele => ((ele.cid || ele.stockcode) == cpyValue.value)));
 	const cpylist = ref([]) 
 	const cpyActive = computed(() => {
 		if(cpyIndex.value != -1) {
+			// console.log(cpylist.value)
 			return cpylist.value[cpyIndex.value]
 		} 
-		return {}
+		return false
 	});
 	const cpyData = ref({})
 	const cpyDataStock = computed(() => cpyData.value.stock || [])
 	const cpyDataGinfo = computed(() => cpyData.value.Ginfo || {})
 	const cpyDataSinfo = computed(() => cpyData.value.Sinfo || {})
 	
-	const terms_position = ref('3')
-	const positionLabel = computed(() => positionList.value.filter(ele => ele.value == terms_position.value )[0].name)
+	const terms_position = ref('')
+	const positionLabel = computed(() => positionList.value.filter(ele => ele.value == terms_position.value )[0]?.name)
 	const positionList = ref([
 		{
 			name: '低位',
@@ -439,35 +459,35 @@
 	const positionShow = ref(false)
 	 
 	
-	const terms_score = ref('2.5') 
+	const terms_score = ref('') 
 	const scoreList = ref([
 		{
 			name: '1分',
-			value: '1',
+			value: 1,
 		}, 
 		{
 			name: '1.5分',
-			value: '1.5',
+			value: 1.5,
 		}, 
 		{
 			name: '2分',
-			value: '2',
+			value: 2,
 		}, 
 		{
 			name: '2.5分',
-			value: '2.5',
+			value: 2.5,
 		}, 
 		{
 			name: '3分',
-			value: '3',
+			value: 3,
 		}, 
 		{
 			name: '3.5分',
-			value: '3.5',
+			value: 3.5,
 		}, 
 		{
 			name: '4分',
-			value: '4',
+			value: 4,
 		},  
 	])
 	const scoreShow = ref(false)
@@ -522,7 +542,7 @@
 		cpyValue.value = ''
 		cpylist.value = []
 		await getHotData()
-		await getStockData()
+		await getStockData({isSetData: true, isDetail: true})
 	}
 	async function getHotData() {
 		if(loading_product.value) return;
@@ -542,19 +562,35 @@
 		loading_product.value = false
 		
 	}
-	async function getStockData() {
+	 
+	async function getStockData({isSetData=false, isDetail=false}) {
 		if(loading_stock.value) return;
 		loading_stock.value = true
-		try{
-			const res = await $api.gpt_analysis_detail({params: {
-				ppid: productActive.value.ppid, 
-				code: cpyActive.value.stockcode,
+		let params = {
+			ppid: productActive.value.ppid,
+		}
+		if(isDetail) {
+			params = {
+				...params,
+				code: cpyActive.value?.stockcode,
+			}
+		} else {
+			params = {
+				...params,
 				terms_score: terms_score.value,
 				terms_position: terms_position.value
+			}
+		}
+		try{
+			const res = await $api.gpt_analysis_detail({params: {
+				...params
 			}})
 			if(res.code == 1) {
 				cpyData.value = res.list.res
-				cpylist.value = res.list.res.stock || []
+				if(isSetData) {
+					cpylist.value = res.list.res.stock || []
+				}
+				
 				if(!cpyValue.value) cpyValue.value = cpylist.value[0].cid || ''
 				// productlist.value = res.list.res.list
 				// productValue.value = productlist.value[0].ppid
@@ -565,30 +601,56 @@
 		loading_stock.value = false
 		
 	}
-	
+	async function resetSearchEvent() {
+		cpylist.value = productlist.value[productIndex.value].stock
+		cpyValue.value = cpylist.value[0].cid
+		init_p_s()
+		await getStockData({isSetData: true, isDetail: true})  
+	}
+	function init_p_s() { 
+		terms_position.value = ''
+		terms_score.value = '' 
+	}
 	function resetEvent() {
 		
 	}
 	function tabsEvent (obj) {  
 		if(obj.disabled) return
-		tabValue.value = obj.value 
+		tabValue.value = obj.value
+		init_p_s()
 	}
 	async function productEvent (obj) {  
 		if(obj.disabled) return
 		productValue.value = obj.ppid 
 		cpylist.value = productlist.value[productIndex.value].stock
 		cpyValue.value = cpylist.value[0].cid
-		await getStockData()  
+		init_p_s()
+		await getStockData({isSetData: true, isDetail: true})  
 	}
 	async function cpyEvent (obj) {  
 		if(obj.disabled) return
-		cpyValue.value = obj.cid 
-		await getStockData()  
+		let stockcode = obj.stockcode
+		cpyValue.value = (obj.cid || stockcode) 
+		await getStockData({isSetData: false, isDetail: true})  
+		// if(stockcode) {
+		// 	cpyValue.value = cpylist.value.filter(ele => ele.stockcode === stockcode)[0].cid
+		// }
 	}
 	async function stockFilterBtn() {
 		cpylist.value = productlist.value[productIndex.value].stock
 		cpyValue.value = ''
-		await getStockData() 
+		await getStockData({isSetData: true, isDetail: false}) 
+		// console.log(cpylist.value)
+		if(cpylist.value[0]) {
+			cpyValue.value =  cpylist.value[0]?.stockcode 
+			cpyData.value.Sinfo = cpylist.value[0]?.Sinfo2
+			cpyData.value = {
+				...cpylist.value[0],
+				Ginfo: {score: cpylist.value[0].score},
+				Sinfo: cpylist.value[0]?.Sinfo2
+			}
+		}
+		
 	}
 </script>
 
