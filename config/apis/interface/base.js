@@ -47,10 +47,13 @@ export const get_order = (data) => uni.$u.http.get('get_order', data)
 // 前台接口：
 // gpt 股票通热点选股 参数by=五档位置5/10/20/30/60/90  zf涨幅
 export const gpt = (data) => uni.$u.http.get('gpt', data)
-// gpt_analysis 股票通季报选股
-export const gpt_analysis = (data) => uni.$u.http.get('gpt_analysis', data)
-
+// gpt_analysis 股票通季报选股 
+export const gpt_analysis = (data, config) => uni.$u.http.post('gpt_analysis', data, config)
+ 
 // gpt_analysis_detail 详细页
 export const gpt_analysis_detail = (data) => uni.$u.http.get('gpt_analysis_detail', data) 
 // get_share_url  
 export const get_share_url = (data) => uni.$u.http.get('get_share_url', data) 
+ 
+ // weixin_pay 发起支付 参数id 订单id price 价格（单位分）
+export const weixin_pay = (data) => uni.$u.http.get('weixin_pay', data) 

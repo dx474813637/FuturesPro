@@ -127,17 +127,20 @@
 							<view class="u-flex u-flex-between u-flex-items-center u-flex-1  u-p-10 u-p-l-12 u-p-r-12 u-radius-4  "
 								>
 								<view class="u-m-r-20">商品</view>
-								<view class="u-flex u-flex-items-center u-flex-1"> 
+								<view class="u-flex u-flex-items-center u-flex-1" @click="menusShow = true"> 
 									<view class="bg-white u-flex-1" >
 										<up-input 
-											v-model="prod" 
+											v-model="prod.name" 
 											inputAlign="right"
 											:customStyle="{
 												backgroundColor: '#fff',
 												borderColor: `#e6d9d9!important`,
 											}"
-											></up-input>
-									</view> 
+											readonly 
+											placeholder="点击选择商品"
+											suffixIcon="arrow-down"
+										></up-input>
+									</view>  
 								</view>
 							</view>
 						</template>
@@ -256,6 +259,13 @@
 		@cancel="edateShow = false" 
 	></up-datetime-picker> 
 	 
+	 <!-- 商品分类popup -->
+	 <MenusPopup
+	 	:show="menusShow"
+	 	title="商品分类"   
+	 	:onUpdateShow="handleChangeShow2"
+		@confirm="menusConfirm"
+	 ></MenusPopup>
 	<!-- 使用指南popup -->
 	<GptHotHelpPopup
 		:show="gptHelpShow"
@@ -277,9 +287,10 @@
 		if(top.value) return 'transparent'
 		return analysisConfig.value.themeColor
 	})
-	
+	const prod = ref({})
+	const menusShow = ref(false)
 	const gptHelpShow = ref(false)
-	const activeNames = ref([]);
+	const activeNames = ref([1]);
 	const activeNames2 = ref([]);
 	const activeNames3 = ref([]);
 	const mode = ref('1')
@@ -357,17 +368,22 @@
 	const routeParams = computed(() => {
 		if(mode.value == '1') {
 			return {
-				mode: mode.value,
+				m: mode.value,
 				by: by.value,
 				zf: zf1.value,
 			}
 		} 
-		return {
-			mode: mode.value, 
-			zf: zf2.value,
-			sdate: sdate.value,
-			edate: edate.value,
+		let obj = {
+			m: mode.value,   
+			sd: sdate.value,
+			ed: edateString.value,
 		} 
+		if(tabValue.value == '1') obj.zf = zf2.value
+		else {
+			obj.pp = prod.value.id
+			obj.cg = prod.value.pid
+		}
+		return obj
 	})  
 	const analysisConfig = computed(() => analysisModeList.value.filter(ele => ele.value == mode.value)[0] )
 	onLoad((options) => {
@@ -425,6 +441,9 @@
 	function handleChangeShow(data) {
 		gptHelpShow.value = data
 	}
+	function handleChangeShow2(data) {
+		menusShow.value = data
+	}
 	
 	function gotoAnalysisDetail() {
 		base.handleGoto({
@@ -433,6 +452,10 @@
 				...routeParams.value
 			}
 		})
+	}
+	function menusConfirm(data) {
+		handleChangeShow2(false)
+		prod.value = data
 	}
 </script>
 

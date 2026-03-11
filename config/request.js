@@ -15,8 +15,7 @@ const duration = sys.osName == 'ios' ? 2000 : 3000
 
 export default function($ws = null) { 
 	const base = baseStore(pinia)
-	const user = userStore(pinia)
-	const { getNewUserid } = toRefs(user) 
+	const user = userStore(pinia) 
 	const http = uni.$u.http
 	// import md5Libs from "@/utils/md5";
 	const getTokenStorage = () => {
@@ -98,8 +97,7 @@ export default function($ws = null) {
 		if (config.url.indexOf('login_cancel') >= 0) {
 			return config
 		}
-		if (!token) {
-		// if (!getNewUserid.value) {
+		if (!token) { 
 			// 立即刷新token
 			if (!isRefreshing) {
 				console.log('刷新token ing', config.url)
@@ -107,27 +105,15 @@ export default function($ws = null) {
 				user.refreshToken().then(res => {
 					console.log('获取token成功，存入头部', res)
 					user.saveUserInfo(res)
-					uni.setStorageSync('WebSocketInfo', res)
-					// tim_online_login()
-					// console.log($ws) 
+					uni.setStorageSync('WebSocketInfo', res) 
 					if ($ws) {
 						$ws.init(base)
 					}
-					let userid = ""
-					// if(res.errMsg != "request:ok") {
-					// 	userid = md5Libs.md5(formatDate(new Date()) + 'wsdz')
-					// 	http.setToken(userid, true)
-					// }else {
+					let userid = "" 
 					userid = res.userid
 					http.setToken({
 						userid: userid
-					})
-					// getNewUserid.value = true
-					// }
-					// if(res.login == 0) { 
-					// 	getCurrentPages().length > 0 && uni.setStorageSync('prePage', getCurrentPages()[getCurrentPages().length - 1].$page.fullPath)  
-					// 	base.handleGoto({url: '/pages/login/login', type: 'redirectTo'}) 
-					// }
+					}) 
 					console.log('刷新token成功，执行队列')
 					requests.forEach(cb => cb(userid))
 					// 执行完成后，清空队列
@@ -163,23 +149,14 @@ export default function($ws = null) {
 		})
 		if (response.hasOwnProperty('data')) { 
 			if (response.data.code != 1) {
-				if (response.data.msg) {
-					// uni.showToast({
-					// 	title: response.data.msg,
-					// 	icon: 'none',
-					// 	mask: true,
-					// 	duration: duration
-					// }) 
+				if (response.data.msg) { 
 					messageManager.showError(response.data.msg); 
 				}
-			} else if (response.data.wss_code == 1) {
-				// $ws.send('{"type":"say","to_client_name":"all","to_client_id":"all","content":"' + response.data.wss_msg + '"}') 
-			}
+			} 
 		}
 		return response.data
 	}, (response) => {
-		// 对响应错误做点什么 （statusCode !== 200）
-		console.log(response) 
+		// 对响应错误做点什么 （statusCode !== 200） 
 		messageManager.showError(response.errMsg); 
 		return Promise.reject(response)
 	})

@@ -63,7 +63,7 @@
 	onMounted(() => {  
 		menusstore.getMenusData($http) 
 		let routeObj = getCurrentPages()[getCurrentPages().length - 1]
-		console.log(routeObj)
+		// console.log(routeObj)
 		menusstore.saveCurPage({
 			route: uni.$u.page(),
 			options: routeObj.options

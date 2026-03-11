@@ -1,6 +1,6 @@
 <script setup> 
 	import { isWeixinBrowser } from '@/utils/base.js'
-	import routingIntercept from '@/config/permission/index.js' 
+	import {routingIntercept, permissionBase} from '@/config/permission/index.js' 
 	import {inject, nextTick} from 'vue' 
 	import {
 		baseStore
@@ -23,7 +23,7 @@
 		if(window._userid) {
 			uni.setStorageSync('userid', window._userid)
 			uni.setStorageSync('poster', window._poster) 
-		}
+		} 
 		// #endif
 		// #ifdef MP-WEIXIN
 		if (uni.canIUse('getUpdateManager')) {
@@ -55,13 +55,25 @@
 				}
 			});
 		} 
+		 
 		// #endif
+		const launchInfo = uni.getLaunchOptionsSync();
+		 console.log('首次启动路径:', launchInfo.path, launchInfo);
+		 console.log('首次启动参数:', launchInfo.query);
 		// let options = uni.getLaunchOptionsSync() 
 		routingIntercept({$http}) 
-		// userS.getNewToken()
+		await userS.getUserData()
 		// userS.refreshUserData()
 		// userS.sendDingyue()
 		// useNormal()
+		let params = '' 
+		for(let key in launchInfo.query) {
+			if(!params) params+='?'
+			else params+='&'
+			params+= `${key}=${launchInfo.query[key]}`
+		} 
+		console.log(params)
+		permissionBase({url: launchInfo.path+params}, {$http})
 	});
 	onShow(async (options) => { 
 		// if(!isWeixinBrowser()) {

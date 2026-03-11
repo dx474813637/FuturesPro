@@ -29,7 +29,7 @@ export const baseStore = defineStore('base', {
 			share_other: '',
 			// themeColor: '#1777FF',
 			themeColor: '#1576E8',
-			empty: 'https://wx.rawmex.cn/Public/memu/data1.png',
+			empty: 'https://cft.100ppi.com/Public/memu/data1.png',
 			online: {
 				count: 0, 
 			}, 
@@ -51,14 +51,14 @@ export const baseStore = defineStore('base', {
 					name: '热点选股',
 					themeColor: '#1678FF',
 					apiName: 'gpt',
-					bgHeaderImage: 'https://wx.rawmex.cn/Public/rdxg-bg/rdxg-bg.png',
+					bgHeaderImage: 'https://cft.100ppi.com/Public/rdxg-bg/rdxg-bg.png',
 				},
 				{
 					value: '2',
 					name: '季报选股',
 					themeColor: '#E62C3A',
 					apiName: 'gpt_analysis',
-					bgHeaderImage: 'https://wx.rawmex.cn/Public/rdxg-bg/jbxg-top.png',
+					bgHeaderImage: 'https://cft.100ppi.com/Public/rdxg-bg/jbxg-top.png',
 				}
 			]
 		};
@@ -296,7 +296,7 @@ export const useCateStore = defineStore('cate', {
 		async getCateData() { 
 			this.cate_loading = true
 			try {
-				const res = await apis.cate_list() 
+				const res = await apis.category() 
 				this.cate_loading = false
 				if(res.code == 1) { 
 					//获取搜索类型数据

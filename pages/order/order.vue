@@ -1,42 +1,43 @@
 <template>
 	<view class="w">
+		<up-loading-page :loading="loading"  ></up-loading-page>
 		<view class="row u-flex-column u-flex-items-center u-flex-center text-white u-p-40 bg-primary">
-			<up-icon name="clock-fill" color="#fff" size="40"></up-icon>
-			<view class="u-font-18 u-m-t-10">等待支付</view>
+			<up-icon :name="orderDetail.status == 1?'checkmark-circle-fill':'clock-fill' " color="#fff" size="40"></up-icon>
+			<view class="u-font-18 u-m-t-10">{{pay_status}}</view>
 		</view>
 		<view class="card-w u-p-l-20 u-p-r-20 u-p-b-40">
 			<view class="bg"></view>
 			<view class="card bg-white box-border u-radius-20 u-p-20">
 				<view class="row u-flex u-flex-items-center u-flex-between u-p-20">
 					<view>订单ID</view>
-					<view>3214</view>
+					<view>{{orderDetail.order_id}}</view>
 				</view>
 				<view class="row u-flex u-flex-items-center u-flex-between u-p-20">
 					<view>订阅商品</view>
-					<view>股票通</view>
+					<view>{{orderDetail.name}}</view>
 				</view>
 				<view class="row u-flex u-flex-items-center u-flex-between u-p-20">
 					<view>订阅日期</view>
-					<view>2026-03-03</view>
+					<view>{{orderDetail.choose_date}}</view>
 				</view>
 				<view class="row u-flex u-flex-items-center u-flex-between u-p-20">
 					<view>订阅期限</view>
-					<view>一年</view>
+					<view>{{orderPriceInfo.time}}</view>
 				</view>
 				<view class="row u-flex u-flex-items-center u-flex-between u-p-20">
 					<view>订阅金额</view>
 					<view class="u-error">
-						<nut-price :price="300" size="large" thousands symbol="¥"></nut-price>
+						<nut-price :price="orderPriceInfo.price" size="large" thousands symbol="¥"></nut-price>
 					</view>
 				</view>
 				<view class="u-p-20">
-					<up-button type="success" size="large" shape="circle">微信支付</up-button>
+					<up-button type="success" size="large" shape="circle" @click="wxpayBtn">微信支付</up-button>
 				</view>
 
 			</view>
 
 			<view class="card bg-white box-border u-radius-20 u-p-20 u-m-t-30"
-				style="background: linear-gradient(to bottom, #fff 60%, #cbe6ff );">
+				style="background: linear-gradient(to bottom, #fff 60%, #cbe6ff );" v-if="false">
 				<view class="u-text-center u-font-19 text-bold u-p-20">我要开票</view>
 				<view class="u-p-30">
 					<up-form :model="form" :rules="rules" ref="uFormRef" labelWidth="120">
@@ -75,6 +76,33 @@
 </template>
 
 <script setup>
+	import useFilter from '@/composition/useFilter.js' 
+	const zt = computed(() => {  
+		return {
+			pay_status: orderDetail.value.status
+		}
+	})
+	const { 
+		pay_status,
+		bill_status,
+		plot_status
+	} = useFilter(zt)
+	import {userStore } from '@/stores/user.js'  
+	import {useCateStore, baseStore} from '@/stores/base.js' 
+	const user = userStore() 
+	const {gpt, qht} = toRefs(user)
+	const base = baseStore() 
+	const $api = inject('$api')  
+	const loading = ref(false) 
+	const orderPriceInfo = ref({})
+	const orderDetail = computed(() => {
+		if(type.value == '3') {
+			return gpt.value
+		}
+		if(type.value == '2') {
+			return qht.value
+		}
+	})
 	const form = ref({
 		name: '',
 		aaa: '',
@@ -120,11 +148,35 @@
 		}],
 	};
 	const uFormRef = ref(null);
-
+	const type = ref('') 
+	onLoad(async (options) => { 
+		if(options.hasOwnProperty('type')) {
+			type.value = options.type || '2'
+		} 
+		await getOrder() 
+		await user.getUserSubscription()
+		
+	}) 
 	onReady(() => {
-		uFormRef.value.setRules(rules)
+		// uFormRef.value.setRules(rules)
 	})
-
+	async function getOrder() {
+		if(loading.value) return
+		loading.value = true
+		try{ 
+			const res = await $api.get_order({
+				params: {
+					type: type.value,
+				}
+			})
+			if(res.code == 1) {
+				orderPriceInfo.value = res.list.res
+			}
+		}catch(e) {
+			
+		}
+		loading.value = false
+	}
 	function submit() {
 		uFormRef.value.validate().then(valid => {
 			if (valid) {
@@ -136,6 +188,29 @@
 			// 处理验证错误  
 			uni.$u.toast('校验失败')
 		});
+	}
+	function groupChange() {
+		
+	}
+	async function wxpayBtn() {
+		if(loading.value) return 
+		loading.value = true
+		uni.showLoading({title: '正在发起微信支付...'})
+		try{ 
+			const res = await $api.weixin_pay({
+				params: {
+					id: orderPriceInfo.value.order_id,
+					price: orderPriceInfo.value.price*100, 
+				}
+			})
+			if(res.code == 1) {
+				
+			} 
+		}catch(e) {
+			
+		}
+		uni.hideLoading()
+		loading.value = false
 	}
 </script>
 

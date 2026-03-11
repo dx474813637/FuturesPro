@@ -13,7 +13,33 @@ export default function useFilter(zt) {
 		else if(value == '5') text = '高位'  
 		return text
 	})  
+	const pay_status = computed(() => {
+		let value = zt?.value.pay_status
+		let text = value
+		if(value == '1') text = '已支付'
+		else if(value == '0') text = '未支付' 
+		return text
+	})  
+	const bill_status = computed(() => {
+		let value = zt?.value.bill_status
+		let text = value
+		if(value == '0') text = '审核未通过'
+		else if(value == '1') text = '审核已通过' 
+		else text = '未申请开票'
+		return text
+	})  
+	const plot_status = computed(() => {
+		let value = zt?.value.plot_status
+		let text = value
+		if(value == '0') text = '发票未寄送'
+		else if(value == '1') text = '发票已寄送' 
+		else text = '未申请开票'
+		return text
+	})  
 	return {
-		position_status
+		position_status,
+		pay_status,
+		bill_status,
+		plot_status
 	}
 }

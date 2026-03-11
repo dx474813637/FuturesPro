@@ -8,7 +8,7 @@ import {
 import pinia  from '@/stores/index.js'; 
 import {inject, nextTick} from 'vue'
 
-	const $ws = inject('$ws')
+	// const $ws = inject('$ws')
 const user = userStore(pinia)
 const menus = menusStore(pinia)
 const base = baseStore(pinia) 
@@ -16,11 +16,13 @@ const base = baseStore(pinia)
  * @description 自定义路由拦截
  */ 
  const whiteList = [ 
- 	'/pages_user/index/index', 
-	'/pages_user/reservation_list/reservation_list',
- 	{
- 		pattern: /^\/pages/
- 	},
+	'/pages/index/index',
+	{ pattern: /^\/pages\/login*/ },
+ // 	'/pages_user/index/index', 
+	// '/pages_user/reservation_list/reservation_list',
+ // 	{
+ // 		pattern: /^\/pages/
+ // 	},
  	// '/pages/user/index',
  	// {
  	// 	pattern: /^\/pages\/list.*/
@@ -37,20 +39,16 @@ const base = baseStore(pinia)
  	// },
  	// { pattern: /^\/pages\/index\/(?!attention).*/ },
  ];
- // 用户信息未完善 权限列表
-const userStateList =  [
-	// {
- // 		pattern: /^\/pages\/my\/broker\/edit*/
- // 	},
- // 	{
- // 		pattern: /^\/pages\/my\/broker\/prod_edit*/
- // 	},
- ]
+ // 股票通 权限列表
+const gptStateList = [
+	{ pattern: /^\/pages\/analysis*/ }
+]
  
 export function permissionBase(e, data) {
-	 
+		
+		const {login, gpt, gptExpireTimestamp} = toRefs(user)
 	 	const url = e.url.split('?')[0]
-	 	console.log('url:addInterceptor ===> ', e.url ) 
+	 	console.log('url:addInterceptor ===> ', e.url, e ) 
 	 	
 	 		
 	 	// 判断当前窗口是白名单，如果是则不重定向路由
@@ -62,8 +60,48 @@ export function permissionBase(e, data) {
 	 			}
 	 			return url === item
 	 		}) 
+			// 不是白名单并且没有token
+			if (!pass && login.value == 0) { 
+				uni.setStorageSync('prePage', e.url)
+				uni.navigateTo({
+					url: "/pages/login/login",
+					success() {
+						// messageManager.showError('请先登录')
+						uni.showToast({
+							title: '请先登录',
+							icon: 'none'
+						})
+					}
+				})
+				return false
+			}
 	 	}
-	 	// 不是白名单并且没有token
+		if (!pass && gptStateList) {
+			//用户信息是否完善校验
+			pass = !gptStateList.some((item) => {
+				if (typeof(item) === 'object' && item.pattern) {
+					return item.pattern.test(url)
+				}
+				return url === item
+			}) 
+			if (!pass) {
+				let timestamp = new Date().getTime();
+				if(timestamp > gptExpireTimestamp.value) { 
+					//不在订阅期内
+					uni.setStorageSync('prePage', e.url)
+					uni.navigateTo({
+						url: "/pages/order/order?type=3",
+						success() { 
+							uni.showToast({
+								title: '请先订阅',
+								icon: 'none'
+							})
+						}
+					}) 
+					return false
+				}
+			}
+		}
 		// console.log(user.user.login, user.user_info.login)
 		// console.log(!user.user.login, !user.user_info.login, pass)
 	 	// if (!pass && (!user.user.login || !user.user_info.user )) {
@@ -123,7 +161,7 @@ export function permissionBase(e, data) {
 		return true
 }
  
-export default async function(data) {
+export async function routingIntercept(data) {
 	// console.log($ws)   
 	const list = ['navigateTo', 'redirectTo', 'reLaunch', 'switchTab'] 
 	// 用遍历的方式分别为,uni.navigateTo,uni.redirectTo,uni.reLaunch,uni.switchTab这4个路由方法添加拦截器

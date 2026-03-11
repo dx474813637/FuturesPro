@@ -97,13 +97,16 @@
 
 <script setup> 
 	const $api = inject('$api') 
+	import {userStore } from '@/stores/user.js'  
 	import { baseStore, menusStore } from '@/stores/base.js'
+	const user = userStore() 
 	const menusstore = menusStore()
 	const base = baseStore() 
 	const logintype = ref(2)
 	const uForm = ref(null)
 	const form = ref({
-		login: '13857106650',
+		// login: '13857106650',
+		login: '18757127948',
 		passwd: '123456',
 	})
 	const passwordType = ref(true)
@@ -150,7 +153,7 @@
 		// 	denglu_info.value = res.list
 		// }
 	})
-	onReady(() => {
+	onReady(() => { 
 		handleSetRules()
 	})
 	function handleSetRules() { 
@@ -199,6 +202,7 @@
 			// user.setLogin(1)
 			// await wode()
 			await menusstore.getMenusData() 
+			await user.getUserSubscription()
 			naviBack()
 			 
 		}
@@ -213,9 +217,9 @@
 						title: '登录成功',
 						icon: 'none'
 					})
+					uni.removeStorageSync('prePage')
 				}
 			})
-			uni.removeStorageSync('prePage')
 		}else {
 			uni.navigateTo({
 				url: '/pages/my/user/index',
