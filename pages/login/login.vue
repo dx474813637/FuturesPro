@@ -105,8 +105,8 @@
 	const logintype = ref(2)
 	const uForm = ref(null)
 	const form = ref({
-		// login: '13857106650',
-		login: '18757127948',
+		login: '13857106650',
+		// login: '18757127948',
 		passwd: '123456',
 	})
 	const passwordType = ref(true)

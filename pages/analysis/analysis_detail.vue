@@ -220,17 +220,13 @@
 							</view>
 							
 						</view>  
-						<view class="main-data">
-							<web-view 
-								:fullscreen="false" 
-								style="width: 100%; height: 170px; border: none!important"
-								src="https://www.100ppi.com/graph/cindex.php?f=graph_gpt_ave&ppid=120&sdate=2026-01-01&edate=2026-03-09"></web-view>
+						<view class="main-data" style="width: 100%;">
+							<ProductECharts
+								:chartData="productEChartsBaseData"
+							></ProductECharts>
 						</view>
 						<view class="main-data">
-							<web-view 
-								:fullscreen="false" 
-								style="width: 100%; height: 220px; border: none!important"
-								src="https://www.100ppi.com/graph/cindex.php?f=graph_stock_k&code=000301&sdate=2026-01-01"></web-view>
+							
 						</view>
 						<view class="u-p-10 u-flex u-flex-wrap u-flex-items-start"  v-if="cpyActive">
 							<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
@@ -433,6 +429,8 @@
 		} 
 		return {}
 	});
+	const productEChartsBaseData = ref({})
+	const cpyKData = ref({})
 	const productZfByDay = computed(() => { 
 		if(productActive.value.pid) {
 			let keys = Object.keys(productActive.value).filter(ele => ele.includes('rate_'))  
@@ -462,6 +460,7 @@
 	const cpyDataStock = computed(() => cpyData.value.stock || [])
 	const cpyDataGinfo = computed(() => cpyData.value.Ginfo || {})
 	const cpyDataSinfo = computed(() => cpyData.value.Sinfo || {})
+	
 	
 	const terms_position = ref('')
 	const positionLabel = computed(() => positionList.value.filter(ele => ele.value == terms_position.value )[0]?.name)
@@ -666,7 +665,7 @@
 		let params = {
 			ppid: productActive.value.ppid,
 		}
-		if(isDetail) {
+		if(isDetail) { 
 			params = {
 				...params,
 				code: cpyActive.value?.stockcode,
@@ -687,6 +686,12 @@
 				if(isSetData) {
 					cpylist.value = res.list.res.stock || []
 				}
+				 
+				productEChartsBaseData.value = res.list.res.charts_ave
+				if(res.list.res.charts_k.code) {
+					cpyKData.value = res.list.res.charts_k
+				}
+				
 				
 				if(!cpyValue.value) cpyValue.value = cpylist.value[0].cid || ''
 				// productlist.value = res.list.res.list

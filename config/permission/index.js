@@ -15,7 +15,7 @@ const base = baseStore(pinia)
 /**
  * @description 自定义路由拦截
  */ 
- const whiteList = [ 
+ const whiteList = [  
 	'/pages/index/index',
 	{ pattern: /^\/pages\/login*/ },
  // 	'/pages_user/index/index', 
@@ -48,7 +48,7 @@ export function permissionBase(e, data) {
 		
 		const {login, gpt, gptExpireTimestamp} = toRefs(user)
 	 	const url = e.url.split('?')[0]
-	 	console.log('url:addInterceptor ===> ', e.url, e ) 
+	 	console.log('url:addInterceptor ===> ', e.url ) 
 	 	
 	 		
 	 	// 判断当前窗口是白名单，如果是则不重定向路由
@@ -59,7 +59,7 @@ export function permissionBase(e, data) {
 	 				return item.pattern.test(url)
 	 			}
 	 			return url === item
-	 		}) 
+	 		})  
 			// 不是白名单并且没有token
 			if (!pass && login.value == 0) { 
 				uni.setStorageSync('prePage', e.url)

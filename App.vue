@@ -62,18 +62,14 @@
 		 console.log('首次启动参数:', launchInfo.query);
 		// let options = uni.getLaunchOptionsSync() 
 		routingIntercept({$http}) 
-		await userS.getUserData()
-		// userS.refreshUserData()
-		// userS.sendDingyue()
-		// useNormal()
+		await userS.getUserData() 
 		let params = '' 
 		for(let key in launchInfo.query) {
 			if(!params) params+='?'
 			else params+='&'
 			params+= `${key}=${launchInfo.query[key]}`
-		} 
-		console.log(params)
-		permissionBase({url: launchInfo.path+params}, {$http})
+		}  
+		permissionBase({url: '/'+launchInfo.path+params}, {$http})
 	});
 	onShow(async (options) => { 
 		// if(!isWeixinBrowser()) {

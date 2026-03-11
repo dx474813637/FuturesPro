@@ -1,11 +1,9 @@
 <template>
-	<view>
-		
+	<view> 
 	</view>
 </template>
 
-<script setup>
-	
+<script setup> 
 </script>
 
 <style lang="scss">
