@@ -224,7 +224,7 @@
 		}catch(e) {
 			
 		}
-		uni.hideLoading()
+		// uni.hideLoading()
 		loading.value = false
 	}
 	async function wxPay(res) { 

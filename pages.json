@@ -10,7 +10,7 @@
 		}
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		
+
 		{
 			"path": "pages/index/gpt",
 			"style": {
@@ -104,7 +104,7 @@
 		},
 		{
 			"path": "pages/login/xieyi",
-			"style": { 
+			"style": {
 				"navigationBarTitleText": ""
 			}
 		},
@@ -134,6 +134,19 @@
 			"style": {
 				"navigationStyle": "custom",
 				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/partner/apply_partner",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "合伙人申请"
+			}
+		},
+		{
+			"path": "pages/partner/users_partner",
+			"style": { 
+				"navigationBarTitleText": "发展用户"
 			}
 		}
 	],
