@@ -98,6 +98,8 @@
 			// uni.setStorageSync('login', res.data.back.login)
 			// this.setLogin(1)
 			// await this.wode()
+			await menusstore.getMenusData() 
+			await user.getUserSubscription()
 			naviBack()
 			
 		}else {
