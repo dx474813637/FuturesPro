@@ -30,8 +30,13 @@
 							<text>周期内</text>
 						</view> 
 					</template>
-					<text >且涨幅≥</text>
-					<text class="text-yellow text-bold u-p-4">{{zf}}%</text>
+					<template v-if="zf">
+						<text >且涨幅≥</text>
+						<text class="text-yellow text-bold u-p-4">{{zf}}%</text>
+					</template>
+					<template v-else>
+						<text>按涨幅排序</text>
+					</template>
 					<text>的商品有</text>
 					<text class="text-yellow text-bold u-p-4">{{productlist.length}}</text>
 					<text>个</text> 
@@ -159,8 +164,8 @@
 					<view class="loading-w u-flex u-flex-items-start u-flex-center u-p-t-80" style="background-color: rgba(255,255,255,.5)" v-if="loading_product || loading_stock">
 						 <nut-icon name="loading" size="20" custom-color="#f00"></nut-icon>
 					</view>
-					<view class="main-left" v-if="cpylist.length > 0">
-						<view class="cpy-list">
+					<view class="main-left">
+						<view class="cpy-list" v-if="cpylist.length > 0">
 							<view 
 								class="cpy-item u-p-10 u-p-t-15 u-p-b-15"
 								v-for="item in cpylist"
@@ -219,44 +224,50 @@
 								</view>
 							</view>
 							
-						</view>  
-						<view class="main-data" style="width: 100%;">
+						</view>   
+						<view class="main-data u-m-b-14" style="width: 100%;">
 							<ProductECharts
-								:chartData="productEChartsBaseData"
+								:chartData="productEChartsBaseData" 
 							></ProductECharts>
 						</view>
-						<view class="main-data">
+						<view class="u-radius-8 u-m-4" style="background: linear-gradient(to bottom, #f6fcff, #fff, #f6fcff);"  v-if="cpyActive">
+							<view class="main-data" style="width: 100%;">
+								<StockECharts
+									:chartData="cpyKData" 
+									:show="cpyActive? true: false"
+								></StockECharts>
+							</view> 
+							<view class="u-p-10 u-flex u-flex-wrap u-flex-items-start">
+								<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
+									<view class="text-base u-font-13">最新股价</view>
+									<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{cpyDataSinfo.price}}</view>
+								</view>
+								<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
+									<view class="text-base u-font-13">90天位置</view>
+									<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{position_status}}</view>
+								</view>
+								<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
+									<view class="text-base u-font-13">最小值</view>
+									<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{cpyDataSinfo.ninety_day_min}}</view>
+								</view>
+								<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
+									<view class="text-base u-font-13">最大值</view>
+									<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{cpyDataSinfo.ninety_day_max}}</view>
+								</view>
+								<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
+									<view class="text-base u-font-13">中位值</view>
+									<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{cpyDataSinfo.ninety_day_zw}}</view>
+								</view>
+								<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
+									<view class="text-base u-font-13">平均值</view>
+									<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{cpyDataSinfo.ninety_day_avg}}</view>
+								</view>
+								<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
+									<view class="text-base u-font-13">PriceSeek评分</view>
+									<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{cpyDataGinfo.score}}</view>
+								</view>
+							</view>
 							
-						</view>
-						<view class="u-p-10 u-flex u-flex-wrap u-flex-items-start"  v-if="cpyActive">
-							<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
-								<view class="text-base u-font-13">最新股价</view>
-								<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{cpyDataSinfo.price}}</view>
-							</view>
-							<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
-								<view class="text-base u-font-13">90天位置</view>
-								<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{position_status}}</view>
-							</view>
-							<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
-								<view class="text-base u-font-13">最小值</view>
-								<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{cpyDataSinfo.ninety_day_min}}</view>
-							</view>
-							<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
-								<view class="text-base u-font-13">最大值</view>
-								<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{cpyDataSinfo.ninety_day_max}}</view>
-							</view>
-							<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
-								<view class="text-base u-font-13">中位值</view>
-								<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{cpyDataSinfo.ninety_day_zw}}</view>
-							</view>
-							<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
-								<view class="text-base u-font-13">平均值</view>
-								<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{cpyDataSinfo.ninety_day_avg}}</view>
-							</view>
-							<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
-								<view class="text-base u-font-13">PriceSeek评分</view>
-								<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{cpyDataGinfo.score}}</view>
-							</view>
 						</view>
 					</view>
 				</view>
@@ -383,6 +394,7 @@
 	const priceSeekInfoShow = ref(false)
 	const mode = ref('1')
 	const zf = ref('')
+	const timestamp = ref(new Date().getTime())
 	
 	const sdate = ref('')
 	const edate = ref('')
@@ -704,8 +716,8 @@
 		
 	}
 	async function resetSearchEvent() {
-		cpylist.value = productlist.value[productIndex.value].stock
-		cpyValue.value = cpylist.value[0].cid
+		cpylist.value = productlist.value[productIndex.value].stock || []
+		cpyValue.value = cpylist.value[0]?.cid || ''
 		init_p_s()
 		await getStockData({isSetData: true, isDetail: true})  
 	}
@@ -752,9 +764,13 @@
 		// }
 	}
 	async function stockFilterBtn() {
-		cpylist.value = productlist.value[productIndex.value].stock
+		// console.log(1, productlist.value[productIndex.value].stock)
 		cpyValue.value = ''
+		cpylist.value = []
+		// cpylist.value = productlist.value[productIndex.value].stock
+		// cpyValue.value = ''
 		await getStockData({isSetData: true, isDetail: false}) 
+		// await getStockData({isSetData: true, isDetail: true})  
 		// console.log(cpylist.value)
 		if(cpylist.value[0]) {
 			cpyValue.value =  cpylist.value[0]?.stockcode 

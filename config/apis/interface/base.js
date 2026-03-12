@@ -29,7 +29,7 @@ export const login_cancel = (data) => uni.$u.http.get('login_cancel', data)
 
 // category 商品分类
 export const category = (data) => uni.$u.http.get('category', data)
-// apply_partner  合伙人申请 code:推荐人id不是必填
+// apply_partner  合伙人申请 code:推荐人id 不是必填
 export const apply_partner = (data) => uni.$u.http.get('apply_partner', data)
 // query_ptp 合伙人发展用户 返回字段： poster：合伙人账号（不用显示）dy_poster：发展的用户账号 cdate：添加日期
 export const query_ptp = (data) => uni.$u.http.get('query_ptp', data)

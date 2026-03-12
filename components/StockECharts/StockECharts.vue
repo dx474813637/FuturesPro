@@ -1,18 +1,23 @@
 <template>
 	<view>
-		<view  style="width: 100%; height: 320px;position: relative;">
-			<l-echart ref="chartRef"></l-echart>
+		<view style="width: 100%; height: 320px;position: relative;">
+			<l-echart ref="kchartRef"></l-echart>
 			<view class="customTooltips u-radius-6" :style="{ left: position[0] + 'px', top: position[1] + 'px' }"
 				v-if="paramsRef.length && position.length && showTip">
 				<!-- <view>这是个自定的tooltips</view> -->
 				<view class="u-m-b-6 u-font-14">{{ paramsRef[0]['axisValue'] }}</view>
-				<view v-for="item in paramsRef">
-					<view class="u-flex  u-flex-between text-base u-font-14">
+				<view v-for="(item, index) in paramsRef[0].data">
+					<view class="u-flex  u-flex-between text-base u-font-14" v-if="index != 0">
 						<view class="u-flex u-flex-items-center" >
-							<view class="u-radius-20 u-m-r-8" :style="{backgroundColor: item.color}" style="width: 8px; height: 8px;"></view>
-							<view>{{ item.seriesName }}</view>
+							<!-- <view class="u-radius-20 u-m-r-8" :style="{backgroundColor: item.color}" style="width: 8px; height: 8px;"></view> -->
+							<view>
+								<template v-if="index == 1">开盘</template>
+								<template v-if="index == 2">收盘</template>
+								<template v-if="index == 3">最低</template>
+								<template v-if="index == 4">最高</template>
+							</view>
 						</view>
-						<view class="text-bold text-black u-m-l-10">{{ item.value }}</view>
+						<view class="text-black u-m-l-10">{{ item }}</view>
 					</view>
 				</view>
 			</view>
@@ -27,9 +32,13 @@
 			default: () => {
 				return {}
 			}
-		}
+		},
+		show: {
+			type: Boolean,
+			default: false
+		},
 	})
-	const chartRef = ref(null)
+	const kchartRef = ref(null)
 	const chartInstance = ref(null)
 	// 仅在小程序环境下引入 ECharts
 	// #ifdef MP
@@ -44,21 +53,20 @@
 	const showTip = ref(false)
 
 	const optionRef = computed(() => {
-		if (!props.chartData.data_data) return false
-		let yname = Object.keys(props.chartData.data_data) 
-		let ydata1 = Object.values(props.chartData.data_data[yname[0]])
-		let ydata2 = Object.values(props.chartData.data_data[yname[1]])
-		let xdata = props.chartData.date_data.split(',').map(date => date.replace(/'/g, ''))
-
+		if (!props.chartData.splitdata) return false
+		// let yname = Object.keys(props.chartData.data_data) 
+		let ydata = JSON.parse(('['+props.chartData.splitdata+']').replace(/'/g, '"')).map(item => item.slice(1))
+		let xdata = props.chartData.xdata.split(',').map(date => date.replace(/'/g, ''))
+		// console.log(ydata, xdata)
 		return {
 			title: {
 				left: 'center',
-				top: 0,
-				text: props.chartData.name + '价格走势',
-				subtext: props.chartData.spec,
+				top: 15,
+				text: `${props.chartData.name}(${props.chartData.code})日K线` ,
+				// subtext: props.chartData.spec,
 			},
 			grid: {
-				height: '50%'
+				height: '55%'
 			},
 			color: ['#5da3ff', '#c641ff'],
 			tooltip: {
@@ -82,10 +90,10 @@
 				},
 				formatter: (params, ticket, callback) => {},
 			},
-			legend: {
-				data: yname,
-				bottom: '15%'
-			},
+			// legend: {
+			// 	data: yname,
+			// 	bottom: '15%'
+			// },
 			dataZoom: [
 				{
 					type: 'inside',
@@ -96,28 +104,27 @@
 					type: 'slider',
 					start: 0,
 					end: 100,
-					bottom: 10
+					bottom: 20
 				}
 			],
 			xAxis: [{
-				type: 'category',
-				axisLine: {
-					lineStyle: {
-						color: '#999999'
-					}
-				},
-				axisLabel: {
-					color: '#666666'
-				},
+				// type: 'category',
+				// axisLine: {
+				// 	lineStyle: {
+				// 		color: '#999999'
+				// 	}
+				// },
+				// axisLabel: {
+				// 	color: '#666666'
+				// },
 				data: xdata
 			}],
 			yAxis: [{
 					type: 'value',
-					scale: true,
 					axisTick: {
 						show: false
 					},
-					name: `${yname[0]}(${props.chartData.unit})`,
+					name: '',
 					axisLine: {
 						lineStyle: {
 							color: '#999999'
@@ -125,44 +132,21 @@
 					},
 					axisLabel: {
 						color: '#666666'
-					}
+					},
+					scale: true
 				},
-				// {
-				// 	type: 'value',
-				// 	scale: true,
-				// 	axisTick: {
-				// 		show: false
-				// 	},
-				// 	name: yname[1],
-				// 	axisLine: {
-				// 		lineStyle: {
-				// 			color: '#999999'
-				// 		}
-				// 	},
-				// 	axisLabel: {
-				// 		color: '#666666'
-				// 	}
-				// }
 			],
-			series: [{
-					name: yname[0],
-					type: 'line',
+			series: [
+				{
+					name: '',
+					type: 'candlestick',
 					yAxisIndex: 0,
 					label: {
 						show: true,
 						// position: 'inside'
 					},
-					data: ydata1
-				},
-				// {
-				// 	name: yname[1],
-				// 	yAxisIndex: 1,
-				// 	type: 'line',
-				// 	label: {
-				// 		show: true
-				// 	},
-				// 	data: ydata2
-				// }
+					data: ydata
+				} 
 			]
 		}
 
@@ -173,19 +157,27 @@
 	watch(
 		() => optionRef.value,
 		async (n, o) => { 
-			if (!optionRef.value || ( JSON.stringify(n) === JSON.stringify(o))) return 
+			if ( !optionRef.value ) return 
 			await initChart()
 		}, {
 			deep: true
 		}
 	)
+	watch(
+		() => props.show,
+		async (n, o) => { 
+			if (!n) return 
+			await initChart()
+		} 
+	)
 	// 初始化图表 
 	const initChart = async () => {
-		if (!chartRef.value) return
+		if (!kchartRef.value) return
 
 		try {
-			const chart = await chartRef.value.init(echarts)
-			chart.setOption(optionRef.value) 
+			const chart = await kchartRef.value.init(echarts)
+			chart.setOption(optionRef.value)
+
 			chart.on('showTip', (params) => {
 				showTip.value = true
 				// console.log('showTip::')

@@ -58,12 +58,12 @@
 			</view>
 
 
-			<view class="alternative">
+			<view class="alternative u-flex-center">
 				<view class="password" @click="changeLoginType">{{ logintype == 1 ? '账号密码登录' : '手机验证码登录'}}</view>
 				<!-- <view class="issue" @click="base.handleGoto({url:'/pages/login/register'})">注册账号</view> -->
-				<view v-if="logintype == 2">
+				<!-- <view v-if="logintype == 2">
 					<up-text type="warning" decoration="underline" text="忘记密码？" @click="base.handleGoto('/pages/login/resetPwd')"></up-text>
-				</view>
+				</view> -->
 			</view> 
 			
 			<!-- <view class=" u-m-t-40 u-flex u-flex-end">
@@ -105,9 +105,8 @@
 	const logintype = ref(2)
 	const uForm = ref(null)
 	const form = ref({
-		login: '13857106650',
-		// login: '18757127948',
-		passwd: '123456',
+		login: '',
+		passwd: '',
 	})
 	const passwordType = ref(true)
 	const denglu_info = ref({})
@@ -221,8 +220,8 @@
 				}
 			})
 		}else {
-			uni.navigateTo({
-				url: '/pages/my/user/index',
+			uni.reLaunch({
+				url: '/pages/my/my',
 				success() {
 					uni.showToast({
 						title: '登录成功',

@@ -8,12 +8,16 @@ export const userStore = defineStore('user', {
 		return { 
 			login: '', 
 			gpt: {},
-			qht: {}
+			qht: {},
+			userInfo: uni.getStorageSync('userInfo') || {}
 		};
 	},
 	getters: { 
 		gptExpireTimestamp(){
 			return new Date(this.gpt.expire_date).getTime() || 0
+		},
+		gptVip() {
+			return this.gptExpireTimestamp > new Date().getTime() 
 		}
 	}, 
 	actions: {
@@ -30,11 +34,14 @@ export const userStore = defineStore('user', {
 			if(res.code == 1) {
 				this.gpt = res.list.res.gpt
 				this.qht = res.list.res.qht
+				this.userInfo = res.info
+				uni.setStorageSync('userInfo', res.info)
 			}
 		}, 
 		clearLogout() {
 			this.login = ''  
-			// uni.removeStorageSync('userid')  
+			this.userInfo = {}
+			uni.removeStorageSync('userInfo')  
 		},
 		async logout() {
 			uni.showLoading()

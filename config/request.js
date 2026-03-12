@@ -16,6 +16,7 @@ const duration = sys.osName == 'ios' ? 2000 : 3000
 export default function($ws = null) { 
 	const base = baseStore(pinia)
 	const user = userStore(pinia) 
+	const {urlParams} = toRefs(base)
 	const http = uni.$u.http
 	// import md5Libs from "@/utils/md5";
 	const getTokenStorage = () => {
@@ -83,6 +84,7 @@ export default function($ws = null) {
 		// console.log(config)
 		const token = getTokenStorage()
 		config.header = {
+			...urlParams.value,
 			...config.header,
 			// 'shareid': base.shareid,
 			userid: token,

@@ -10,6 +10,7 @@ import { userStore } from '@/stores/user';
 // const extConfig = uni.getExtConfigSync ? uni.getExtConfigSync():{}
 // console.log(extConfig) 
 let pageRoute = uni.getStorageSync('noTokenNeedPermissionRoute') || ''
+import {isWeixinBrowser} from '@/utils/base' 
 export const baseStore = defineStore('base', {
 	state: () => {
 		return {
@@ -22,10 +23,11 @@ export const baseStore = defineStore('base', {
 				'appsecret': '29caD4UaRVtdotmMrRksDcYHOBG2VxunY278w7+6LK6rE/V1VW29fPY',
 				// 'xcxlogin': extConfig.attr.login,
 				// 'xcxappid': extConfig.attr.wxappid,
-				'tid2': uni.getStorageSync('tid2') || '',
-				'poster2': uni.getStorageSync('poster2') || '',
-				'shareother': uni.getStorageSync('share_other') || '',
+				// 'tid2': uni.getStorageSync('tid2') || '',
+				// 'poster2': uni.getStorageSync('poster2') || '',
+				// 'shareother': uni.getStorageSync('share_other') || '',
 			},
+			urlParams: {},
 			share_other: '',
 			// themeColor: '#1777FF',
 			themeColor: '#1576E8',
@@ -181,7 +183,78 @@ export const baseStore = defineStore('base', {
 					}
 				});
 			})
-		}
+		},
+		async wxShare(){
+			// console.log( 'wxShare' )
+			if (!isWeixinBrowser()) return 
+			let url = window.location.href
+			const res = await apis.get_share_url({params: {url, share_id: uni.getStorageSync('share_id') || ''}})
+			if(res.code == 1) {
+				if(jWeixin && jWeixin.config) {
+					const share_config = res.list
+					jWeixin.config({
+						debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+						appId: share_config.appid, // 必填，公众号的唯一标识
+						timestamp: share_config.timestamp, // 必填，生成签名的时间戳
+						nonceStr: share_config.noncestr, // 必填，生成签名的随机串
+						signature: share_config.signature,// 必填，签名
+						jsApiList: [
+							'onMenuShareAppMessage',
+							'onMenuShareTimeline',
+							'chooseWXPay',
+							'showOptionMenu',
+							"updateAppMessageShareData",
+							"updateTimelineShareData",
+							"hideMenuItems",
+							"showMenuItems" ,
+							"downloadImage"
+						] // 必填，需要使用的JS接口列表
+					});
+					jWeixin.ready(() => { 
+						// console.log('wxShare2')
+						let obj = {
+							title: share_config.title,
+							link: res.url,// url,
+							desc: share_config.desc || '',
+							imgUrl: share_config.imgUrl || '',
+						}
+						  // 分享到朋友圈及QQ空间
+						if(jWeixin.updateAppMessageShareData) {
+						   	jWeixin.updateAppMessageShareData({
+								...obj, 
+								success(data){
+									console.log('success', data)
+								}, 
+								fail(data){
+									console.log('fail', data)
+								}
+							})
+						} else {
+						  	jWeixin.onMenuShareAppMessage({...obj})
+						} 
+						  // 分享给朋友及分享到QQ
+						if(jWeixin.updateTimelineShareData) {
+						   	jWeixin.updateTimelineShareData({
+								...obj, 
+								success(data){
+									console.log('success', data)
+								}, 
+								fail(data){
+									console.log('fail', data)
+								}
+							})
+						} else {
+						  	jWeixin.onMenuShareTimeline({...obj})
+						}  
+					 
+						jWeixin.error((err ) => {
+							// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名
+							console.log('验证失败', err)
+						})
+					}) 
+				}
+			} 
+		} 
 	},
 });
  
@@ -223,6 +296,7 @@ export const menusStore = defineStore('menus', {
 				const user = userStore()
 				const {login} = toRefs(user)
 				login.value = res.login 
+				if(res.share_id) uni.setStorageSync('share_id', res.share_id)
 				// user.saveUserInfo(res.info)
 				// user.getUserInfo(res.info)
 				//获取底部导航菜单

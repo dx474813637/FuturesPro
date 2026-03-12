@@ -1,5 +1,9 @@
 // mixins/globalMixin.js
 import messageManager from '@/config/message.js'
+import {
+		baseStore
+	} from '@/stores/base';
+	const base = baseStore()
 export default {
 	data() {
 		return {
@@ -7,6 +11,8 @@ export default {
 		}
 	},
 	onLoad(options) {
+		// console.log(1,getCurrentPages())
+		
 		if (options.hasOwnProperty('scene')) {
 			let str = decodeURIComponent(options.scene)
 			if (str) {
@@ -35,6 +41,7 @@ export default {
 			messageManager.registerToast(proxy.$refs.globalToast)
 			// console.log('GlobalToast实例已注册到消息管理器')
 		}
+		base.wxShare()
 	},
 	methods: {
 		// 全局方法

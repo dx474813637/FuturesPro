@@ -43,7 +43,7 @@ export default defineConfig({
 		},
 		assetsDir: 'assets_h5_100ppi'
 	},
-	base: '/100ppi',
+	// base: '/100ppi',
 	plugins: [
 		// injectLoadingComponent(),
 		UniComponents({

@@ -10,54 +10,62 @@
 		}
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		
+		{
+			"path": "pages/index/gpt",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": ""
+			}
+		},
 		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "uni-app"
 			}
 		},
-		{
-			"path": "pages/subscribe/center/center",
-			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTitleText": ""
-			}
-		},
-		{
-			"path": "pages/subscribe/index/index",
-			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTitleText": ""
-			}
-		},
-		{
-			"path": "pages/subscribe/gpt/gpt",
-			"style": {
-				"navigationStyle": "custom", 
-				"navigationBarTitleText": ""
-			}
-		},
-		{
-			"path": "pages/subscribe/gpt/hot",
-			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTitleText": ""
-			}
-		},
-		{
-			"path": "pages/subscribe/gpt/season",
-			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTitleText": ""
-			}
-		},
-		{
-			"path": "pages/subscribe/gpt/analysis",
-			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTitleText": ""
-			}
-		},
+		// {
+		// 	"path": "pages/subscribe/center/center",
+		// 	"style": {
+		// 		"navigationStyle": "custom",
+		// 		"navigationBarTitleText": ""
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/subscribe/index/index",
+		// 	"style": {
+		// 		"navigationStyle": "custom",
+		// 		"navigationBarTitleText": ""
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/subscribe/gpt/gpt",
+		// 	"style": {
+		// 		"navigationStyle": "custom", 
+		// 		"navigationBarTitleText": ""
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/subscribe/gpt/hot",
+		// 	"style": {
+		// 		"navigationStyle": "custom",
+		// 		"navigationBarTitleText": ""
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/subscribe/gpt/season",
+		// 	"style": {
+		// 		"navigationStyle": "custom",
+		// 		"navigationBarTitleText": ""
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/subscribe/gpt/analysis",
+		// 	"style": {
+		// 		"navigationStyle": "custom",
+		// 		"navigationBarTitleText": ""
+		// 	}
+		// },
 		{
 			"path": "pages/order/order",
 			"style": {
@@ -100,13 +108,13 @@
 				"navigationBarTitleText": ""
 			}
 		},
-		{
-			"path": "pages/subscribe/qht/qht",
-			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTitleText": ""
-			}
-		},
+		// {
+		// 	"path": "pages/subscribe/qht/qht",
+		// 	"style": {
+		// 		"navigationStyle": "custom",
+		// 		"navigationBarTitleText": ""
+		// 	}
+		// },
 		{
 			"path": "pages/analysis/analysis",
 			"style": {
@@ -124,6 +132,7 @@
 		{
 			"path": "pages/my/my",
 			"style": {
+				"navigationStyle": "custom",
 				"navigationBarTitleText": ""
 			}
 		}

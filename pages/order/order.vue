@@ -17,21 +17,32 @@
 					<view>{{orderDetail.name}}</view>
 				</view>
 				<view class="row u-flex u-flex-items-center u-flex-between u-p-20">
-					<view>订阅日期</view>
+					<view>订阅时间</view>
 					<view>{{orderDetail.choose_date}}</view>
 				</view>
-				<view class="row u-flex u-flex-items-center u-flex-between u-p-20">
+				<view class="row u-flex u-flex-items-center u-flex-between u-p-20" v-if="orderDetail.status == 1">
+					<view>生效时间</view>
+					<view>{{orderDetail.status_date}}</view>
+				</view>
+				<view class="row u-flex u-flex-items-center u-flex-between u-p-20" v-if="orderDetail.status == 1">
+					<view>到期时间</view>
+					<view>{{orderDetail.expire_date}}</view>
+				</view>
+				<view class="row u-flex u-flex-items-center u-flex-between u-p-20" v-if="orderPriceInfo.time">
 					<view>订阅期限</view>
-					<view>{{orderPriceInfo.time}}</view>
+					<view>{{orderDetail.time}}</view>
 				</view>
 				<view class="row u-flex u-flex-items-center u-flex-between u-p-20">
 					<view>订阅金额</view>
 					<view class="u-error">
-						<nut-price :price="orderPriceInfo.price" size="large" thousands symbol="¥"></nut-price>
+						<nut-price :price="orderPriceInfo.price || orderDetail.price" size="large" thousands symbol="¥"></nut-price>
 					</view>
 				</view>
-				<view class="u-p-20">
+				<view class="u-p-20" v-if="orderDetail.status == 0">
 					<up-button type="success" size="large" shape="circle" @click="wxpayBtn">微信支付</up-button>
+				</view>
+				<view class="u-p-20" v-if="orderDetail.status == 0">
+					<up-button type="primary" plain size="large" shape="circle" @click="base.handleGoto('/pages/my/my')">个人中心</up-button>
 				</view>
 
 			</view>
@@ -153,8 +164,12 @@
 		if(options.hasOwnProperty('type')) {
 			type.value = options.type || '2'
 		} 
-		await getOrder() 
 		await user.getUserSubscription()
+		if(!gpt.value.order_id) {
+			await getOrder() 
+			await user.getUserSubscription()
+			
+		}
 		
 	}) 
 	onReady(() => {
@@ -199,18 +214,129 @@
 		try{ 
 			const res = await $api.weixin_pay({
 				params: {
-					id: orderPriceInfo.value.order_id,
-					price: orderPriceInfo.value.price*100, 
+					id: (orderPriceInfo.value.order_id || orderDetail.value.order_id),
+					price: (orderPriceInfo.value.price || orderDetail.value.price)*100, 
 				}
 			})
 			if(res.code == 1) {
-				
+				wxPay(res)
 			} 
 		}catch(e) {
 			
 		}
 		uni.hideLoading()
 		loading.value = false
+	}
+	async function wxPay(res) { 
+		if(res.list.return_code == 'SUCCESS' && res.list.result_code == 'SUCCESS') {
+			
+			// #ifdef H5
+			wxpayEvent(res.pay)
+			// #endif
+			// #ifdef MP-WEIXIN
+			uni.requestPayment({
+			    provider: 'wxpay',
+			    timeStamp: String(res.pay.timeStamp),
+			    nonceStr: res.pay.nonceStr,
+			    package: res.pay.package,
+			    signType: res.pay.signType,
+			    paySign: res.pay.paySign,
+			    success: async data => {
+			        console.log('success:' + JSON.stringify(data)); 
+					uni.showToast({
+						title: '支付成功',
+						icon: 'none'
+					})
+					uni.showLoading()
+					// await getData()
+					await user.getUserSubscription()
+			    },
+			    fail: err =>{
+			        console.log(err);
+					if(err.errMsg == 'requestPayment:fail cancel') { 
+						uni.showToast({
+							title: '用户取消支付',
+							icon: 'none'
+						})
+					}else {
+						uni.showToast({
+							title: '支付失败',
+							icon: 'none'
+						})
+					}
+			    }
+			});
+		// #endif
+		}else { 
+			uni.showToast({
+				title: res.list.return_msg,
+				icon: 'none'
+			})
+		}
+	} 
+	   // 检测支付环境中的 WeixinJSBridge
+	function wxpayEvent(data) {
+		if (typeof WeixinJSBridge == "undefined") {
+			if (document.addEventListener) {
+				document.addEventListener('WeixinJSBridgeReady', onBridgeReady(data), false);
+			} else if (document.attachEvent) {
+				document.attachEvent('WeixinJSBridgeReady', onBridgeReady(data));
+				document.attachEvent('onWeixinJSBridgeReady', onBridgeReady(data));
+			}
+		} else {
+			onBridgeReady(data);
+		}
+	}
+
+	function onBridgeReady(data) {
+		WeixinJSBridge.invoke(
+		  'getBrandWCPayRequest', {
+			 // 传入第一步后端接口返回的核心参数
+			"appId": data.appid, //公众号
+			"timeStamp": data.timeStamp, //时间戳
+			"nonceStr": data.nonceStr, //随机串
+			"package": data.package, //prepay_id
+			"signType": data.signType, //微信签名方式RSA
+			"paySign": data.paySign //微信签名
+		  },
+		  async function(res) {
+			// 支付成功
+			if (res.err_msg == "get_brand_wcpay_request:ok") {
+				  // 使用以上方式判断前端返回,微信团队郑重提示：
+				  //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。 
+				uni.showToast({
+					title: '支付成功',
+					icon: 'none'
+				})
+				uni.showLoading()
+				await user.getUserSubscription()
+			}
+			// 支付过程中用户取消
+			if (res.err_msg == "get_brand_wcpay_request:cancel") { 
+				uni.showToast({
+					title: '取消支付',
+					icon: 'none'
+				})
+			}
+			// 支付失败
+			if (res.err_msg == "get_brand_wcpay_request:fail") {
+				uni.showToast({
+					title: '支付失败',
+					icon: 'none'
+				})
+			}
+			/**
+			* 其它
+			* 1、请检查预支付会话标识prepay_id是否已失效
+			* 2、请求的appid与下单接口的appid是否一致
+			* */
+			if (res.err_msg == "调用支付JSAPI缺少参数：total_fee") {
+				uni.showToast({
+					title: res.err_msg,
+					icon: 'none'
+				})
+			}
+		  });
 	}
 </script>
 

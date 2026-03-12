@@ -15,9 +15,11 @@ const base = baseStore(pinia)
 /**
  * @description 自定义路由拦截
  */ 
- const whiteList = [  
-	'/pages/index/index',
-	{ pattern: /^\/pages\/login*/ },
+ const whiteList = [   
+ 	'/pages/login/login', 
+ 	'/pages/login/code', 
+	// { pattern: /^\/pages\/login*/ },
+	{ pattern: /^\/pages\/index*/ },
  // 	'/pages_user/index/index', 
 	// '/pages_user/reservation_list/reservation_list',
  // 	{
@@ -47,6 +49,7 @@ const gptStateList = [
 export function permissionBase(e, data) {
 		
 		const {login, gpt, gptExpireTimestamp} = toRefs(user)
+		const {urlParams} = toRefs(base)
 	 	const url = e.url.split('?')[0]
 	 	console.log('url:addInterceptor ===> ', e.url ) 
 	 	
@@ -63,7 +66,7 @@ export function permissionBase(e, data) {
 			// 不是白名单并且没有token
 			if (!pass && login.value == 0) { 
 				uni.setStorageSync('prePage', e.url)
-				uni.navigateTo({
+				uni.redirectTo({
 					url: "/pages/login/login",
 					success() {
 						// messageManager.showError('请先登录')
@@ -90,7 +93,7 @@ export function permissionBase(e, data) {
 					//不在订阅期内
 					uni.setStorageSync('prePage', e.url)
 					uni.navigateTo({
-						url: "/pages/order/order?type=3",
+						url: "/pages/index/gpt",
 						success() { 
 							uni.showToast({
 								title: '请先订阅',
@@ -158,6 +161,9 @@ export function permissionBase(e, data) {
 				tid: paramsObj.tid
 			}) 
 		}
+		// console.log(urlParams.value)
+		urlParams.value = {}
+		// console.log(urlParams.value)
 		return true
 }
  

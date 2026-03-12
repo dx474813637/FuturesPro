@@ -106,7 +106,7 @@
 		
 	} 
 	function naviBack() {
-		if(uni.getStorageSync('prePage')) { 
+		if(uni.getStorageSync('prePage')) {
 			uni.redirectTo({
 				url: uni.getStorageSync('prePage'),
 				success() {
@@ -114,12 +114,12 @@
 						title: '登录成功',
 						icon: 'none'
 					})
+					uni.removeStorageSync('prePage')
 				}
 			})
-			uni.removeStorageSync('prePage')
 		}else {
 			uni.reLaunch({
-				url: '/pages/my/user/index',
+				url: '/pages/my/my',
 				success() {
 					uni.showToast({
 						title: '登录成功',
