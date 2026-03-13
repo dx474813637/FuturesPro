@@ -4,7 +4,7 @@
 		<NavBar :bgColor="bgColor"  title="个人中心" :backBtn="false" :titleStyle="`color: ${themeColor}`" placeholder ></NavBar>
 		<view class="header">
 			<view class="u-p-10 ">
-				<view class="box-user u-p-20 u-p-t-30 u-p-b-30 u-flex u-flex-items-start u-radius-15" @click="base.handleGoto('/pages/login/login')">
+				<view class="box-user u-p-20 u-p-t-30 u-p-b-30 u-flex u-flex-items-start u-radius-15" @click="login ?  () =>{} : base.handleGoto('/pages/login/login')">
 					
 					<nut-avatar custom-color="#e0ecff" size="50" bg-color="#77bfff">
 						<up-image :src="userInfo.avatarurl" width="50px" height="50px" v-if="userInfo.avatarurl"></up-image>
@@ -53,6 +53,30 @@
 				</view>
 			</view>
 			
+			<view class="u-p-l-20 u-p-r-20 u-p-b-20  box-border u-m-b-20">
+				<view class="u-radius-12   u-p-20 box-border   bg-white" >
+					<view class="u-flex u-flex-items-start u-flex-wrap">
+						<view class="u-flex-column u-flex-center u-flex-items-center" style="flex: 0 0 25%" @click="base.handleGoto('/pages/partner/users_partner')" v-if="partner == 1">
+							<view class="u-radius-40   u-flex u-flex-items-center u-flex-center u-m-b-6 text-base bg-white" style="width: 35px; height: 35px;">
+								<nut-icon name="haoyou" font-class-name="custom-icon" class-prefix="custom-icon" size="20" ></nut-icon>
+							</view>
+							<view class="text-base u-font-14">发展用户</view>
+						</view>
+						<view class="u-flex-column u-flex-center u-flex-items-center" style="flex: 0 0 25%" @click="base.handleGoto('/pages/partner/apply_partner')" v-els>
+							<view class="u-radius-40   u-flex u-flex-items-center u-flex-center u-m-b-6 text-base bg-white" style="width: 35px; height: 35px;">
+								<nut-icon name="jinhuodan-01" font-class-name="custom-icon" class-prefix="custom-icon" size="20" ></nut-icon>
+							</view>
+							<view class="text-base u-font-14">申请合伙人</view>
+						</view>
+						<view class="u-flex-column u-flex-center u-flex-items-center" style="flex: 0 0 25%" @click="base.handleGoto('/pages/login/resetPwd')">
+							<view class="u-radius-40   u-flex u-flex-items-center u-flex-center u-m-b-6 text-base bg-white" style="width: 35px; height: 35px;">
+								<nut-icon name="qiehuan" font-class-name="custom-icon" class-prefix="custom-icon" size="20" ></nut-icon>
+							</view>
+							<view class="text-base u-font-14">重置密码</view>
+						</view>
+					</view>
+				</view>
+			</view>
 		</view>
 	</view>
 	<!-- #ifdef H5 -->
@@ -147,7 +171,7 @@
 				<view class="text-bold u-font-18 u-p-l-10" style="color: #1254B3;">选股方法</view>
 			</view>
 			<view class="" style="color: #67799f;">
-				<view class="u-radius-10 u-warning-light-bg u-p-20 u-m-b-20" @click="base.handleGoto({url:'/pages/analysis/analysis',params:{mode:'1'}})">
+				<view class="u-radius-10 u-primary-light-bg u-p-20 u-m-b-20" @click="base.handleGoto({url:'/pages/analysis/analysis',params:{mode:'1'}})">
 					<view> 
 						<view class="u-flex u-flex-items-center u-flex-between u-m-b-10">
 							<view class="u-font-17  u-flex u-flex-items-center u-warning ">
@@ -155,7 +179,7 @@
 								<view class="u-m-l-10 text-black">热点选股</view>
 							</view>
 							<view>
-								<view class="u-warning-bg text-white u-radius-15 u-flex u-flex-items-center u-p-4 u-p-l-14 u-p-r-20" >
+								<view class="u-primary-bg text-white u-radius-15 u-flex u-flex-items-center u-p-4 u-p-l-14 u-p-r-20" >
 									<up-icon name="search" color="#fff" ></up-icon>
 									<text class="u-m-l-10 u-font-13  text-thin">查 看</text>
 								</view>
@@ -164,15 +188,15 @@
 						<view class="u-font-14">利用n天商品价格上涨幅度，筛选热点商品，从而选择合适的价值周期股投资机会。</view>
 					</view>
 				</view>
-				<view class="u-radius-10 u-error-light-bg u-p-20" @click="base.handleGoto({url:'/pages/analysis/analysis',params:{mode:'2'}})">
+				<view class="u-radius-10 u-primary-light-bg u-p-20" @click="base.handleGoto({url:'/pages/analysis/analysis',params:{mode:'2'}})">
 					<view> 
 						<view class="u-flex u-flex-items-center u-flex-between u-m-b-10">
-							<view class="u-font-17  u-flex u-flex-items-center u-error "> 
+							<view class="u-font-17  u-flex u-flex-items-center u-primary "> 
 								<nut-icon name="tongji" font-class-name="custom-icon" class-prefix="custom-icon" size="20" ></nut-icon> 
 								<view class="u-m-l-10 text-black">季报选股</view>
 							</view>
 							<view>
-								<view class="u-error-bg text-white u-radius-15 u-flex u-flex-items-center u-p-4 u-p-l-14 u-p-r-20" >
+								<view class="u-primary-bg text-white u-radius-15 u-flex u-flex-items-center u-p-4 u-p-l-14 u-p-r-20" >
 									<up-icon name="search" color="#fff" ></up-icon>
 									<text class="u-m-l-10 u-font-13  text-thin">查 看</text>
 								</view>
@@ -269,7 +293,7 @@
 	</view>
 	
 	
-	<view class="u-p-20 u-p-l-40 u-p-r-40" v-if="login && login != '0'"><u-button type="error" shape="circle" @click="user.logout">退出登录</u-button></view>
+	<view class="u-p-20 u-p-l-40 u-p-r-40" v-if="login && login != '0'"><u-button type="primary" plain shape="circle" @click="user.logout">退出登录</u-button></view>
 	<u-safe-bottom></u-safe-bottom>
 	
 	<MenusBar></MenusBar>
@@ -282,7 +306,7 @@ import {userStore } from '@/stores/user.js'
 import {useCateStore, baseStore} from '@/stores/base.js'  
 	const base = baseStore() 
 	const {themeColor} = toRefs(base)
-	const {gpt, gptVip, userInfo, login} = toRefs(user)
+	const {gpt, gptVip, userInfo, login, partner} = toRefs(user)
 	const top = ref(true)
 	const bgColor = computed(() => {
 		// if(top.value) return '#BEDAFF'

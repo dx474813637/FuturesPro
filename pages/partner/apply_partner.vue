@@ -24,6 +24,19 @@
 					/>
 				</up-form-item>
 
+				<up-form-item prop="name" >
+					<up-input shape="circle" size="large"
+						v-model="form.name" 
+						prefixIcon="account-fill"
+						border="none"
+						clearable 
+						fontSize="17px"
+						placeholder="请输入推荐人姓名（非必填）" 
+						:customStyle="{padding: '15px', background: '#F6F6F6'}"
+						prefixIconStyle="color: #929cb5"
+						placeholderStyle="color: #AFB1B5"
+					/>
+				</up-form-item>
 			</up-form>
 			<view class="u-m-t-80">
 				<up-button type="primary" :ripple="true" @click="submit" shape="circle"  :customStyle="{height: '50px'}">
@@ -47,6 +60,7 @@
 	const uForm = ref(null)
 	const form = ref({
 		code: '', 
+		name: '', 
 	}) 
 	onLoad(() => {
 		// const res = await $api.denglu_info()
@@ -60,7 +74,7 @@
 		uni.showLoading()
 		// await uni.$u.sleep(1800)
 		let res = await $api.apply_partner({
-			params: {code: form.value.code}
+			params: {...form.value}
 		}) 
 		if(res.code == 1) { 
 			messageManager.showSuccess(res.msg) 

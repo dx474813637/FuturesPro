@@ -44,6 +44,9 @@
 				<view class="u-p-20" v-if="orderDetail.status == 0">
 					<up-button type="primary" plain size="large" shape="circle" @click="base.handleGoto('/pages/my/my')">个人中心</up-button>
 				</view>
+				<view class="u-p-20" v-if="gptVip">
+					<up-button type="primary" size="large" plain  shape="circle" @click="base.handleGoto({url: '/pages/analysis/analysis', type: 'reLaunch'})">我要选股</up-button>
+				</view>
 
 			</view>
 
@@ -78,7 +81,7 @@
 				</view>
 
 				<view class="u-p-20">
-					<up-button type="primary" size="large" shape="circle" @click="submit">提 交</up-button>
+					<up-button type="primary"  size="large" shape="circle" @click="submit">提 交</up-button>
 				</view>
 
 			</view>
@@ -101,7 +104,7 @@
 	import {userStore } from '@/stores/user.js'  
 	import {useCateStore, baseStore} from '@/stores/base.js' 
 	const user = userStore() 
-	const {gpt, qht} = toRefs(user)
+	const {gpt, qht, gptVip} = toRefs(user)
 	const base = baseStore() 
 	const $api = inject('$api')  
 	const loading = ref(false) 

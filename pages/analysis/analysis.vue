@@ -1,10 +1,5 @@
 <template>
-	<view class="w box-border" :class="{w1: mode == 1, w2: mode == 2}" :style="{backgroundColor: analysisConfig.themeColor }">
-		<!-- <view class="bg" :style="{backgroundColor: analysisConfig.themeColor}"></view> -->
-		<view class="bg-img " >
-			<up-status-bar></up-status-bar>
-			<up-image width="100%" :src="analysisConfig.bgHeaderImage" mode="widthFix"></up-image>
-		</view>
+	<view class="w box-border" :class="{w1: mode == 1, w2: mode == 2}" :style="{backgroundColor: analysisConfig.themeColor }"> 
 		<NavBar :bgColor="bgColor"  title="" :backBtn="false" customColor="#fff" :titleStyle="`color: #fff`" placeholder ></NavBar>
 		<view class="w-main">
 			<view class="u-flex u-flex-end u-p-t-10 ">
@@ -19,9 +14,8 @@
 				</view>
 			</view>
 			<template v-if="mode == '1'">
-				<view class="u-text-center text-white text-thin" style="margin-top: 90px;">
-					{{riqi}}
-				</view>
+				<view class="text-white u-text-center u-p-20 u-m-b-10" style="font-size: 26px;">热点选股</view>
+				<view class="u-text-center text-white text-thin" >{{riqi}}</view>
 				<!-- 热点选股搜索框 -->
 				<view class="u-p-20">
 					<view class="bg-white u-p-20 bg-white u-radius-15">
@@ -69,7 +63,10 @@
 				</view>
 			</template>
 			<template v-if="mode == '2'"> 
-				<view class="u-p-20" style="padding-top: 70px!important;">
+			
+				<view class="text-white u-p-l-40 u-p-r-40 u-m-b-4 " style="font-size: 26px;">季报选股</view>
+				<view class="text-white u-p-l-40 u-p-r-40 u-m-b-10 text-thin u-font-13" >买卖周期股，就用生意社股票通!</view>
+				<view class="u-p-20" >
 					<view class="u-flex u-flex-items-center u-flex-between u-m-b-20">
 						<view class="tabs-w u-flex u-flex-items-center">
 							<view 
@@ -95,12 +92,12 @@
 						<view class="u-flex u-flex-between u-flex-items-center u-flex-1 u-p-10 u-p-l-12 u-p-r-12 u-radius-4  ">
 							<view class="u-m-r-20">日期</view>
 							<view class="u-flex-1 u-flex u-flex-items-center ">
-								<view class="u-flex u-flex-items-center u-border u-p-12 u-radius-4 u-flex-1" @click="sdateShow = true" style="border-color: #e6d9d9!important">
+								<view class="u-flex u-flex-items-center u-border u-p-12 u-radius-4 u-flex-1" @click="sdateShow = true" >
 									<up-icon name="calendar" size="18" color="#666"></up-icon> 
 									<view class="u-flex-1 u-font-13 u-p-5 text-nowrap" >{{sdate}}</view>
 								</view> 
 								<view class="u-p-5 u-m-l-10 u-m-r-10">至</view>
-								<view class="u-flex u-flex-items-center u-border u-p-12 u-radius-4 u-flex-1" @click="edateShow = true" style="border-color: #e6d9d9!important">
+								<view class="u-flex u-flex-items-center u-border u-p-12 u-radius-4 u-flex-1" @click="edateShow = true" >
 									<up-icon name="calendar" size="18" color="#666"></up-icon> 
 									<view class="u-flex-1 u-font-13 u-p-5 text-nowrap" >{{edateString}}</view>
 								</view> 
@@ -115,8 +112,7 @@
 										v-model="zf2"
 										inputAlign="right"
 										:customStyle="{
-											backgroundColor: '#fff',
-											borderColor: `#e6d9d9!important`,
+											backgroundColor: '#fff', 
 										}"
 										></up-input>
 								</view>
@@ -133,8 +129,7 @@
 											v-model="prod.name" 
 											inputAlign="right"
 											:customStyle="{
-												backgroundColor: '#fff',
-												borderColor: `#e6d9d9!important`,
+												backgroundColor: '#fff', 
 											}"
 											readonly 
 											placeholder="点击选择商品"
@@ -147,9 +142,9 @@
 						
 						<view class=" u-m-t-30"> 
 							<up-button 
-								type="error" 
+								type="primary" 
 								shape="circle"  
-								:customStyle="{width: '70vw', fontSize: '17px', background:`linear-gradient(to top, #E62C3B, #ff5d68 )`}"
+								:customStyle="{width: '70vw', fontSize: '17px', background:`linear-gradient(to top, #1678FF, #54a7ff )`}"
 								@click="gotoAnalysisDetail"
 							>搜 索</up-button> 
 						</view> 
@@ -482,10 +477,10 @@
 		border-right: 10px solid transparent;
 	}
 	&.w1::after {
-		border-top: 10px solid #1677FF;
+		border-top: 10px solid #1678FF;
 	}
 	&.w2::after {
-		border-top: 10px solid #E62C3B;
+		border-top: 10px solid #1678FF;
 	}
 	.w-main {
 		position: relative; 
@@ -533,7 +528,7 @@
 			}
 			&.active {
 				background-color: #fff;
-				color: #E62C3A;
+				color: #1678FF;
 				&::after {
 					display: block;
 				}

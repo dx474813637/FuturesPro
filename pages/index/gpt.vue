@@ -1,12 +1,17 @@
 <template>
 	<view class="w  u-p-t-40"> 
 		<image style="width: 100%; height: auto" mode="widthFix" src="https://cft.100ppi.com/Public/index-topbj/home-top-logo.png" />
-		<view class="u-p-l-10 u-p-r-10 banner" @click="gotoGPT"> 
+		<view class="u-p-l-10 u-p-r-10 banner"> 
 		<image style="width: 100%; height: auto" mode="widthFix" src="https://cft.100ppi.com/Public/rdxg-bg/home-ban.png" /> 
 			<view class="button-w text-nowrap u-flex-column u-flex-items-center u-flex-center">
-				<view class="u-m-b-20 ">买卖周期股，就用生意社股票通</view>
-				<view class="u-radius-25 text-white u-p-8 u-p-l-60 u-p-r-60 u-text-center u-font-16" 
-				style="background: linear-gradient(to bottom, #FC6349, #F03930);">我要{{gptVip? '选股':'订阅'}}</view>
+				<view class="u-m-b-20">买卖周期股，就用生意社股票通</view>
+				<template v-if="gptVip">
+					<view class="u-flex u-flex-items-center u-flex-center">
+						<view class="u-radius-25 text-white u-p-12 u-m-r-14 u-p-l-60 u-p-r-60 u-text-center u-font-16 u-primary-bg" @click="base.handleGoto({url: '/pages/analysis/analysis', params: {mode:'1'}} )" >热点选股</view>
+						<view class="u-radius-25 text-white u-p-12 u-m-l-14 u-p-l-60 u-p-r-60 u-text-center u-font-16 u-primary-bg" @click="base.handleGoto({url: '/pages/analysis/analysis', params: {mode:'2'}} )" >季报选股</view>
+					</view>
+				</template>
+				<view v-else class="u-radius-25 text-white u-p-8 u-p-l-60 u-p-r-60 u-text-center u-font-16 u-primary-bg" @click="gotoGPT" >我要订阅</view>
 			</view>
 		</view>
 		
@@ -85,10 +90,10 @@
 		
 	})   
 	function gotoGPT() {
-		if(gptVip.value) {
-			base.handleGoto('/pages/analysis/analysis' )
-			return 
-		}
+		// if(gptVip.value) {
+		// 	base.handleGoto('/pages/analysis/analysis' )
+		// 	return 
+		// }
 		uni.showModal({
 			title: '提示',
 			content: '是否订阅股票通',

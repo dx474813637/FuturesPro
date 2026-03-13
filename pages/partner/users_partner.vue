@@ -1,5 +1,5 @@
 <template>
-	<view class="w u-p-20" >
+	<view class="w u-p-20 u-p-t-30" >
 		<!-- <view class="status-w u-text-center u-p-t-20 u-p-b-40 u-font-40 text-bold text-white u-line-2" >
 			{{ tuan.title }}
 		</view> 
@@ -21,49 +21,61 @@
 			列表
 		</view> -->
 		<view class="list">  
-			<view class="list-item u-m-b-15" v-for="item in dataList" :key="item.id">
-				<view>{{item.dy_poster}}</view>
-				<view>{{item.cdate}}</view>
+			<view class="list-item u-m-b-20 u-border u-p-30 u-radius-14 u-flex u-flex-between uni-shadow-sm text-base" 
+				v-for="item in dataList" :key="item.id"
+				@click="analysisEvent(item)"
+			>
+				<view class="u-flex u-flex-items-center u-info-light-bg u-radius-6 u-p-6 u-p-l-12 u-p-r-20">
+					<up-icon name="account-fill"></up-icon>
+					<view class="u-m-l-10">
+						<up-copy :content="item.dy_poster">
+						    <text>{{item.dy_poster}}</text>
+						</up-copy>
+					</view>
+				</view>
+				<view class="u-flex u-flex-items-center">
+					<up-icon name="clock"></up-icon>
+					<view class="u-m-l-10 u-m-r-30">{{item.cdate}}</view>
+					<up-icon name="arrow-right"></up-icon>
+				</view> 
 			</view>
 			<template v-if="dataList.length == 0">
 				<u-empty mode="data" :icon="base.empty" />
 			</template>
 			<template v-else>
-				<u-loadmore :status="loadstatus" />
+				<view class="u-p-t-30"><u-loadmore :status="loadstatus" /></view>
+				
 			</template>  
 				
 				
 			<u-safe-bottom></u-safe-bottom>
 		</view>	 
 	</view>
-	<DarenAnalysisPopup
-		:show="showDarenAnalysis" 
-		title="分析" 
-		:list="daren_analysis"
+	<UserAnalysisPopup
+		:show="showUserAnalysis" 
+		title="发展用户" 
+		mode="center"
+		:list="user_analysis"
 		:onUpdateShow="handleChangeShow" 
-	></DarenAnalysisPopup>
+	></UserAnalysisPopup>
 	<MenusBar></MenusBar>
 </template>
 
-<script setup>
-	import { onLoad, onReady, onReachBottom, onUnload } from "@dcloudio/uni-app";
-	import { ref, reactive, computed, toRefs, inject, watch } from 'vue'
+<script setup>  
 	import useDataList from '@/composition/useDataList.js'
 	// import { share } from '@/composition/share.js'
 	import { baseStore } from '@/stores/base'
 	import {userStore} from '@/stores/user'
 	const user = userStore()
-	const { tmp_id_list } = toRefs(user)
+	// const { tmp_id_list } = toRefs(user)
 	const base = baseStore(); 
 	// const {
 	// 	setOnlineControl,
 	// 	onlineControl
 	// } = share()
-	const $api = inject('$api')   
-	const tuan = ref({})
-	const kg = ref(0)
-	const daren_analysis = ref([])
-	const showDarenAnalysis = ref(false)
+	const $api = inject('$api')    
+	const user_analysis = ref({})
+	const showUserAnalysis = ref(false)
 	const analysis_loading = ref(false)
 	const options = computed(() => {
 		return {
@@ -75,10 +87,10 @@
 			getDataCallBack: (res) => {
 				if (res.code == 1) {
 					dataList.value = [...dataList.value, ...res.list]
-					tuan.value = res.tuan
-					kg.value = res.kg
+					// tuan.value = res.tuan
+					// kg.value = res.kg
 					
-					if(dataList.value.length >= res.total) {
+					if(dataList.value.length >= res.list.length) {
 						loadstatus.value = 'nomore'
 					}
 					else {
@@ -96,42 +108,28 @@
 		params,
 		getDataList,
 		initDataList, 
-	} = useDataList(options)
-	const role = ref('1')
-	onLoad(async (options) => { 
-		// if(options?.role) {
-		// 	role.value = options.role
-		// }
-		// uni.$on('updateData', initDataList)
+	} = useDataList(options) 
+	onLoad(async (options) => {  
 		initDataList() 
 	})  
 	onUnload(() => {
-		uni.$off('updateData', initDataList)
-	})
-	const title = computed(() => `分成比例：${tuan.value.divide}%`)
+		// uni.$off('updateData', initDataList)
+	}) 
 	
-	function cardClick() {
-		if(role.value != '2') return
-		base.handleGoto({
-			url: '/pages_user/tuan/tuanAdd',
-			params: {
-				type: 'edit'
-			}
-		})
-	}
+	 
 	function handleChangeShow(data) {
-		showDarenAnalysis.value = data
+		showUserAnalysis.value = data
 	}
-	async function analysisEvent({data}) {
+	async function analysisEvent(data) {
 		if(analysis_loading.value) return
-		daren_analysis.value = {}
+		user_analysis.value = {}
 		uni.showLoading();
 		analysis_loading.value = true
 		try{
-			const res = await $api.divide_analysis({params: {id: data.did}})
+			const res = await $api.query_ptp_dy({params: {login: data.dy_poster}})
 			if(res.code == 1) {
-				showDarenAnalysis.value = true
-				daren_analysis.value = res.list
+				showUserAnalysis.value = true
+				user_analysis.value = res.list.pt_status? res.list : res.list.res
 			}
 		}catch(e){
 			uni.hideLoading()

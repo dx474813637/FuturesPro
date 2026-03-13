@@ -1,9 +1,17 @@
 <template>
-	<view class="w" :style="{backgroundImage: 'url(https://cft.100ppi.com/Public/rdxg-bg/info-top.png)' }">
+	<view class="w" >
+		<view class="bg"></view>
 		<NavBar :bgColor="bgColor"  title="" :backBtn="false" customColor="#fff" :titleStyle="`color: #fff`" placeholder ></NavBar>
 		<view class="w-main">
-			<view class="u-flex u-flex-end u-p-t-10 ">
-				<view class="">
+			<view class="u-flex u-flex-between u-flex-items-center  u-m-b-20">
+				<view class="u-flex-1"></view>
+				<view class="u-flex-1">
+					<view class="text-white u-text-center" style="font-size: 26px;">
+						<template v-if="mode == '1'">热点</template>
+						<template v-else-if="mode == '2'">季报</template>选股
+					</view>
+				</view>
+				<view class="u-flex-1 u-flex u-flex-end">
 					<view 
 						class="bg-white u-p-4 u-p-l-20 u-p-r-20 u-font-14 text-thin" 
 						style="border-radius: 10px 0 0 10px;"
@@ -11,7 +19,8 @@
 					>重新筛选</view>
 				</view>
 			</view>
-			<view class="u-text-center text-white text-thin" style="margin-top: 70px;">
+			
+			<view class="u-text-center text-white text-thin u-m-b-20" >
 				<template v-if="ppid">
 					<text class="u-font-14">下方股票筛选，可再按股价五档位置及AI财报评分选股。</text>
 				</template>
@@ -54,7 +63,7 @@
 						color: '#fff', 
 						fontWeight: '800'
 					}" :inactiveStyle="{
-						color: '#f1c9ca', 
+						color: '#d1dcea', 
 					}" itemStyle=" height: 25px; padding: 5px 12px; "
 					@click="tabsEvent"	
 				></up-tabs>
@@ -68,7 +77,7 @@
 						lineColor="#fff" 
 						lineHeight="0" 
 						:activeStyle="{
-							color: '#E62C3A', 
+							color: '#007aff', 
 							backgroundColor: 'rgba(255,255,255, 1)',
 							padding: '4px 15px',
 							borderRadius: '15px',
@@ -99,11 +108,11 @@
 					</up-tabs>
 				</view>
 				
-				<view class="u-p-5 u-p-l-12 u-p-r-12 u-m-b-12" v-if="mode == '1'">
+				<view class="u-p-5 u-p-l-12 u-p-r-12 u-m-t-10" v-if="mode == '1'">
 					<view class="bg-white u-radius-12 u-p-12">
-						<view class="u-font-15 u-p-6 u-p-l-15 u-m-b-6 text-base">生意社价格行情</view>
+						<view class="u-font-15 u-p-6 u-p-l-15 u-m-b-6  ">生意社价格行情</view>
 						<view class="u-flex u-flex-items-center u-flex-between u-radius-10" style="overflow: hidden;">
-							<view class="u-p-10 u-error-light-bg u-text-center u-flex-1 box-border"
+							<view class="u-p-10   u-text-center u-flex-1 box-border"
 								v-for="item in productZfByDay" :key="item.index"
 								:class="{
 									'u-error-light-bg': item.value > 0, 
@@ -117,8 +126,8 @@
 										class="u-font-20" 
 										:class="{
 											'u-error': item.value > 0, 
-											'text-info': item.value == 0, 
-											'u-success': item.value < 0
+											'text-base': item.value == 0, 
+											'u-success-dark': item.value < 0
 										}"
 										>{{item.value}}%</view>
 								</view>
@@ -127,13 +136,54 @@
 					</view>
 				</view>
 				<view class="loading-w u-flex u-flex-items-center u-flex-center" style="background-color: rgba(255,255,255,.5)" v-if="loading_product">
-					 <nut-icon name="loading" size="20" custom-color="#f00"></nut-icon>
+					 <nut-icon name="loading" size="20" custom-color="#007aff"></nut-icon>
 				</view>
 			</view>
-			
-			<view class="content-w u-p-l-12 u-p-r-12">
+			<view class="center-bottom u-m-t-10" >
+				<view class="u-p-l-12 u-p-r-12 " > 
+					<view class=" u-radius-12 u-p-10 u-p-l-15 uni-shadow-sm"	style="background: linear-gradient(to bottom, #cae4ff,#fff 45px);">
+						<view class="u-flex u-flex-items-center u-flex-between">
+							<view class="u-flex u-flex-items-start  u-p-l-10  u-p-b-10" >
+								股票筛选
+							</view>
+							<view class="u-flex-column u-flex-items-end u-flex-1">
+								<view class="u-flex u-flex-items-center  u-flex-1 u-m-b-10" style="flex: 0 0 40%">
+									<view class="text-nowrap u-font-14 u-m-r-10 text-base">90天股价位置 ≤ </view>
+									<view class="u-flex u-flex-items-center u-border u-p-4 u-radius-8 u-flex-1 bg-white u-info"
+										style="width: 70px; flex: 0 0 70px; border-color: #c7e4ff!important" 
+										@click="positionShow = true"
+									>
+										<view class="u-flex-1 u-font-13 u-text-center" :class="{'u-primary': terms_position}" >{{positionLabel || '请选择'}}</view>
+										<!-- <up-icon name="list-dot" size="10" color="#aaa"></up-icon> -->
+									</view>
+								</view>
+								<view class="u-flex u-flex-items-center  u-flex-1  " style="flex: 0 0 40%">
+									<view class="text-nowrap u-font-14 u-m-r-10 text-base">PriceSeek评分 ≥ </view>
+									<view class="u-flex u-flex-items-center u-border u-p-4 u-radius-8 u-flex-1 bg-white u-info" 
+										style="width: 70px; flex: 0 0 70px; border-color: #c7e4ff!important" 
+										@click="scoreShow = true"
+									>
+										<view class="u-flex-1 u-font-13 u-text-center" :class="{'u-primary': terms_score}">{{terms_score?terms_score+' 分' : '请选择'}}</view>
+										<!-- <up-icon name="list-dot" size="10" color="#aaa"></up-icon> -->
+									</view>
+								</view> 
+							</view>
+							<view class="u-m-l-30 u-m-r-20">
+								<up-button type="primary" plain  shape="circle" 
+									:customStyle="{borderColor: '#97caff', backgroundColor: '#fff', height: '30px',padding: '0 16px'}" @click="stockFilterBtn"
+									>搜索</up-button> 
+							</view>
+						</view> 
+					</view>
+				</view>  
+			</view>
+			<view class="content-w u-p-l-12 u-p-r-12 u-m-t-15">
 				<view class="content-header">
-					<view class="tab-list-cnt box-border  " style=" border-radius: 12px 12px 0 0;" v-if="mode == '1'">
+					<view class="u-flex u-flex-items-baseline bg-white u-p-14 u-p-l-30 u-m-t-10" style="border-radius: 15px 15px 0 0">
+						<view class="u-font-16">生产商</view>
+						<view class="u-font-13 u-m-l-20 u-info">基本面评析</view>
+					</view>
+					<!-- <view class="tab-list-cnt box-border  " style=" border-radius: 12px 12px 0 0;" v-if="mode == '1'">
 						<view class="tab-list " >
 							<view class="tab-item active u-flex u-flex-items-center u-flex-start u-p-l-32" >
 								<view class="u-flex u-flex-items-baseline ">
@@ -144,25 +194,19 @@
 							</view>
 							<view class="tab-item " >  
 							</view>
-							<div :style="{'transform': `translateX(0)`}" class="tab-selected">
-								<!-- <div class="left"></div> -->
-								<div class="right"></div>
-							</div> 
+							<view :style="{'transform': `translateX(0)`}" class="tab-selected">
+								<view class="left"></view>
+								<view class="right"></view>
+							</view> 
 						</view>  
-					</view> 
-					<view v-else-if="mode == '2'">
-						<view class="u-flex u-flex-items-baseline bg-white u-p-14 u-p-l-30 u-m-t-10" style="border-radius: 15px 15px 0 0">
-							<view class="u-font-16">生产商</view>
-							<view class="u-font-13 u-m-l-20 u-info">基本面评析</view>
-						</view>
-					</view>
+					</view>  -->
 				</view>
 				<view class="content-main box-border u-flex u-flex-items-start bg-white " 
-					style=" border-top: 1rpx solid #f5f5f5;"
-					:style="{'border-radius': mode == '2' ? '0': '0 15px 15px 15px'}"
+					style=" border-top: 1rpx solid #d0d4d6;"
+					:style="{'border-radius':'0  0 15px 15px'}"
 					>  
 					<view class="loading-w u-flex u-flex-items-start u-flex-center u-p-t-80" style="background-color: rgba(255,255,255,.5)" v-if="loading_product || loading_stock">
-						 <nut-icon name="loading" size="20" custom-color="#f00"></nut-icon>
+						 <nut-icon name="loading" size="20" custom-color="#007aff"></nut-icon>
 					</view>
 					<view class="main-left">
 						<view class="cpy-list" v-if="cpylist.length > 0">
@@ -195,20 +239,20 @@
 						</view>
 						<view class="u-p-15 main-base-info"  v-if="cpyActive">
 							<view class="u-flex u-flex-items-start u-flex-between u-m-b-10">
-								<view class="u-font-30 text-nowrap u-m-r-10">
+								<view class="u-font-30 text-nowrap u-p-l-10 u-m-r-10">
 									<view class="">{{cpyActive.stock}}</view>
-									<view class="u-error">{{cpyActive.stockcode}}</view> 
+									<view class="u-primary">{{cpyActive.stockcode}}</view> 
 								</view>
 								<view class="u-p-t-6"> 
 									<view class=" u-flex-column u-flex-items-end u-m-l-20">
 										<view class="u-flex u-flex-items-start u-m-b-5 u-font-13"> 
 											<view class="text-base text-nowrap">营收占比</view>
-											<view class="u-error u-m-l-10"> 
+											<view class="u-primary u-m-l-10"> 
 											{{cpyActive.portion ? cpyActive.portion : '--'}}</view>
 										</view>
 										<view class="u-flex u-flex-items-center u-font-13"> 
 											<view class="text-base text-nowrap">产能</view>
-											<view class="u-error u-m-l-10">{{cpyActive.capacity? cpyActive.capacity + cpyActive.unit : '--'}}</view>
+											<view class="u-primary u-m-l-10">{{cpyActive.capacity? cpyActive.capacity + cpyActive.unit : '--'}}</view>
 										</view>
 									</view>   
 								</view>
@@ -240,31 +284,31 @@
 							<view class="u-p-10 u-flex u-flex-wrap u-flex-items-start">
 								<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
 									<view class="text-base u-font-13">最新股价</view>
-									<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{cpyDataSinfo.price}}</view>
+									<view class="u-font-14 u-radius-8 u-primary-light-bg u-p-4 u-p-l-15 u-p-r-15 u-primary">{{cpyDataSinfo.price}}</view>
 								</view>
 								<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
 									<view class="text-base u-font-13">90天位置</view>
-									<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{position_status}}</view>
+									<view class="u-font-14 u-radius-8 u-primary-light-bg u-p-4 u-p-l-15 u-p-r-15 u-primary">{{position_status}}</view>
 								</view>
 								<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
 									<view class="text-base u-font-13">最小值</view>
-									<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{cpyDataSinfo.ninety_day_min}}</view>
+									<view class="u-font-14 u-radius-8 u-primary-light-bg u-p-4 u-p-l-15 u-p-r-15 u-primary">{{cpyDataSinfo.ninety_day_min}}</view>
 								</view>
 								<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
 									<view class="text-base u-font-13">最大值</view>
-									<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{cpyDataSinfo.ninety_day_max}}</view>
+									<view class="u-font-14 u-radius-8 u-primary-light-bg u-p-4 u-p-l-15 u-p-r-15 u-primary">{{cpyDataSinfo.ninety_day_max}}</view>
 								</view>
 								<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
 									<view class="text-base u-font-13">中位值</view>
-									<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{cpyDataSinfo.ninety_day_zw}}</view>
+									<view class="u-font-14 u-radius-8 u-primary-light-bg u-p-4 u-p-l-15 u-p-r-15 u-primary">{{cpyDataSinfo.ninety_day_zw}}</view>
 								</view>
 								<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
 									<view class="text-base u-font-13">平均值</view>
-									<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{cpyDataSinfo.ninety_day_avg}}</view>
+									<view class="u-font-14 u-radius-8 u-primary-light-bg u-p-4 u-p-l-15 u-p-r-15 u-primary">{{cpyDataSinfo.ninety_day_avg}}</view>
 								</view>
 								<view class="u-flex u-flex-items-center u-flex-between u-p-10 box-border" style="flex: 0 0 50%">
 									<view class="text-base u-font-13">PriceSeek评分</view>
-									<view class="u-font-14 u-radius-8 u-error-light-bg u-p-4 u-p-l-15 u-p-r-15 u-error">{{cpyDataGinfo.score}}</view>
+									<view class="u-font-14 u-radius-8 u-primary-light-bg u-p-4 u-p-l-15 u-p-r-15 u-primary">{{cpyDataGinfo.score}}</view>
 								</view>
 							</view>
 							
@@ -314,7 +358,7 @@
 	</up-action-sheet>
 	<u-safe-bottom></u-safe-bottom> 
 	<MenusBar></MenusBar>
-	<TabBar
+	<!-- <TabBar
 		:customStyle="{ 
 			background: 'transparent',  
 			paddingBottom: '60px'
@@ -326,10 +370,10 @@
 		<view class="center-bottom" > 
 			<view class="u-p-12 " >
 				<view class="bg-white u-radius-12 u-p-10 u-p-l-15 u-p-r-15 "	> 
-					<view class="u-error-bg u-radius-12 u-p-10 u-p-l-15 text-white"	>
+					<view class="u-primary-bg u-radius-12 u-p-10 u-p-l-15 text-white"	>
 						<view class="u-flex u-flex-items-center u-flex-between">
-							<view class="u-flex u-flex-items-start" >
-								<up-image height="20px" src="https://cft.100ppi.com/Public/rdxg-bg/gpsx.png" mode="heightFix"></up-image>
+							<view class="u-flex u-flex-items-start  u-p-l-20 u-primary-light u-p-b-10" style="font-style:italic;">
+								股票筛选
 							</view>
 							<view class="u-flex-column u-flex-items-end u-flex-1">
 								<view class="u-flex u-flex-items-center  u-flex-1 u-m-b-10" style="flex: 0 0 40%">
@@ -338,8 +382,7 @@
 										style="width: 60px; flex: 0 0 60px; border-color: #fff!important" 
 										@click="positionShow = true"
 									>
-										<view class="u-flex-1 u-font-13 u-text-center" :class="{'u-error': terms_position}" >{{positionLabel || '请选择'}}</view>
-										<!-- <up-icon name="list-dot" size="10" color="#aaa"></up-icon> -->
+										<view class="u-flex-1 u-font-13 u-text-center" :class="{'u-primary': terms_position}" >{{positionLabel || '请选择'}}</view>
 									</view>
 								</view>
 								<view class="u-flex u-flex-items-center  u-flex-1  " style="flex: 0 0 40%">
@@ -348,8 +391,7 @@
 										style="width: 60px; flex: 0 0 60px; border-color: #fff!important" 
 										@click="scoreShow = true"
 									>
-										<view class="u-flex-1 u-font-13 u-text-center" :class="{'u-error': terms_score}">{{terms_score?terms_score+' 分' : '请选择'}}</view>
-										<!-- <up-icon name="list-dot" size="10" color="#aaa"></up-icon> -->
+										<view class="u-flex-1 u-font-13 u-text-center" :class="{'u-primary': terms_score}">{{terms_score?terms_score+' 分' : '请选择'}}</view>
 									</view>
 								</view> 
 							</view>
@@ -362,7 +404,7 @@
 				</view>
 			</view>  
 		</view>
-	</TabBar> 
+	</TabBar> -->
 </template>
 
 <script setup>
@@ -386,7 +428,7 @@
 	// const gptHotFilterShow = ref(false) 
 	const bgColor = computed(() => {
 		if(top.value) return 'transparent'
-		return '#E62C3A'
+		return '#007aff'
 	})
 	const loading_product = ref(false)
 	const loading_stock = ref(false)
@@ -482,7 +524,7 @@
 			value: '1',
 		},
 		{
-			name: '中地位',
+			name: '中低位',
 			value: '2',
 		},
 		{
@@ -800,10 +842,9 @@
 		height: 100%;
 		z-index: 10;
 	}
-	.w {
-		background-repeat: no-repeat;
-		background-size: 100% auto;
-		background-position: 0 0;
+	.w { 
+		position: relative;
+		background: linear-gradient(to bottom, #007aff 200px, #dcdfff 300px, #f8f8f8 );
 	}
 	.product-tabs {
 		position: relative;
@@ -914,12 +955,14 @@
 			padding-bottom: 80px;
 			flex: 0 0 80px;
 			width: 80px; 
-			border-right: 1rpx solid #f5f5f5;
+			border-right: 1rpx solid #d0d4d6;
+			min-height: 50vh;
 			.cpy-list {
 				.cpy-item {
 					&.active {
+						background-color: #f8f8f8;
 						.name {
-							color: $u-error;
+							color: $u-primary;
 						}
 					}
 				}

@@ -25,7 +25,6 @@ export default function useFilter(zt) {
 		let text = value
 		if(value == '0') text = '审核未通过'
 		else if(value == '1') text = '审核已通过' 
-		else text = '未申请开票'
 		return text
 	})  
 	const plot_status = computed(() => {
@@ -36,10 +35,19 @@ export default function useFilter(zt) {
 		else text = '未申请开票'
 		return text
 	})  
+	const type_status = computed(() => {
+		let value = zt?.value.type_status
+		let text = value
+		if(value == '1') text = ''
+		else if(value == '2') text = '期货通' 
+		else if(value == '3') text = '股票通'  
+		return text
+	})  
 	return {
 		position_status,
 		pay_status,
 		bill_status,
-		plot_status
+		plot_status,
+		type_status
 	}
 }

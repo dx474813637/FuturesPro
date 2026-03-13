@@ -14,11 +14,10 @@
 					<up-input shape="circle" size="large"
 						v-model="form.mobile" 
 						prefixIcon="account-fill"
-						border="none"
-						clearable 
-						fontSize="17px"
-						placeholder="请输入手机" 
-						:customStyle="{padding: '15px', background: '#F6F6F6'}"
+						border="none" 
+						disabled
+						fontSize="17px" 
+						:customStyle="{padding: '15px', background: '#d8d8d8'}"
 						prefixIconStyle="color: #929cb5"
 						placeholderStyle="color: #AFB1B5"
 					/> 
@@ -99,6 +98,9 @@
 		userStore
 	} from '@/stores/user.js'
 	const user = userStore()
+	const {
+		login
+	} = toRefs(user)
 	import {
 		useCateStore,
 		baseStore
@@ -109,7 +111,7 @@
 		themeColor
 	} = toRefs(base)
 	const form = ref({
-		mobile: '',
+		mobile: login.value ,
 		passwd: '',
 		npasswd: '',
 		captcha: '',
@@ -121,14 +123,14 @@
 		return {
 			mobile: [{
 					required: true,
-					message: '请输入手机号',
+					message: '手机号有误为空',
 					trigger: ['blur', 'change']
 				},
 				{
 					validator: (rule, value, callback) => {
 						return uni.$u.test.mobile(value)
 					},
-					message: '请输入正确的11位手机号',
+					message: '手机号有误',
 					trigger: ['blur', 'change']
 				},
 			],

@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view  style="width: 100%; height: 320px;position: relative;">
+		<view  style="width: 100%; height: 300px;position: relative;">
 			<l-echart ref="chartRef"></l-echart>
 			<view class="customTooltips u-radius-6" :style="{ left: position[0] + 'px', top: position[1] + 'px' }"
 				v-if="paramsRef.length && position.length && showTip">
@@ -58,7 +58,7 @@
 				subtext: props.chartData.spec,
 			},
 			grid: {
-				height: '50%'
+				height: '55%'
 			},
 			color: ['#5da3ff', '#c641ff'],
 			tooltip: {
@@ -82,10 +82,10 @@
 				},
 				formatter: (params, ticket, callback) => {},
 			},
-			legend: {
-				data: yname,
-				bottom: '15%'
-			},
+			// legend: {
+			// 	data: yname,
+			// 	bottom: '15%'
+			// },
 			dataZoom: [
 				{
 					type: 'inside',

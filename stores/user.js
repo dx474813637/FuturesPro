@@ -8,7 +8,8 @@ export const userStore = defineStore('user', {
 		return { 
 			login: '', 
 			gpt: {},
-			qht: {},
+			qht: {}, 
+			partner: 0,
 			userInfo: uni.getStorageSync('userInfo') || {}
 		};
 	},
@@ -41,6 +42,8 @@ export const userStore = defineStore('user', {
 		clearLogout() {
 			this.login = ''  
 			this.userInfo = {}
+			this.gpt = {}
+			this.qht = {}
 			uni.removeStorageSync('userInfo')  
 		},
 		async logout() {

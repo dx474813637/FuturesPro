@@ -58,7 +58,7 @@ export const baseStore = defineStore('base', {
 				{
 					value: '2',
 					name: '季报选股',
-					themeColor: '#E62C3A',
+					themeColor: '#1678FF',
 					apiName: 'gpt_analysis',
 					bgHeaderImage: 'https://cft.100ppi.com/Public/rdxg-bg/jbxg-top.png',
 				}
@@ -185,7 +185,7 @@ export const baseStore = defineStore('base', {
 			})
 		},
 		async wxShare(){
-			// console.log( 'wxShare' )
+			console.log( 'wxShare' )
 			if (!isWeixinBrowser()) return 
 			let url = window.location.href
 			const res = await apis.get_share_url({params: {url, share_id: uni.getStorageSync('share_id') || ''}})
@@ -294,8 +294,9 @@ export const menusStore = defineStore('menus', {
 			const res = await apis.memu()  
 			if(res.code == 1) {  
 				const user = userStore()
-				const {login} = toRefs(user)
+				const {login, partner} = toRefs(user)
 				login.value = res.login 
+				partner.value = res.partner 
 				if(res.share_id) uni.setStorageSync('share_id', res.share_id)
 				// user.saveUserInfo(res.info)
 				// user.getUserInfo(res.info)
