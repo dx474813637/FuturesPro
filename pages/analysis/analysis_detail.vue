@@ -834,14 +834,7 @@
 	}
 </style>
 <style lang="scss" scoped> 
-	.loading-w {
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 100%;
-		height: 100%;
-		z-index: 10;
-	}
+	
 	.w { 
 		position: relative;
 		background: linear-gradient(to bottom, #007aff 200px, #dcdfff 300px, #f8f8f8 );

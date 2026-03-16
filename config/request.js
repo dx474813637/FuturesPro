@@ -136,6 +136,7 @@ export default function($ws = null) {
 
 		}
 		// #endif
+		console.log(config)
 		return config
 	}, config => { // 可使用async await 做异步操作
 		return Promise.reject(config)

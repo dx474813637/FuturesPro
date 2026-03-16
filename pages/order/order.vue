@@ -246,13 +246,22 @@
 			    paySign: res.pay.paySign,
 			    success: async data => {
 			        console.log('success:' + JSON.stringify(data)); 
+					user.getUserSubscription()
 					uni.showToast({
 						title: '支付成功',
 						icon: 'none'
 					})
-					uni.showLoading()
-					// await getData()
-					await user.getUserSubscription()
+					setTimeout(() => {
+						base.handleGoto({
+							url: '/pages/my/my',
+							type: 'reLaunch', 
+						})
+					}, 2000)
+					
+					
+					// uni.showLoading()
+					// // await getData()
+					// await user.getUserSubscription()
 			    },
 			    fail: err =>{
 			        console.log(err);

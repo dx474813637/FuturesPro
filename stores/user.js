@@ -7,6 +7,7 @@ export const userStore = defineStore('user', {
 	state: () => {
 		return { 
 			login: '', 
+			subscription_loading: false,
 			gpt: {},
 			qht: {}, 
 			partner: 0,
@@ -31,13 +32,20 @@ export const userStore = defineStore('user', {
 			
 		}, 
 		async getUserSubscription() {
-			const res = await apis.my_subscription()
-			if(res.code == 1) {
-				this.gpt = res.list.res.gpt
-				this.qht = res.list.res.qht
-				this.userInfo = res.info
-				uni.setStorageSync('userInfo', res.info)
-			}
+			if(this.subscription_loading) return
+			this.subscription_loading = true
+			try{
+				const res = await apis.my_subscription()
+				if(res.code == 1) {
+					this.gpt = res.list.res.gpt
+					this.qht = res.list.res.qht
+					this.userInfo = res.info
+					uni.setStorageSync('userInfo', res.info)
+				}
+			}catch(e) {
+				
+			} 
+			this.subscription_loading = false
 		}, 
 		clearLogout() {
 			this.login = ''  

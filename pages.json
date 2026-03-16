@@ -14,14 +14,12 @@
 		{
 			"path": "pages/index/gpt",
 			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTitleText": ""
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
 			}
 		},
 		// {
@@ -77,35 +75,30 @@
 		{
 			"path": "pages/login/login",
 			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTitleText": ""
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/login/code",
 			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTitleText": ""
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/login/register",
 			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTitleText": ""
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/login/resetPwd",
 			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTitleText": ""
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/login/xieyi",
 			"style": {
-				"navigationBarTitleText": ""
 			}
 		},
 		// {
@@ -118,35 +111,43 @@
 		{
 			"path": "pages/analysis/analysis",
 			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTitleText": ""
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/analysis/analysis_detail",
 			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTitleText": ""
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/my/my",
 			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTitleText": ""
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/partner/apply_partner",
 			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTitleText": "合伙人申请"
+				"navigationStyle": "custom" 
 			}
 		},
 		{
 			"path": "pages/partner/users_partner",
 			"style": { 
 				"navigationBarTitleText": "发展用户"
+			}
+		},
+		{
+			"path": "pages/partner/users_product",
+			"style": {
+				"navigationBarTitleText": "发展列表"
+			}
+		},
+		{
+			"path": "pages/my/mycard",
+			"style": {
+				"navigationBarTitleText": "我的名片"
 			}
 		}
 	],

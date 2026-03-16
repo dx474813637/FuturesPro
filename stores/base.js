@@ -162,8 +162,31 @@ export const baseStore = defineStore('base', {
 					});
 			  });
 		},
-		async uploadFilePromise(url, api="upimg") { 
-			return new Promise((resolve, reject) => { 
+		blobToFile (blob,fileName) {
+			return new File([blob], fileName, {type:'image/png'})
+		},
+		async uploadFilePromise(files, api="upimg") { 
+			return new Promise((resolve, reject) => {  
+				// #ifdef H5
+				uni.uploadFile({
+					url: `${this.configBaseURL}${api}`,  
+					file: files,  
+					header: {
+						'appid': 10004,
+						'appsecret': '29caD4UaRVtdotmMrRksDcYHOBG2VxunY278w7+6LK6rE/V1VW29fPY',
+						'userid': uni.getStorageSync('userid') || '', 
+					},
+					success: (res) => {
+						console.log(res)
+						resolve(JSON.parse(res.data))
+					},
+					fail(error) { 
+						console.log(error)
+						reject(error)
+					}
+				});
+				// #endif
+				// #ifdef MP-WEIXIN
 				uni.uploadFile({
 					url: `${this.configBaseURL}${api}`, 
 					filePath: url,
@@ -181,7 +204,8 @@ export const baseStore = defineStore('base', {
 						console.log(error)
 						reject(error)
 					}
-				});
+				}); 
+				// #endif
 			})
 		},
 		async wxShare(){

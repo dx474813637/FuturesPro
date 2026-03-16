@@ -33,11 +33,14 @@ export const category = (data) => uni.$u.http.get('category', data)
 export const apply_partner = (data) => uni.$u.http.get('apply_partner', data)
 // query_ptp 合伙人发展用户 返回字段： poster：合伙人账号（不用显示）dy_poster：发展的用户账号 cdate：添加日期
 export const query_ptp = (data) => uni.$u.http.get('query_ptp', data)
+// query_ptp_statist  股票通发展列表 期货通发展列表  type=2：期货通；3：股票通
+export const query_ptp_statist = (data) => uni.$u.http.get('query_ptp_statist', data) 
 // query_ptp_dy 用户订阅查询 参数login 返回字段：poster：合伙人账号（不用显示） dy_poster：发展的用户账号 
 	// pt_status：合伙人当前状态 type：订阅内容，2：期货通，3：股票通
 	// status：订阅状态，1：已支付，0：未支付ctime：订阅时间
 	// status_date：支付时间expire_date：到期日期 （trade_number：交易单号merchant_number：商户单号 不用显示）
 export const query_ptp_dy = (data) => uni.$u.http.get('query_ptp_dy', data)
+
 // my_subscription 我的订阅
 export const my_subscription = (data) => uni.$u.http.get('my_subscription', data)
 
@@ -57,3 +60,21 @@ export const get_share_url = (data) => uni.$u.http.get('get_share_url', data)
  
  // weixin_pay 发起支付 参数id 订单id price 价格（单位分）
 export const weixin_pay = (data) => uni.$u.http.get('weixin_pay', data) 
+
+// upimg 上传图片
+export const upimg = (data, config) => uni.$u.http.post('upimg', data, config)
+// login_card 我的名片
+export const login_card = (data) => uni.$u.http.get('login_card', data) 
+// edit_card 创建编辑我的名片 `name`, `position`, `company`, `phone`, `tel`, `email`, `address` img  info
+export const edit_card = (data, config) => uni.$u.http.post('edit_card', data, config)
+
+// 前台接口
+// web_login_card 名片信息 参数login
+export const web_login_card = (data) => uni.$u.http.get('web_login_card', data) 
+// my_ewm  我的二维码
+export const my_ewm = (data) => uni.$u.http.get('my_ewm', data) 
+
+// list_chance  资讯列表 参数pid 不必填  用在海报中心的，没有翻页。
+export const list_chance = (data) => uni.$u.http.get('list_chance', data) 
+// detail_chance 资讯详情 参数id
+export const detail_chance = (data) => uni.$u.http.get('detail_chance', data) 
