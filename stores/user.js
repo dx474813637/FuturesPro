@@ -11,6 +11,8 @@ export const userStore = defineStore('user', {
 			gpt: {},
 			qht: {}, 
 			partner: 0,
+			partner_amount: 0,
+			partner_amount2: 0,
 			userInfo: uni.getStorageSync('userInfo') || {}
 		};
 	},

@@ -1,7 +1,13 @@
 <template> 
 
 	<view> 
-		<NavBar :bgColor="bgColor"  title="个人中心" :backBtn="false" :titleStyle="`color: ${themeColor}`" placeholder ></NavBar>
+		<NavBar :bgColor="bgColor"  title="个人中心" :backBtn="false" :titleStyle="`color: ${themeColor}`" placeholder >
+			<template #right>
+				<view @click="base.handleGoto('/pages/my/settings')">
+					<up-icon name="setting" size="20"></up-icon>
+				</view>
+			</template>
+		</NavBar>
 		<view class="header">
 			<view class="u-p-10 "> 
 				<view class="box-user u-p-20 u-flex u-flex-items-start u-radius-15" @click="login ?  () =>{} : base.handleGoto('/pages/login/login')">
@@ -53,6 +59,18 @@
 				</view>
 			</view>
 			
+			<view class="u-p-l-20 u-p-r-20 u-p-b-20  box-border  " v-if="partner == 1">
+				<view class="u-radius-12   u-p-20 box-border   bg-white u-flex u-flex-items-center text-base" >
+					<view class="u-flex-1 u-flex u-flex-items-baseline u-flex-center ">
+						<view class="u-m-r-10">可用</view>
+						<view class="u-error"><nut-price :price="partner_amount" thousands size="large"></nut-price></view>
+					</view>
+					<view class="u-flex-1 u-flex u-flex-items-baseline u-flex-center">
+						<view>可提</view>
+						<view class="u-error"><nut-price :price="partner_amount2" thousands size="large"></nut-price></view>
+					</view>
+				</view>
+			</view>
 			<view class="u-p-l-20 u-p-r-20 u-p-b-20  box-border  ">
 				<view class="u-radius-12   u-p-25 box-border   bg-white" >
 					<view class="u-flex u-flex-items-center u-flex-between u-m-b-20">
@@ -60,14 +78,50 @@
 							<view class="u-flex u-primary-bg text-white u-radius-30 u-flex-items-center u-flex-center u-p-2"><nut-icon name="hangye" font-class-name="custom-icon" class-prefix="custom-icon" size="14" ></nut-icon></view>
 							<view class="text-bold u-m-l-12 ">合伙人中心</view>
 						</view>
-						<view class="u-flex u-flex-items-center" @click="base.handleGoto('/pages/my/mycard')"> 
-							<view class=" text-base u-m-r-5 ">我的名片</view>
+						<view class="u-flex u-flex-items-center" @click="base.handleGoto('/pages/partner/about_partner')"> 
+							<view class=" text-base u-m-r-5 u-font-14">关于合伙人</view>
 							<view class="u-flex u-primary-light-bg text-white u-radius-30 u-flex-items-center u-flex-center u-p-6">
 								<up-icon name="arrow-right" color="#007aff" size="12"></up-icon>
 							</view> 
 						</view>
 					</view>
-					<view class="u-flex u-flex-items-center u-flex-between u-primary u-font-16 u-m-b-12" v-if="partner !== 1">
+					<view class="u-flex u-flex-items-start u-flex-wrap">
+						<template v-if="partner == 1">
+							<view class="u-flex-column u-flex-center u-flex-items-center" style="flex: 0 0 25%"
+								@click="base.handleGoto('/pages/index/userCard')" 
+								>
+								<view class="u-radius-40   u-flex u-flex-items-center u-flex-center u-m-b-6 text-base bg-white" style="width: 35px; height: 35px;">
+									<nut-icon name="my" font-class-name="custom-icon" class-prefix="custom-icon" size="24" ></nut-icon>
+								</view>
+								<view class="text-base u-font-14">我的名片</view>
+							</view>
+							<view class="u-flex-column u-flex-center u-flex-items-center" style="flex: 0 0 25%" @click="base.handleGoto('/pages/my/haibao')">
+								<view class="u-radius-40   u-flex u-flex-items-center u-flex-center u-m-b-6 text-base bg-white" style="width: 35px; height: 35px;">
+									<nut-icon name="haibao1" font-class-name="custom-icon" class-prefix="custom-icon" size="24" ></nut-icon>
+								</view>
+								<view class="text-base u-font-14">海报中心</view>
+							</view>
+							<view class="u-flex-column u-flex-center u-flex-items-center" style="flex: 0 0 25%" @click="base.handleGoto('/pages/my/myqrcode')">
+								<view class="u-radius-40   u-flex u-flex-items-center u-flex-center u-m-b-6 text-base bg-white" style="width: 35px; height: 35px;">
+									<nut-icon name="erweima" font-class-name="custom-icon" class-prefix="custom-icon" size="24" ></nut-icon>
+								</view>
+								<view class="text-base u-font-14">我的二维码</view>
+							</view> 
+						</template> 
+						<view class="u-flex-column u-flex-center u-flex-items-center u-info-light-bg u-radius-10 u-p-20 box-border" 
+							style="flex: 0 0 100%;border: 1rpx dashed #aaa; " 
+							@click="base.handleGoto('/pages/partner/apply_partner')" 
+							v-else
+						>
+							<view class="u-radius-40   u-flex u-flex-items-center u-flex-center u-m-b-6 text-base " style="width: 35px; height: 35px;">
+								<!-- <nut-icon name="jinhuodan-01" font-class-name="custom-icon" class-prefix="custom-icon" size="24" ></nut-icon> -->
+								<up-icon name="plus-circle" size="24" color="#aaa"></up-icon>
+							</view>
+							<view class="  u-font-14 u-info">申请合伙人</view>
+						</view>
+						
+					</view>
+					<view class="u-flex u-flex-items-center u-flex-between u-primary u-font-16 u-m-t-12" v-if="partner == 1">
 						<view 
 							@click="base.handleGoto({url: '/pages/partner/users_product', params: {type: '3'}})"
 							class="u-flex-1 u-flex u-flex-items-center u-flex-between u-radius-4 u-p-12 u-primary-light-bg u-p-r-20 u-p-l-20 box-border u-m-5">
@@ -83,44 +137,6 @@
 							<view>
 								<up-icon name="list-dot" size="16"></up-icon>
 							</view>
-						</view>
-					</view>
-					<view class="u-flex u-flex-items-start u-flex-wrap">
-						<view class="u-flex-column u-flex-center u-flex-items-center" style="flex: 0 0 25%" 
-							@click="base.handleGoto('/pages/partner/users_partner')" 
-							v-if="partner == 1"
-						>
-							<view class="u-radius-40   u-flex u-flex-items-center u-flex-center u-m-b-6 text-base bg-white" style="width: 35px; height: 35px;">
-								<nut-icon name="haoyou" font-class-name="custom-icon" class-prefix="custom-icon" size="24" ></nut-icon>
-							</view>
-							<view class="text-base u-font-14">发展列表</view>
-						</view>
-						<view class="u-flex-column u-flex-center u-flex-items-center" style="flex: 0 0 25%" 
-							@click="base.handleGoto('/pages/partner/apply_partner')" 
-							v-else
-						>
-							<view class="u-radius-40   u-flex u-flex-items-center u-flex-center u-m-b-6 text-base bg-white" style="width: 35px; height: 35px;">
-								<nut-icon name="jinhuodan-01" font-class-name="custom-icon" class-prefix="custom-icon" size="24" ></nut-icon>
-							</view>
-							<view class="text-base u-font-14">申请合伙人</view>
-						</view>
-						<view class="u-flex-column u-flex-center u-flex-items-center" style="flex: 0 0 25%" @click="base.handleGoto('/pages/login/resetPwd')">
-							<view class="u-radius-40   u-flex u-flex-items-center u-flex-center u-m-b-6 text-base bg-white" style="width: 35px; height: 35px;">
-								<nut-icon name="haibao1" font-class-name="custom-icon" class-prefix="custom-icon" size="24" ></nut-icon>
-							</view>
-							<view class="text-base u-font-14">海报中心</view>
-						</view>
-						<view class="u-flex-column u-flex-center u-flex-items-center" style="flex: 0 0 25%" @click="base.handleGoto('/pages/login/resetPwd')">
-							<view class="u-radius-40   u-flex u-flex-items-center u-flex-center u-m-b-6 text-base bg-white" style="width: 35px; height: 35px;">
-								<nut-icon name="erweima" font-class-name="custom-icon" class-prefix="custom-icon" size="24" ></nut-icon>
-							</view>
-							<view class="text-base u-font-14">我的二维码</view>
-						</view>
-						<view class="u-flex-column u-flex-center u-flex-items-center" style="flex: 0 0 25%" @click="base.handleGoto('/pages/login/resetPwd')">
-							<view class="u-radius-40   u-flex u-flex-items-center u-flex-center u-m-b-6 text-base bg-white" style="width: 35px; height: 35px;">
-								<nut-icon name="safe" font-class-name="custom-icon" class-prefix="custom-icon" size="24" ></nut-icon>
-							</view>
-							<view class="text-base u-font-14">重置密码</view>
 						</view>
 					</view>
 				</view>
@@ -327,16 +343,22 @@
 					<view class="u-flex u-primary-bg text-white u-radius-30 u-flex-items-center u-flex-center u-p-2"><nut-icon name="moneybagfill" font-class-name="custom-icon" class-prefix="custom-icon" size="14" ></nut-icon></view>
 					<view class="text-bold u-m-l-12 ">财富号</view>
 				</view>
+				<view class="u-flex u-flex-items-center" @click="base.handleGoto('/pages/index/cfh')"> 
+					<view class=" text-base u-m-r-5 u-font-14">发现</view>
+					<view class="u-flex u-primary-light-bg text-white u-radius-30 u-flex-items-center u-flex-center u-p-6">
+						<up-icon name="arrow-right" color="#007aff" size="12"></up-icon>
+					</view> 
+				</view>
 			</view>
 			<view class="u-flex u-flex-items-start u-flex-wrap">
 				
-				<view class="u-flex-column u-flex-center u-flex-items-center" style="flex: 0 0 25%" @click="base.handleGoto('/pages/login/resetPwd')">
+				<view class="u-flex-column u-flex-center u-flex-items-center" style="flex: 0 0 25%" >
 					<view class="u-radius-40   u-flex u-flex-items-center u-flex-center u-m-b-6 text-base bg-white" style="width: 35px; height: 35px;">
 						<nut-icon name="jinhuodan-01" font-class-name="custom-icon" class-prefix="custom-icon" size="24" ></nut-icon>
 					</view>
 					<view class="text-base u-font-14">我要发布</view>
 				</view>
-				<view class="u-flex-column u-flex-center u-flex-items-center" style="flex: 0 0 25%" @click="base.handleGoto('/pages/login/resetPwd')">
+				<view class="u-flex-column u-flex-center u-flex-items-center" style="flex: 0 0 25%"  @click="base.handleGoto({url: '/pages/index/cfh_user', params: {login}})">
 					<view class="u-radius-40   u-flex u-flex-items-center u-flex-center u-m-b-6 text-base bg-white" style="width: 35px; height: 35px;">
 						<nut-icon name="xinwen" font-class-name="custom-icon" class-prefix="custom-icon" size="24" ></nut-icon>
 					</view>
@@ -358,12 +380,12 @@ import {userStore } from '@/stores/user.js'
 import {useCateStore, baseStore} from '@/stores/base.js'  
 	const base = baseStore() 
 	const {themeColor} = toRefs(base)
-	const {gpt, gptVip, userInfo, login, partner, subscription_loading} = toRefs(user)
+	const {gpt, gptVip, userInfo, partner, login, subscription_loading, partner_amount, partner_amount2} = toRefs(user)
 	const top = ref(true)
 	const bgColor = computed(() => {
 		// if(top.value) return '#BEDAFF'
 		return '#BEDAFF'
-	})
+	}) 
 	const tabIndex = computed(() => {
 		return tabslist.value.findIndex(ele => ele.value == tabValue.value)
 	});
@@ -424,6 +446,11 @@ import {useCateStore, baseStore} from '@/stores/base.js'
 	page {
 		background-color: #F5F6FA;  
 		padding-bottom: 100px;
+		::v-deep {
+			.nut-price {
+				color: $u-error!important
+			}
+		}
 	}
 </style>
 <style lang="scss" scoped>

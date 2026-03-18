@@ -170,7 +170,7 @@ export const baseStore = defineStore('base', {
 				// #ifdef H5
 				uni.uploadFile({
 					url: `${this.configBaseURL}${api}`,  
-					file: files,  
+					files: files,  
 					header: {
 						'appid': 10004,
 						'appsecret': '29caD4UaRVtdotmMrRksDcYHOBG2VxunY278w7+6LK6rE/V1VW29fPY',
@@ -209,7 +209,7 @@ export const baseStore = defineStore('base', {
 			})
 		},
 		async wxShare(){
-			console.log( 'wxShare' )
+			// console.log( 'wxShare' )
 			if (!isWeixinBrowser()) return 
 			let url = window.location.href
 			const res = await apis.get_share_url({params: {url, share_id: uni.getStorageSync('share_id') || ''}})
@@ -318,9 +318,11 @@ export const menusStore = defineStore('menus', {
 			const res = await apis.memu()  
 			if(res.code == 1) {  
 				const user = userStore()
-				const {login, partner} = toRefs(user)
+				const {login, partner, partner_amount, partner_amount2} = toRefs(user)
 				login.value = res.login 
 				partner.value = res.partner 
+				partner_amount.value = res.partner_amount 
+				partner_amount2.value = res.partner_amount2 
 				if(res.share_id) uni.setStorageSync('share_id', res.share_id)
 				// user.saveUserInfo(res.info)
 				// user.getUserInfo(res.info)

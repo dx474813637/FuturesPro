@@ -22,6 +22,13 @@
 					</view> 
 				</slot>
 			</template>
+			<template #center>
+				<slot></slot>
+			</template>
+			<template #right>
+				<slot name="right"></slot>
+			</template>
+			
 		</up-navbar>
 	</view>
 </template>

@@ -101,8 +101,8 @@
 		// #ifdef H5
 		if (window._userid) {
 			uni.setStorageSync('userid', window._userid)
-			uni.setStorageSync('poster', window._poster)
-			uni.setStorageSync('_operator', window._operator)
+			// uni.setStorageSync('poster', window._poster)
+			// uni.setStorageSync('_operator', window._operator)
 		}
 		// #endif
 		if (options.query.hasOwnProperty('scene')) {

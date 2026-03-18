@@ -1,13 +1,13 @@
 <template>
 	<view class="wrap u-p-20"> 
-		<view class="u-p-10 " v-if="cj == 0"> 
+		<!-- <view class="u-p-10 " v-if="cj == 0"> 
 			<up-alert 
 				title="当前还未创建名片" 
 				type="warning"  
 				showIcon 
 				fontSize="16px"
 			></up-alert>
-		</view>
+		</view> -->
 		<view class="content"> 
 			<up-form 
 				labelPosition="top"
@@ -17,14 +17,13 @@
 				errorType="toast"
 			>
 				<up-form-item prop="name" >
-					<up-input shape="circle" 
+					<up-input  
 						v-model="form.name"  
-						border="none"
+						border="bottom"
 						clearable 
 						inputAlign="right"
 						fontSize="16px"
-						:placeholder="`请输入姓名`" 
-						:customStyle="{padding: '10px 15px', background: '#F6F6F6'}"
+						:placeholder="`请输入姓名`"  
 						prefixIconStyle="color: #929cb5"
 						placeholderStyle="color: #AFB1B5"
 					>
@@ -36,7 +35,7 @@
 						</template>
 					</up-input>
 				</up-form-item>
-				<up-form-item prop="position" >
+				<!-- <up-form-item prop="position" >
 					<up-input shape="circle" 
 						v-model="form.position"  
 						border="none"
@@ -103,7 +102,7 @@
 						clearable 
 						inputAlign="right"
 						fontSize="16px"
-						:placeholder="`请输入座机`" 
+						:placeholder="`请输入电话`" 
 						:customStyle="{padding: '10px 15px', background: '#F6F6F6'}"
 						prefixIconStyle="color: #929cb5"
 						placeholderStyle="color: #AFB1B5"
@@ -111,7 +110,7 @@
 						<template #prefix>
 							<view class="u-flex u-flex-items-center" style="color: #929cb5">
 								<up-icon name="phone-fill" color="#929cb5"></up-icon>
-								<view class="u-m-l-6 u-font-16 ">座机</view>
+								<view class="u-m-l-6 u-font-16 ">电话</view>
 							</view>
 						</template>
 					</up-input>
@@ -143,7 +142,7 @@
 						clearable 
 						inputAlign="right"
 						fontSize="16px"
-						:placeholder="`请输入所在地`" 
+						:placeholder="`请输入地址`" 
 						:customStyle="{padding: '10px 15px', background: '#F6F6F6'}"
 						prefixIconStyle="color: #929cb5"
 						placeholderStyle="color: #AFB1B5"
@@ -151,35 +150,57 @@
 						<template #prefix>
 							<view class="u-flex u-flex-items-center" style="color: #929cb5">
 								<up-icon name="map-fill" color="#929cb5"></up-icon>
-								<view class="u-m-l-6 u-font-16 ">所在地</view>
+								<view class="u-m-l-6 u-font-16 ">地址</view>
 							</view>
 						</template>
 					</up-input>
-				</up-form-item>
-				<u-form-item label=""  prop="img" ref="img"  > 
+				</up-form-item> -->
+				<u-form-item label="" labelPosition="left"  prop="img" ref="img"  > 
 					<template #label>
-						<view>label</view>
+						<view class="u-flex u-flex-items-center u-m-l-14" style="color: #929cb5">
+							<up-icon name="account-fill" color="#929cb5"></up-icon>
+							<view class="u-m-l-6 u-font-16 ">头像</view>
+						</view> 
 					</template>
-					<up-upload
-						:fileList="fileLists.img"
-						@afterRead="afterRead"
-						@delete="deletePic"
-						name="img" 
-						:maxCount="1"
-						:maxSize="2048000"
-						width="100%"
-						@oversize="handleoversize"
-					></up-upload>
+					<view class="u-flex-1 u-flex u-flex-end">
+						<view style="width: 100px; flex: 0 0 100px">
+							<up-upload
+								:fileList="fileLists.img"
+								@afterRead="afterRead"
+								@delete="deletePic"
+								name="img" 
+								:maxCount="1"
+								:maxSize="2048000"
+								width="100px"
+								height="100px"
+								@oversize="handleoversize"
+							> 
+							</up-upload>  
+						</view>
+					</view>
+					
 				</u-form-item>
-				<up-form-item prop="info" >
-					<up-textarea v-model="info" placeholder="请输入简介" ></up-textarea>
-				</up-form-item>
+				<!-- <up-form-item prop="info" labelWidth="100vw" >
+					<template #label>
+						<view class="u-flex u-flex-items-center u-flex-items-start u-m-b-12">
+							<view class="u-p-10 u-radius-20 u-info-light-bg">
+								<up-icon name="order" color="#929cb5"></up-icon>
+							</view>
+							<view class="text-nowrap u-m-l-10" style="color: #929cb5">名片简介</view>
+						</view>
+					</template>
+					<up-textarea 
+					v-model="form.info" 
+					placeholder="请输入简介" 
+					cursorSpacing="50"
+					></up-textarea>
+				</up-form-item> -->
 			</up-form>
  
 		</view>  
 		
 		<view class="u-m-t-40 u-m-b-40">
-			<up-button type="primary" shape="circle" size="large" @click="submit">提交名片信息</up-button>
+			<up-button type="primary" shape="circle" size="large" @click="submit">更新信息</up-button>
 		</view>
 	</view>
 	<up-loading-page :loading="loading"></up-loading-page>
@@ -188,9 +209,9 @@
 <script setup> 
 	const $api = inject('$api') 
 	import {userStore } from '@/stores/user.js'  
-	import { baseStore, menusStore } from '@/stores/base.js'
-import { login } from '../../config/apis/interface/base'
+	import { baseStore, menusStore } from '@/stores/base.js' 
 	const user = userStore() 
+	const {login} = toRefs(user)
 	const menusstore = menusStore()
 	const base = baseStore()  
 	const uForm = ref(null)
@@ -198,14 +219,14 @@ import { login } from '../../config/apis/interface/base'
 	const loading = ref(false)
 	const form = ref({
 		name: '',
-		position: '',
-		company: '',
-		phone: '',
-		tel: '',
-		email: '',
-		address: '',
+		// position: '财富通合伙人',
+		// company: '',
+		// phone: '',
+		// tel: '',
+		// email: '',
+		// address: '',
 		img: '',
-		info: '',
+		// info: '',
 	})
 	const fileLists = reactive({ 
 		img: [] 
@@ -213,17 +234,17 @@ import { login } from '../../config/apis/interface/base'
 	const passwordType = ref(true) 
 	const rules = computed(() => { 
 		return {
-			phone: [{
-					required: true,
-					message: '请输入手机号',
-					trigger: ['blur', 'change']
-				},
-				{
-					validator: (rule, value, callback) => uni.$u.test.mobile(value),
-					message: '请输入正确的11位手机号',
-					trigger: ['blur', 'change']
-				},
-			],
+			// phone: [{
+			// 		required: true,
+			// 		message: '请输入手机号',
+			// 		trigger: ['blur', 'change']
+			// 	},
+			// 	{
+			// 		validator: (rule, value, callback) => uni.$u.test.mobile(value),
+			// 		message: '请输入正确的11位手机号',
+			// 		trigger: ['blur', 'change']
+			// 	},
+			// ],
 			name: {
 				required: true,
 				message: '请输入姓名',
@@ -263,8 +284,12 @@ import { login } from '../../config/apis/interface/base'
 					login: login.value
 				}
 			})
-			if(res.code == 1) { 
-				cj.value = res.cj
+			if(res.code == 1) {  
+				form.value = {
+					...res.list
+				}
+				if(res.list.img) fileLists.img = [{ url: res.list.img }]  
+				 
 			}
 		} catch(e) {
 			
@@ -279,12 +304,13 @@ import { login } from '../../config/apis/interface/base'
 			...form.value
 		})
 		if(res.code == 1) { 
-			 await getData()
+			messageManager.showSuccess(res.msg) 
+			// await getData()
 		}
 	}
 	// 新增图片
 	async function afterRead(event) {
-		// console.log(event)
+		console.log(event)
 		// 当设置 mutiple 为 true 时, file 为数组格式，否则为对象格式
 		let lists = [].concat(event.file)
 		let obj = fileLists[event.name]
@@ -299,16 +325,16 @@ import { login } from '../../config/apis/interface/base'
 		console.log(lists)
 		for (let i = 0; i < obj.length; i++) {
 			let item = obj[i] 
-			const blob = await fetch(item.url).then(response=>response.blob()) 
-			let fileN = base.blobToFile(blob, lists[i].name) 
-			const result = await base.uploadFilePromise(fileN) 
+			// const blob = await fetch(item.url).then(response=>response.blob()) 
+			// let fileN = base.blobToFile(blob, lists[i].name) 
+			const result = await base.uploadFilePromise([item])  
 			// const result = await base.uploadFilePromise(item.thumb)  
 			if(result.code == 1) {
 				obj.splice(i, 1, Object.assign(item, {
 					status: 'success',
 					message: '',
-					url: result.list[0],
-					name: result.list[0]
+					url: result.list,
+					name: result.list
 				}))  
 			}
 			else {
@@ -322,6 +348,7 @@ import { login } from '../../config/apis/interface/base'
 			
 			
 		}
+		console.log('obj', obj)
 		form.value[event.name]= fileLists[event.name].map(ele => ele.url).join('|')
 	}  
 	function deletePic(event) {
@@ -335,24 +362,8 @@ import { login } from '../../config/apis/interface/base'
 		})
 	} 
 </script> 
-<style lang="scss" scoped>
-	.u-border-bottom {
-		border-bottom: 1rpx solid #e7e7e7;
-	}
-
-	.login-box {
-		display: none;
-
-		&.tel,
-		&.pw {
-			display: block;
-		}
-	}
-
-	.inputRow {
-		margin-bottom: 30rpx;
-	}
-
+<style lang="scss" scoped> 
+  
 	.wrap {
 		// height: 100vh;
 		background: #fff;
@@ -368,68 +379,7 @@ import { login } from '../../config/apis/interface/base'
 				font-weight: 500;
 				margin-bottom: 50rpx;
 			}
-
-			input {
-				text-align: left;
-				margin-bottom: 10rpx;
-				padding-bottom: 6rpx;
-			}
-
-			.tips {
-				color: #ffaa00;
-				margin-bottom: 60rpx;
-				margin-top: 8rpx;
-			}
-
-			.getCaptcha {
-				background-color: rgb(253, 243, 208);
-				color: $uni-color-warning;
-				border: none;
-				font-size: 30rpx;
-				padding: 12rpx 0;
-
-				&::after {
-					border: none;
-				}
-			}
-
-			.alternative {
-				color: #666;
-				display: flex;
-				justify-content: space-between;
-				margin-top: 30rpx;
-			}
-		}
-
-		.buttom {
-			position: fixed;
-			left: 0;
-			bottom: 0;
-			width: 100%;
-
-			.loginType {
-				display: flex;
-				padding: 350rpx 150rpx 150rpx 150rpx;
-				justify-content: space-between;
-
-				.item {
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-					color: #666;
-					font-size: 28rpx;
-				}
-			}
-
-			.hint {
-				// padding: 20rpx 40rpx;
-				font-size: 28rpx;
-				color: #333;
-
-				.link {
-					color: #007aff;
-				}
-			}
+ 
 		}
 	}
 </style>

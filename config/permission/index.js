@@ -66,7 +66,7 @@ export function permissionBase(e, data) {
 			// 不是白名单并且没有token
 			if (!pass && login.value == 0) { 
 				uni.setStorageSync('prePage', e.url)
-				uni.redirectTo({
+				uni.navigateTo({
 					url: "/pages/login/login",
 					success() {
 						// messageManager.showError('请先登录')

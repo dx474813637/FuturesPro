@@ -77,4 +77,6 @@ export const my_ewm = (data) => uni.$u.http.get('my_ewm', data)
 // list_chance  资讯列表 参数pid 不必填  用在海报中心的，没有翻页。
 export const list_chance = (data) => uni.$u.http.get('list_chance', data) 
 // detail_chance 资讯详情 参数id
-export const detail_chance = (data) => uni.$u.http.get('detail_chance', data) 
+export const detail_chance = (data) => uni.$u.http.get('detail_chance', data)
+ // haibao  海报生成 参数id
+export const haibao = (data) => uni.$u.http.get('haibao', data)

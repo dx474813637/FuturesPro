@@ -1,40 +1,11 @@
 <template> 
-	<view class="header bg-white u-p-t-40 u-p-b-10" >
-		<view class="u-p-t-20 u-p-l-20 u-p-r-20 box-border">
-			<up-image src="https://p.cft.100ppi.com/Public/index-topbj/index-logo.png" height="35px" mode="heightFix"></up-image>
-			<!-- <up-image src="https://p.cft.100ppi.com/Public/index-topbj/home-top-logo.png" height="40px" mode="heightFix"></up-image> -->
-			<view class="u-primary text-thin u-m-t-5 u-m-b-30">
-				买卖周期股，就用生意社股票通!
-			</view>
-			<view class="data-box u-flex u-flex-items-center u-flex-between">
-				<view class="u-flex-1 u-m-r-10 box-border">
-					<view class="u-primary-light-bg u-radius-6 u-text-center u-p-10 u-p-t-20 u-p-b-20 u-info">
-						<nut-icon name="qihuo1" font-class-name="custom-icon" class-prefix="custom-icon" size="24" ></nut-icon>
-						<view class="u-font-15 text-black">基准价</view> 
-					</view> 
-				</view> 
-				<view class="u-flex-1  box-border">
-					<view class="u-primary-light-bg u-radius-6 u-text-center u-p-10 u-p-t-20 u-p-b-20 u-info" @click="base.handleGoto('/pages/index/gpt')">
-						<nut-icon name="Kxiantu" font-class-name="custom-icon" class-prefix="custom-icon" size="24" ></nut-icon>
-						<view class="u-font-15 text-black">股票通</view> 
-					</view> 
-				</view> 
-				<view class="u-flex-1  u-m-l-10 box-border">
-					<view class="u-primary-light-bg u-radius-6 u-text-center u-p-10 u-p-t-20 u-p-b-20 u-info">
-						<nut-icon name="qihuo" font-class-name="custom-icon" class-prefix="custom-icon" size="24" ></nut-icon>
-						<view class="u-font-15 text-black">期货通</view> 
-					</view> 
-				</view> 
-			</view>
-		</view>
-		<view class="tabs-list u-flex u-flex-items-center u-flex-between  u-p-10 box-border">
-			<view class="tabs-item u-flex-1 u-flex u-flex-items-center u-flex-center u-info-light-bg u-m-10 u-p-12 u-radius-16 text-base" 
-				v-for="item in tabslist"  
-				:key="item.value"
-				@click="tabsEvent(item)"
-			>{{item.name}}</view>
-		</view>
-	</view> 
+	<view class="header bg-white"> 
+		<NavBar :bgColor="bgColor"  :title="title" customColor="#000" :titleStyle="`color: ${themeColor}`" placeholder   >
+		</NavBar>
+		<view class="    u-p-b-10" > 
+			<up-image src="https://p.cft.100ppi.com/Public/index-topbj/cfhlogo.png" width="100%" mode="widthFix"></up-image>
+		</view> 
+	</view>
 	<view >
 		<view class="tabs-main">
 			<div class="loading-w u-flex u-flex-items-center u-flex-center" style="height: 100%;">
@@ -57,6 +28,7 @@
 	import {useCateStore, baseStore} from '@/stores/base.js' 
 	const user = userStore() 
 	const base = baseStore() 
+	const {themeColor} = toRefs(base)
 	const $api = inject('$api')  
 	const keyword = ref('')
 	const ceshi = ref({
@@ -72,6 +44,15 @@
 		likenumber: 1,
 		chatnumber: 0,
 	})
+	const top = ref(true)
+	const bgColor = computed(() => {
+		if(top.value) return 'transparent'
+		return '#d4e5ff'
+	}) 
+	const title = computed(() => {
+		if(top.value) return ''
+		return '财富号'
+	}) 
 	const options = computed(() => {
 		return {
 			params: { 
@@ -103,55 +84,20 @@
 		getDataList,
 		initDataList, 
 	} = useDataList(options)  
-	
-	const tabIndex = computed(() => {
-		return tabslist.value.findIndex(ele => ele.value == tabValue.value)
-	});
-	const tabValue = ref('1');
-	
-	const tabslist = ref([
-		{
-			name: '财富号',
-			value: '1',
-			disabled: false,
-			icon: 'Kxiantu',
-			url: '/pages/index/cfh'
-		},
-		{
-			name: '7X24',
-			value: '2', 
-			disabled: false,
-			icon: 'tongji',
-			url: '/pages/index/daily'
-		},  
-		{
-			name: '合伙人',
-			value: '3', 
-			disabled: false,
-			icon: 'tongji',
-			url: '/pages/my/my'
-		},  
-	])
-	onLoad(async (options) => {  
-		if(options.hasOwnProperty('type')) {
-			tabValue.value = options.type
-		} 
+	 
+	onLoad(async (options) => {   
 		// initDataList() 
 	})  
-	function tabsEvent (obj) {  
-		if(obj.disabled) {
-			// messageManager.showText('敬请期待'); 
-			return
-		}  
-		if(!obj.url) {
-			return
-		} 
-		base.handleGoto(obj.url)
-		// uni.navigateTo({
-		// 	url: obj.url
-		// })
-		// tabValue.value = obj.value 
-	}
+	onPageScroll((e) => { 
+		handleScroll(e)
+	})
+	// 滚动事件处理函数
+	const handleScroll = (e) => {
+		// 直接使用回调提供的滚动信息
+		const scrollTop = e.scrollTop
+		// 当滚动距离超过80px时，top设为false，否则设为true
+		top.value = scrollTop < 60
+	} 
 </script>
 
 <style lang="scss">

@@ -20,6 +20,7 @@
 		{
 			"path": "pages/index/index",
 			"style": {
+				"navigationStyle": "custom"
 			}
 		},
 		// {
@@ -132,12 +133,12 @@
 				"navigationStyle": "custom" 
 			}
 		},
-		{
-			"path": "pages/partner/users_partner",
-			"style": { 
-				"navigationBarTitleText": "发展用户"
-			}
-		},
+		// {
+		// 	"path": "pages/partner/users_partner",
+		// 	"style": { 
+		// 		"navigationBarTitleText": "发展用户"
+		// 	}
+		// },
 		{
 			"path": "pages/partner/users_product",
 			"style": {
@@ -145,9 +146,52 @@
 			}
 		},
 		{
-			"path": "pages/my/mycard",
+			"path": "pages/my/myInfo",
 			"style": {
-				"navigationBarTitleText": "我的名片"
+				"navigationBarTitleText": "我的姓名和头像"
+			}
+		},
+		{
+			"path": "pages/my/myqrcode",
+			"style": {
+				"navigationBarTitleText": "我的二维码"
+			}
+		},
+		{
+			"path": "pages/my/settings",
+			"style": {
+				"navigationBarTitleText": "通用"
+			}
+		},
+		{
+			"path": "pages/partner/about_partner",
+			"style": {
+				"navigationBarTitleText": "关于合伙人"
+			}
+		},
+		{
+			"path": "pages/index/userCard",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "用户名片"
+			}
+		},
+		{
+			"path": "pages/index/daily",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/index/cfh",
+			"style": {
+				"navigationStyle": "custom" 
+			}
+		},
+		{
+			"path": "pages/index/cfh_user",
+			"style": {
+				"navigationStyle": "custom" 
 			}
 		}
 	],
