@@ -95,7 +95,7 @@
 								</view>
 								<view class="text-base u-font-14">我的名片</view>
 							</view>
-							<view class="u-flex-column u-flex-center u-flex-items-center" style="flex: 0 0 25%" @click="base.handleGoto('/pages/my/haibao')">
+							<view class="u-flex-column u-flex-center u-flex-items-center" style="flex: 0 0 25%" @click="base.handleGoto('/pages/partner/haibao_center')">
 								<view class="u-radius-40   u-flex u-flex-items-center u-flex-center u-m-b-6 text-base bg-white" style="width: 35px; height: 35px;">
 									<nut-icon name="haibao1" font-class-name="custom-icon" class-prefix="custom-icon" size="24" ></nut-icon>
 								</view>

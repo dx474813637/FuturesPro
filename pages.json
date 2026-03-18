@@ -179,7 +179,7 @@
 		{
 			"path": "pages/index/daily",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -192,6 +192,12 @@
 			"path": "pages/index/cfh_user",
 			"style": {
 				"navigationStyle": "custom" 
+			}
+		},
+		{
+			"path": "pages/partner/haibao_center",
+			"style": {
+				"navigationStyle": "custom"
 			}
 		}
 	],
