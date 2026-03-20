@@ -1,14 +1,29 @@
 <template>
 	<view>
 		<PopupNormal v-bind="$attrs" > 
-			<view class="list-w bg-white">   
-				<scroll-view class="main-list  u-p-30" scroll-y >
-					<view class="text-bold u-m-b-50">PriceSeek对{{ginfo.stock}}({{ginfo.stockcode}})的技术指标分析</view>
-					<view class="">
-						<rich-text :nodes="ginfo.remark2"></rich-text>
-						
-					</view>
-					<!-- <up-parse :content="ginfo.remark"></up-parse> -->
+			<view class="list-w  ">   
+				<scroll-view class="main-list  u-p-30" scroll-y > 
+				
+					<template v-if="!list || list.length == 0">
+						<u-empty
+							mode="data"
+							:icon="empty"
+						>
+						</u-empty>
+					</template> 
+					<view class="u-m-t-20" v-for="item in list" :key="item.id"> 
+						<view class="u-radius-10 u-p-20  bg-white u-flex u-flex-items-center u-flex-between uni-shadow-sm">
+							<view class="text-base">id: {{item.id}}</view>
+							<view class="u-error"> 
+								<template v-if="mode == '1'"> 
+									<nut-price :price="item.split_amount" ></nut-price>
+								</template>
+								<template v-if="mode == '2'"> 
+									<nut-price :price="item.withdraw_amount" ></nut-price>
+								</template>
+							</view>
+						</view>
+					</view> 
 				</scroll-view> 
 			</view>  
 		</PopupNormal>
@@ -20,16 +35,20 @@
 	const $api = inject('$api')
 	import { baseStore } from '@/stores/base'
 	const base = baseStore();
-	const { themeColor } = toRefs(base)
+	const { themeColor ,empty} = toRefs(base)
 	import { userStore } from '@/stores/user'
 	const user = userStore();
 	const { user_info } = toRefs(user)
 	 
 	const props = defineProps({  
-		ginfo: {
-			type: Object,
+		mode: {
+			type: String,
+			default: '1',
+		} ,
+		list: {
+			type: Array,
 			default: () => {
-				return {}
+				return []
 			},
 		}
 	})   
@@ -40,8 +59,8 @@
 
 <style lang="scss" scoped>
 	.list-w {
-		height: 80vh;
-		// background-color: #f2f2f2;
+		height: 60vh;
+		background-color: #f2f2f2;
 		position: relative;
 		.load-bg {
 			position: absolute;

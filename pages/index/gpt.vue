@@ -4,7 +4,7 @@
 		<view class="u-p-l-10 u-p-r-10 banner"> 
 		<image style="width: 100%; height: auto" mode="widthFix" src="https://cft.100ppi.com/Public/rdxg-bg/home-ban.png" /> 
 			<view class="button-w text-nowrap u-flex-column u-flex-items-center u-flex-center">
-				<view class="u-m-b-20">买卖周期股，就用生意社股票通</view>
+				<view class="u-m-b-20 u-font-15" style="color: #111;">蓝筹股炒不动，题材股不敢炒，周期股更稳健</view>
 				<template v-if="gptVip">
 					<view class="u-flex u-flex-items-center u-flex-center">
 						<view class="u-radius-25 text-white u-p-12 u-m-r-14 u-p-l-60 u-p-r-60 u-text-center u-font-16 u-primary-bg" @click="base.handleGoto({url: '/pages/analysis/analysis', params: {mode:'1'}} )" >热点选股</view>
@@ -37,8 +37,8 @@
 						<view class="text-black u-font-16">选股方法</view> 
 				    </template>
 					<view>
-						<view>1.热点选股：利用n天商品价格上涨幅度，筛选热点商品，从而选择合适的价值周期股投资机会。</view>
-						<view>2.季报选股：利用季报周期内商品价格上涨幅度，提前于季报与年报，发现价值周期股买入信号。</view>
+						<view>1.热点选股：利用n天商品价格上涨幅度，筛选热点商品，从而选择合适的周期股投资机会。</view>
+						<view>2.季报选股：利用季报周期内商品价格上涨幅度，提前于季报与年报，发现周期股买入信号。</view>
 					</view>
 			    </nut-collapse-item> 
 			</nut-collapse>

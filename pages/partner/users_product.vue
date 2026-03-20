@@ -20,25 +20,54 @@
 		<view class="u-p-20  text-bold u-info u-font-28">
 			列表
 		</view> -->
-		<view class="list">  
-			<view class="list-item u-m-b-20 u-border u-p-30 u-radius-14 u-flex u-flex-between uni-shadow-sm text-base" 
+		<view class="list"> 
+			<view class="list-item u-m-b-20 u-border u-p-30 u-radius-14  uni-shadow-sm text-base"
 				v-for="item in dataList" :key="item.id"
-				@click="analysisEvent(item)"
 			>
-				<view class="u-flex u-flex-items-center u-info-light-bg u-radius-6 u-p-6 u-p-l-12 u-p-r-20">
-					<up-icon name="account-fill"></up-icon>
-					<view class="u-m-l-10">
-						<up-copy :content="item.dy_poster">
-						    <text>{{item.dy_poster}}</text>
-						</up-copy>
+				<view class="u-flex u-flex-between u-m-b-15">
+					<view class="u-flex u-flex-items-center u-info-light-bg u-radius-6 u-p-6 u-p-l-12 u-p-r-20">
+						<up-icon name="account-fill"></up-icon>
+						<view class="u-m-l-10">
+							<text>{{item.id}}</text>
+						</view>
 					</view>
+					<view class="u-flex u-flex-items-center"> 
+						<view class=" ">
+							<template v-if="item.type == 2">期货通</template>
+							<template v-else-if="item.type == 3">股票通</template> 
+						</view> 
+						<view class="u-m-l-10" :class="{'u-error': item.status != 1, 'u-success': item.status == 1}">
+							<template v-if="item.status == 1">已支付</template>
+							<template v-else-if="item.status == 2">已过期</template>
+							<template v-else-if="item.status == 0" >未支付</template>
+						</view> 
+					</view> 
 				</view>
-				<view class="u-flex u-flex-items-center">
-					<up-icon name="clock"></up-icon>
-					<view class="u-m-l-10 u-m-r-30">{{item.cdate}}</view>
-					<up-icon name="arrow-right"></up-icon>
+				<view class="u-flex u-flex-between u-m-b-15">
+					<view class="u-flex u-flex-items-center ">
+						<text>订阅时间</text> 
+					</view>
+					<view class="u-flex u-flex-items-center"> 
+						<view class="u-m-l-10  ">{{item.ctime}}</view> 
+					</view> 
+				</view>
+				<view class="u-flex u-flex-between u-m-b-15" v-if="item.status != 0">
+					<view class="u-flex u-flex-items-center ">
+						<text>支付时间</text> 
+					</view>
+					<view class="u-flex u-flex-items-center"> 
+						<view class="u-m-l-10  ">{{item.status_date}}</view> 
+					</view> 
+				</view>
+				<view class="u-flex u-flex-between" v-if="item.status != 0">
+					<view class="u-flex u-flex-items-center ">
+						<text>到期日期</text> 
+					</view>
+					<view class="u-flex u-flex-items-center"> 
+						<view class="u-m-l-10  ">{{item.expire_date}}</view> 
+					</view> 
 				</view> 
-			</view>
+			</view> 
 			<template v-if="dataList.length == 0">
 				<u-empty mode="data" :icon="base.empty" />
 			</template>
@@ -51,13 +80,13 @@
 			<u-safe-bottom></u-safe-bottom>
 		</view>	 
 	</view>
-	<UserAnalysisPopup
+	<!-- <UserAnalysisPopup
 		:show="showUserAnalysis" 
 		title="发展用户" 
 		mode="center"
 		:list="user_analysis"
 		:onUpdateShow="handleChangeShow" 
-	></UserAnalysisPopup>
+	></UserAnalysisPopup> -->
 	<MenusBar></MenusBar>
 </template>
 
@@ -83,6 +112,7 @@
 				type: type.value 
 			},
 			api: 'query_ptp_statist',
+			noReach: true,
 			getDataCallBack: (res) => {
 				if (res.code == 1) {
 					dataList.value = [...dataList.value, ...res.list]

@@ -3,7 +3,7 @@
 		<NavBar :bgColor="bgColor"  :title="title" customColor="#000" :titleStyle="`color: ${themeColor}`" placeholder   >
 		</NavBar>
 		<view class="    u-p-b-10" > 
-			<up-image src="https://p.cft.100ppi.com/Public/index-topbj/cfhlogo.png" width="100%" mode="widthFix"></up-image>
+			<up-image src="https://p.cft.100ppi.com/Public/index-topbj/cfhlogo.png" width="100%" height="auto" mode="widthFix"></up-image>
 		</view> 
 		<view class="u-p-20">
 			<view class="bg-white u-p-20 u-radius-15" style="position: relative;">

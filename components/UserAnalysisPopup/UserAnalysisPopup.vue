@@ -5,12 +5,12 @@
 				<scroll-view class="main-list  u-p-30" scroll-y >
 					<view class="u-flex u-flex-items-center u-flex-between u-p-10 u-m-b-15 u-font-30">
 						<view class="u-info text-nowrap">用户账号：</view>
-						<view class="u-flex-1">{{list.dy_poster}}</view> 
+						<view class="u-flex-1">{{list.poster}}</view> 
 					</view>
-					<view class="u-flex u-flex-items-center u-flex-between u-p-10 u-m-b-15 u-font-30">
+					<!-- <view class="u-flex u-flex-items-center u-flex-between u-p-10 u-m-b-15 u-font-30">
 						<view class="u-info text-nowrap">合伙人当前状态：</view>
-						<view class="u-flex-1">{{list.pt_status}}</view> 
-					</view>
+						<view class="u-flex-1">{{list.status}}</view> 
+					</view> -->
 					<view class="u-flex u-flex-items-center u-flex-between u-p-10 u-m-b-15 u-font-30">
 						<view class="u-info text-nowrap">订阅内容：</view>
 						<view class="u-flex-1">{{type_status}}</view> 
@@ -21,16 +21,19 @@
 					</view>
 					<view class="u-flex u-flex-items-center u-flex-between u-p-10 u-m-b-15 u-font-30">
 						<view class="u-info text-nowrap">订阅时间：</view>
-						<view class="u-flex-1">{{list.ctime}}</view> 
+						<view class="u-flex-1">{{list.choose_date}}</view> 
 					</view>
-					<view class="u-flex u-flex-items-center u-flex-between u-p-10 u-m-b-15 u-font-30">
-						<view class="u-info text-nowrap">支付时间：</view>
-						<view class="u-flex-1">{{list.status_date}}</view> 
-					</view>
-					<view class="u-flex u-flex-items-center u-flex-between u-p-10 u-m-b-15 u-font-30">
-						<view class="u-info text-nowrap">到期日期：</view>
-						<view class="u-flex-1">{{list.expire_date}}</view> 
-					</view>
+					<template v-if="list.status == 1">
+						<view class="u-flex u-flex-items-center u-flex-between u-p-10 u-m-b-15 u-font-30">
+							<view class="u-info text-nowrap">支付时间：</view>
+							<view class="u-flex-1">{{list.status_date}}</view> 
+						</view>
+						<view class="u-flex u-flex-items-center u-flex-between u-p-10 u-m-b-15 u-font-30">
+							<view class="u-info text-nowrap">到期日期：</view>
+							<view class="u-flex-1">{{list.expire_date}}</view> 
+						</view>
+					</template>
+					
 				</scroll-view> 
 			</view>  
 		</PopupNormal>

@@ -17,6 +17,7 @@ export default function useFilter(zt) {
 		let value = zt?.value.pay_status
 		let text = value
 		if(value == '1') text = '已支付'
+		else if(value == '2') text = '已过期' 
 		else if(value == '0') text = '未支付' 
 		return text
 	})  

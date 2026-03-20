@@ -19,7 +19,7 @@
 						</view>
 					</nut-avatar>
 					<view class="content u-m-l-20 u-flex-1">
-						<view class="u-flex u-flex-items-center u-flex-between u-m-b-8">
+						<view class="u-flex u-flex-items-center u-flex-between u-m-b-12">
 							<view class="name">{{userInfo.nickname || login || '未登录'}}</view>
 							<!-- <view class="u-info u-flex u-flex-items-center" @click="base.handleGoto('/pages/subscribe/index/index')">
 								<view class="u-m-r-10">我的订阅</view>
@@ -28,28 +28,28 @@
 						</view>
 						<view>
 							<!-- <view class="u-info u-font-12">描述文字</view> -->
-							<view class="u-flex u-flex-items-center tags-w">
-								<!-- <view class="  u-flex ">
-									<nut-tag round custom-color="linear-gradient(45deg, #F9FDE1, #FFD385)" text-color="#8D4E0D">
-										<view class="u-flex u-flex-items-center">
-											<nut-icon name="huiyuanvip" font-class-name="custom-icon" class-prefix="custom-icon" size="14" ></nut-icon>
-											<text >现货通</text>
-										</view> 
-									</nut-tag> 
-								</view>
-								<view class="u-m-l-10 u-flex">
-									<nut-tag round custom-color="linear-gradient(45deg, #F9FDE1, #FFD385)" text-color="#8D4E0D">
-										<view class="u-flex u-flex-items-center">
-											<nut-icon name="huiyuanvip" font-class-name="custom-icon" class-prefix="custom-icon" size="14" ></nut-icon>
-											<text>期货通</text>
-										</view> 
-									</nut-tag>  
-								</view> -->
-								<view class="  u-flex" v-if="gptVip">
+							<view class="u-flex u-flex-items-center tags-w"> 
+								<view class="  u-flex" v-if="partner == 1">
 									<nut-tag   custom-color="linear-gradient(45deg, #F9FDE1, #FFD385)" text-color="#8D4E0D">
 										<view class="u-flex u-flex-items-center">
 											<nut-icon name="huiyuanvip" font-class-name="custom-icon" class-prefix="custom-icon" size="14" ></nut-icon>
-											<text>股票通</text>
+											<text>合伙人</text>
+										</view> 
+									</nut-tag>   
+								</view>
+								<view class="  u-flex" v-else-if="subsVip">
+									<nut-tag   custom-color="linear-gradient(45deg, #F9FDE1, #FFD385)" text-color="#8D4E0D">
+										<view class="u-flex u-flex-items-center">
+											<nut-icon name="huiyuanvip" font-class-name="custom-icon" class-prefix="custom-icon" size="14" ></nut-icon>
+											<text>VIP用户</text>
+										</view> 
+									</nut-tag>   
+								</view>
+								<view class="  u-flex" v-else>
+									<nut-tag   custom-color="#eee" text-color="#144975">
+										<view class="u-flex u-flex-items-center">
+											<nut-icon name="myfill" font-class-name="custom-icon" class-prefix="custom-icon" size="14" ></nut-icon>
+											<text>普通用户</text>
 										</view> 
 									</nut-tag>   
 								</view>
@@ -61,11 +61,12 @@
 			
 			<view class="u-p-l-20 u-p-r-20 u-p-b-20  box-border  " v-if="partner == 1">
 				<view class="u-radius-12   u-p-20 box-border   bg-white u-flex u-flex-items-center text-base" >
-					<view class="u-flex-1 u-flex u-flex-items-baseline u-flex-center ">
+					<view class="u-flex-1 u-flex u-flex-items-baseline u-flex-center " @click="amountBtn('1')">
 						<view class="u-m-r-10">可用</view>
 						<view class="u-error"><nut-price :price="partner_amount" thousands size="large"></nut-price></view>
 					</view>
-					<view class="u-flex-1 u-flex u-flex-items-baseline u-flex-center">
+					<up-line direction="col" length="20px"></up-line>
+					<view class="u-flex-1 u-flex u-flex-items-baseline u-flex-center" @click="amountBtn('2')">
 						<view>可提</view>
 						<view class="u-error"><nut-price :price="partner_amount2" thousands size="large"></nut-price></view>
 					</view>
@@ -85,10 +86,10 @@
 							</view> 
 						</view>
 					</view>
-					<view class="u-flex u-flex-items-start u-flex-wrap">
+					<view class="u-flex u-flex-items-start u-flex-wrap u-p-b-10">
 						<template v-if="partner == 1">
 							<view class="u-flex-column u-flex-center u-flex-items-center" style="flex: 0 0 25%"
-								@click="base.handleGoto('/pages/index/userCard')" 
+								@click="base.handleGoto({url: '/pages/index/userCard', params: {login}})" 
 								>
 								<view class="u-radius-40   u-flex u-flex-items-center u-flex-center u-m-b-6 text-base bg-white" style="width: 35px; height: 35px;">
 									<nut-icon name="my" font-class-name="custom-icon" class-prefix="custom-icon" size="24" ></nut-icon>
@@ -99,13 +100,19 @@
 								<view class="u-radius-40   u-flex u-flex-items-center u-flex-center u-m-b-6 text-base bg-white" style="width: 35px; height: 35px;">
 									<nut-icon name="haibao1" font-class-name="custom-icon" class-prefix="custom-icon" size="24" ></nut-icon>
 								</view>
-								<view class="text-base u-font-14">海报中心</view>
+								<view class="text-base u-font-14">推广海报</view>
 							</view>
 							<view class="u-flex-column u-flex-center u-flex-items-center" style="flex: 0 0 25%" @click="base.handleGoto('/pages/my/myqrcode')">
 								<view class="u-radius-40   u-flex u-flex-items-center u-flex-center u-m-b-6 text-base bg-white" style="width: 35px; height: 35px;">
 									<nut-icon name="erweima" font-class-name="custom-icon" class-prefix="custom-icon" size="24" ></nut-icon>
 								</view>
-								<view class="text-base u-font-14">我的二维码</view>
+								<view class="text-base u-font-14">推广二维码</view>
+							</view> 
+							<view class="u-flex-column u-flex-center u-flex-items-center" style="flex: 0 0 25%" @click="base.handleGoto('/pages/partner/users_partner')">
+								<view class="u-radius-40   u-flex u-flex-items-center u-flex-center u-m-b-6 text-base bg-white" style="width: 35px; height: 35px;">
+									<nut-icon name="chakan" font-class-name="custom-icon" class-prefix="custom-icon" size="24" ></nut-icon>
+								</view>
+								<view class="text-base u-font-14">发展列表</view>
 							</view> 
 						</template> 
 						<view class="u-flex-column u-flex-center u-flex-items-center u-info-light-bg u-radius-10 u-p-20 box-border" 
@@ -121,9 +128,9 @@
 						</view>
 						
 					</view>
-					<view class="u-flex u-flex-items-center u-flex-between u-primary u-font-16 u-m-t-12" v-if="partner == 1">
+					<!-- <view class="u-flex u-flex-items-center u-flex-between u-primary u-font-16 u-m-t-12" v-if="partner == 1">
 						<view 
-							@click="base.handleGoto({url: '/pages/partner/users_product', params: {type: '3'}})"
+							@click="base.handleGoto({url: '/pages/partner/users_partner', params: { mode: 'gpt'}})"
 							class="u-flex-1 u-flex u-flex-items-center u-flex-between u-radius-4 u-p-12 u-primary-light-bg u-p-r-20 u-p-l-20 box-border u-m-5">
 							<view>股票通发展列表</view>
 							<view>
@@ -131,14 +138,14 @@
 							</view>
 						</view>
 						<view 
-							@click="base.handleGoto({url: '/pages/partner/users_product', params: {type: '2'}})"
+							@click="base.handleGoto({url: '/pages/partner/users_partner', params: { mode: 'qht'}})"
 							class="u-flex-1 u-flex u-flex-items-center u-flex-between u-radius-4 u-p-12 u-primary-light-bg u-p-r-20 u-p-l-20 box-border u-m-5">
 							<view>期货通发展列表</view>
 							<view>
 								<up-icon name="list-dot" size="16"></up-icon>
 							</view>
 						</view>
-					</view>
+					</view> -->
 				</view>
 			</view>
 		</view>
@@ -241,7 +248,7 @@
 									</view>
 								</view>
 							</view> 
-							<view class="u-font-14">利用n天商品价格上涨幅度，筛选热点商品，从而选择合适的价值周期股投资机会。</view>
+							<view class="u-font-14">利用n天商品价格上涨幅度，筛选热点商品，从而选择合适的周期股投资机会。</view>
 						</view>
 					</view>
 					<view class="u-radius-10 u-primary-light-bg u-p-20" @click="base.handleGoto({url:'/pages/analysis/analysis',params:{mode:'2'}})">
@@ -258,7 +265,7 @@
 									</view>
 								</view>
 							</view> 
-							<view class="u-font-14">利用季报周期内商品价格上涨幅度，提前于季报与年报，发现价值周期股买入信号。</view>
+							<view class="u-font-14">利用季报周期内商品价格上涨幅度，提前于季报与年报，发现周期股买入信号。</view>
 						</view>
 					</view>
 				</view>
@@ -371,6 +378,13 @@
 	<u-safe-bottom></u-safe-bottom>
 	
 	<MenusBar></MenusBar>
+	<PartnerAmountListPopup
+		:show="amountShow"
+		:mode="mode"
+		:list="amountList"
+		:title="amountTitle"   
+		:onUpdateShow="handleChangeShow"
+	></PartnerAmountListPopup>
 </template>
 
 
@@ -380,12 +394,36 @@ import {userStore } from '@/stores/user.js'
 import {useCateStore, baseStore} from '@/stores/base.js'  
 	const base = baseStore() 
 	const {themeColor} = toRefs(base)
-	const {gpt, gptVip, userInfo, partner, login, subscription_loading, partner_amount, partner_amount2} = toRefs(user)
+	const {
+		gpt, 
+		gptVip, 
+		subsVip,
+		userInfo, 
+		partner, 
+		login, 
+		subscription_loading, 
+		partner_amount, 
+		partner_amount2, 
+		partner_amount_list, 
+		partner_amount2_list
+	} = toRefs(user)
 	const top = ref(true)
+	const amountShow = ref(false)
 	const bgColor = computed(() => {
 		// if(top.value) return '#BEDAFF'
 		return '#BEDAFF'
 	}) 
+	const mode = ref('1')
+	const amountList = computed(() => {
+		if(mode.value == '1') return partner_amount_list.value
+		if(mode.value == '2') return partner_amount2_list.value
+		return []
+	})
+	const amountTitle = computed(() => {
+		if(mode.value == '1') return '可用金额明细列表'
+		if(mode.value == '2') return '可提金额明细列表'
+		return []
+	})
 	const tabIndex = computed(() => {
 		return tabslist.value.findIndex(ele => ele.value == tabValue.value)
 	});
@@ -439,7 +477,16 @@ import {useCateStore, baseStore} from '@/stores/base.js'
 		// 当滚动距离超过80px时，top设为false，否则设为true
 		top.value = scrollTop < 60
 	}
-	 
+	function handleChangeShow(data) {
+		amountShow.value = data
+	}
+	function amountBtn(v) {
+		mode.value = v
+		if(amountList.value ) {
+			handleChangeShow(true)
+		}
+		
+	}
 </script> 
 
 <style lang="scss">

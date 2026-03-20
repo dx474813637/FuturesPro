@@ -41,6 +41,10 @@ export const query_ptp_statist = (data) => uni.$u.http.get('query_ptp_statist', 
 	// status_date：支付时间expire_date：到期日期 （trade_number：交易单号merchant_number：商户单号 不用显示）
 export const query_ptp_dy = (data) => uni.$u.http.get('query_ptp_dy', data)
 
+ // about 关于合伙人
+export const about = (data) => uni.$u.http.get('about', data)
+
+
 // my_subscription 我的订阅
 export const my_subscription = (data) => uni.$u.http.get('my_subscription', data)
 
@@ -71,10 +75,11 @@ export const edit_card = (data, config) => uni.$u.http.post('edit_card', data, c
 // 前台接口
 // web_login_card 名片信息 参数login
 export const web_login_card = (data) => uni.$u.http.get('web_login_card', data) 
-// my_ewm  我的二维码
+// my_ewm  推广二维码
 export const my_ewm = (data) => uni.$u.http.get('my_ewm', data) 
-
-// list_chance  资讯列表 参数pid 不必填  用在海报中心的，没有翻页。
+// list_chance_recommend
+export const list_chance_recommend = (data) => uni.$u.http.get('list_chance_recommend', data) 
+// list_chance  资讯列表 参数pid 不必填  用在推广海报的，没有翻页。
 export const list_chance = (data) => uni.$u.http.get('list_chance', data) 
 // detail_chance 资讯详情 参数id
 export const detail_chance = (data) => uni.$u.http.get('detail_chance', data)

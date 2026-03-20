@@ -215,10 +215,10 @@
 								<view style="color:#9899BD">选股方法</view>
 							</nut-divider>
 							<view class="tag-style u-radius-6 u-p-10 u-p-l-20 u-p-r-20 u-m-b-20">
-								1，热点选股：利用n天商品价格上涨幅度，筛选热点商品，从而选择合适的价值周期股投资机会。 
+								1，热点选股：利用n天商品价格上涨幅度，筛选热点商品，从而选择合适的周期股投资机会。 
 							</view>
 							<view class="tag-style u-radius-6 u-p-10 u-p-l-20 u-p-r-20">
-								2，季报选股：利用季报周期内商品价格上涨幅度，提前于季报与年报，发现价值周期股买入信号。
+								2，季报选股：利用季报周期内商品价格上涨幅度，提前于季报与年报，发现周期股买入信号。
 							</view>
 						</view>
 						<view class=" u-p-l-40 u-p-r-40">

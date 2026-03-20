@@ -1,39 +1,39 @@
 <template>
 	<view class="w">
 		<up-loading-page :loading="loading"  ></up-loading-page>
-		<view class="row u-flex-column u-flex-items-center u-flex-center text-white u-p-40 bg-primary">
+		<view class="row u-flex-column u-flex-items-center u-flex-center text-white u-p-30 bg-primary">
 			<up-icon :name="orderDetail.status == 1?'checkmark-circle-fill':'clock-fill' " color="#fff" size="40"></up-icon>
 			<view class="u-font-18 u-m-t-10">{{pay_status}}</view>
 		</view>
 		<view class="card-w u-p-l-20 u-p-r-20 u-p-b-40">
 			<view class="bg"></view>
-			<view class="card bg-white box-border u-radius-20 u-p-20">
-				<view class="row u-flex u-flex-items-center u-flex-between u-p-20">
-					<view>订单ID</view>
+			<view class="card bg-white box-border u-radius-20 u-p-12">
+				<view class="row u-flex u-flex-items-center u-flex-between u-p-12 u-p-l-20 u-p-r-20">
+					<view class="text-base">订单ID</view>
 					<view>{{orderDetail.order_id}}</view>
 				</view>
-				<view class="row u-flex u-flex-items-center u-flex-between u-p-20">
-					<view>订阅商品</view>
+				<view class="row u-flex u-flex-items-center u-flex-between u-p-12 u-p-l-20 u-p-r-20">
+					<view class="text-base">订阅商品</view>
 					<view>{{orderDetail.name}}</view>
 				</view>
-				<view class="row u-flex u-flex-items-center u-flex-between u-p-20">
-					<view>订阅时间</view>
+				<view class="row u-flex u-flex-items-center u-flex-between u-p-12 u-p-l-20 u-p-r-20">
+					<view class="text-base">订阅时间</view>
 					<view>{{orderDetail.choose_date}}</view>
 				</view>
-				<view class="row u-flex u-flex-items-center u-flex-between u-p-20" v-if="orderDetail.status == 1">
-					<view>生效时间</view>
+				<view class="row u-flex u-flex-items-center u-flex-between u-p-12 u-p-l-20 u-p-r-20" v-if="orderDetail.status == 1">
+					<view class="text-base">生效时间</view>
 					<view>{{orderDetail.status_date}}</view>
 				</view>
-				<view class="row u-flex u-flex-items-center u-flex-between u-p-20" v-if="orderDetail.status == 1">
-					<view>到期时间</view>
+				<view class="row u-flex u-flex-items-center u-flex-between u-p-12 u-p-l-20 u-p-r-20" v-if="orderDetail.status == 1">
+					<view class="text-base">到期时间</view>
 					<view>{{orderDetail.expire_date}}</view>
 				</view>
-				<view class="row u-flex u-flex-items-center u-flex-between u-p-20" v-if="orderPriceInfo.time">
-					<view>订阅期限</view>
+				<view class="row u-flex u-flex-items-center u-flex-between u-p-12 u-p-l-20 u-p-r-20" v-if="orderPriceInfo.time">
+					<view class="text-base">订阅期限</view>
 					<view>{{orderDetail.time}}</view>
 				</view>
-				<view class="row u-flex u-flex-items-center u-flex-between u-p-20">
-					<view>订阅金额</view>
+				<view class="row u-flex u-flex-items-center u-flex-between u-p-12 u-p-l-20 u-p-r-20">
+					<view class="text-base">订阅金额</view>
 					<view class="u-error">
 						<nut-price :price="orderPriceInfo.price || orderDetail.price" size="large" thousands symbol="¥"></nut-price>
 					</view>
@@ -48,6 +48,14 @@
 					<up-button type="primary" size="large" plain  shape="circle" @click="base.handleGoto({url: '/pages/analysis/analysis', type: 'reLaunch'})">我要选股</up-button>
 				</view>
 
+			</view>
+			<view class="title  u-m-t-30  ">
+				<view class="u-font-15 bg-white u-p-25 u-radius-15">
+					<view class="  text-base">生意社股票通具体功能：</view>
+					<view class="u-radius-5 bg-white u-m-t-12">1、热点选股与季报选股2种方法</view>
+					<view class="u-radius-5 bg-white u-m-t-12">2、股价90天内5档位置（高位、中高位、中位、中低位与低位）</view>
+					<view class="u-radius-5 bg-white u-m-t-12">3、AI大模型财报评级与K线分析</view>
+				</view>
 			</view>
 
 			<view class="card bg-white box-border u-radius-20 u-p-20 u-m-t-30"

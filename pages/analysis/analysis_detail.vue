@@ -1,15 +1,12 @@
 <template>
 	<view class="w" >
 		<view class="bg"></view>
-		<NavBar :bgColor="bgColor"  title="" :backBtn="false" customColor="#fff" :titleStyle="`color: #fff`" placeholder ></NavBar>
+		<NavBar :bgColor="bgColor"  :title="title" :backBtn="false" customColor="#fff" :titleStyle="`color: #fff`" placeholder ></NavBar>
 		<view class="w-main">
 			<view class="u-flex u-flex-between u-flex-items-center  u-m-b-20">
 				<view class="u-flex-1"></view>
 				<view class="u-flex-1">
-					<view class="text-white u-text-center" style="font-size: 26px;">
-						<template v-if="mode == '1'">热点</template>
-						<template v-else-if="mode == '2'">季报</template>选股
-					</view>
+					<view class="text-white u-text-center" style="font-size: 26px;">{{mode_title}}</view>
 				</view>
 				<view class="u-flex-1 u-flex u-flex-end">
 					<view 
@@ -179,27 +176,16 @@
 			</view>
 			<view class="content-w u-p-l-12 u-p-r-12 u-m-t-15">
 				<view class="content-header">
-					<view class="u-flex u-flex-items-baseline bg-white u-p-14 u-p-l-30 u-m-t-10" style="border-radius: 15px 15px 0 0">
-						<view class="u-font-16">生产商</view>
-						<view class="u-font-13 u-m-l-20 u-info">基本面评析</view>
-					</view>
-					<!-- <view class="tab-list-cnt box-border  " style=" border-radius: 12px 12px 0 0;" v-if="mode == '1'">
-						<view class="tab-list " >
-							<view class="tab-item active u-flex u-flex-items-center u-flex-start u-p-l-32" >
-								<view class="u-flex u-flex-items-baseline ">
-									<view class="u-font-16">生产商</view>
-									<view class="u-font-13 u-m-l-20 u-info">基本面评析</view>
-								</view>
-								
-							</view>
-							<view class="tab-item " >  
-							</view>
-							<view :style="{'transform': `translateX(0)`}" class="tab-selected">
-								<view class="left"></view>
-								<view class="right"></view>
-							</view> 
-						</view>  
-					</view>  -->
+					<view class="u-flex u-flex-items-center u-flex-between bg-white u-p-14 u-p-l-30 u-m-t-10" style="border-radius: 15px 15px 0 0">
+						<view class="u-flex u-flex-items-baseline">
+							<view class="u-font-16">生产商</view>
+							<view class="u-font-13 u-m-l-20 u-info">基本面评析</view> 
+						</view>
+						<view class="u-flex u-flex-items-center">
+							<view class="u-font-14 u-m-r-8 text-base" @click="prodChart = !prodChart">显示商品走势图</view>
+							<view><up-switch size="15" activeColor="#ffaa00" v-model="prodChart" ></up-switch></view>
+						</view>
+					</view> 
 				</view>
 				<view class="content-main box-border u-flex u-flex-items-start bg-white " 
 					style=" border-top: 1rpx solid #d0d4d6;"
@@ -258,7 +244,7 @@
 								</view>
 								
 							</view>
-							<view class="u-flex u-flex-items-center u-flex-between u-primary-light-bg u-p-8 u-p-l-20 u-p-r-20 u-radius-8" @click="handleChangeShow4(true)">
+							<view class="u-flex u-flex-items-center u-flex-between u-primary-light-bg u-p-8 u-p-l-20 u-p-r-20 u-radius-8" >
 								<view class="u-flex u-flex-items-center">
 									<view class="u-font-14 text-base ">PriceSeek评分</view>
 									<up-icon name="arrow-right" size="14" color="#ccc" ></up-icon>
@@ -269,8 +255,9 @@
 							</view>
 							
 						</view>   
-						<view class="main-data u-m-b-14" style="width: 100%;">
+						<view class="main-data u-m-b-14" style="width: 100%;" >
 							<ProductECharts
+								:show="prodChart"
 								:chartData="productEChartsBaseData" 
 							></ProductECharts>
 						</view>
@@ -311,19 +298,21 @@
 									<view class="u-font-14 u-radius-8 u-primary-light-bg u-p-4 u-p-l-15 u-p-r-15 u-primary">{{cpyDataGinfo.score}}</view>
 								</view>
 							</view>
-							
+						</view>
+						<view class="u-p-20  " v-if="cpyDataGinfo.remark2">
+							<up-button type="primary" plain shape="circle" @click="priceSeekInfoShow = true">技术指标分析</up-button>
 						</view>
 					</view>
 				</view>
 			</view>
 		</view>
 	</view> 
-	<!-- <PriceSeekInfoPopup
+	<PriceSeekInfoPopup
 		:show="priceSeekInfoShow"
 		:ginfo="cpyDataGinfo"
-		title="PriceSeek评析"   
+		:title="`技术指标分析`"   
 		:onUpdateShow="handleChangeShow4"
-	></PriceSeekInfoPopup> -->
+	></PriceSeekInfoPopup>
 	<ProductLabelPopup
 		:show="allproductShow"
 		title="商品筛选结果"   
@@ -430,6 +419,16 @@
 		if(top.value) return 'transparent'
 		return '#007aff'
 	})
+	const mode_title = computed(() => {
+		if (mode.value == '1') return '热点选股'
+		if (mode.value == '2') return '季报选股'
+		return ''
+	})
+	const title = computed(() => {
+		if (top.value) return ''
+		return mode_title.value
+	})
+	const prodChart = ref(true)
 	const loading_product = ref(false)
 	const loading_stock = ref(false)
 	const allproductShow = ref(false)

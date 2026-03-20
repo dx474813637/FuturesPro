@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view  style="width: 100%; height: 300px;position: relative;">
+		<view  style="width: 100%; height: 300px;position: relative;" v-if="show">
 			<l-echart ref="chartRef"></l-echart>
 			<view class="customTooltips u-radius-6" :style="{ left: position[0] + 'px', top: position[1] + 'px' }"
 				v-if="paramsRef.length && position.length && showTip">
@@ -20,13 +20,18 @@
 	</view>
 </template>
 
-<script setup>
+<script setup> 
+	// https://ext.dcloud.net.cn/plugin?id=4899
 	const props = defineProps({
 		chartData: {
 			type: Object,
 			default: () => {
 				return {}
 			}
+		},
+		show: {
+			type: Boolean,
+			default: true
 		}
 	})
 	const chartRef = ref(null)
@@ -179,13 +184,24 @@
 			deep: true
 		}
 	)
+	watch(
+		() => props.show,
+		async (n, o) => { 
+			if (n) {
+				nextTick(async ()=> {
+					await initChart() 
+				})
+				
+			} 
+		} 
+	)
 	// 初始化图表 
 	const initChart = async () => {
 		if (!chartRef.value) return
 
 		try {
 			const chart = await chartRef.value.init(echarts)
-			chart.setOption(optionRef.value) 
+			chart.setOption(optionRef.value, true) 
 			chart.on('showTip', (params) => {
 				showTip.value = true
 				// console.log('showTip::')

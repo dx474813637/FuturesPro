@@ -18,10 +18,15 @@
 					</view>
 				</view>
 			</view>
+			<view class="u-radius-10 bg-white u-p-30 u-m-t-30">
+				<view class=" " style="line-height: 30px;">
+					生意社财富通平台是由上市公司网盛生意宝（002095）旗下大宗商品数据服务平台生意社，打造的面向股票与期货投资者的数据服务平台，主要服务包括股票通与期货通服务，股票通包括1000+只周期股，期货通包括50+个期货商品。
+				</view>
+			</view>
 		</view>
-		<view class="u-flex u-flex-items-center u-flex-center" style="height: 240px;">
+		<!-- <view class="u-flex u-flex-items-center u-flex-center" style="height: 240px;">
 			<up-image src="https://p.cft.100ppi.com/Public/minpian/biaoyu.png" width="100%" mode="widthFix"></up-image>
-		</view>
+		</view> -->
 		
 	</view>
 	<up-loading-page :loading="loading"></up-loading-page>

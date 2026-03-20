@@ -149,7 +149,7 @@
 								</view>
 							</view>
 						</view> 
-						<view class="u-font-14">利用n天商品价格上涨幅度，筛选热点商品，从而选择合适的价值周期股投资机会。</view>
+						<view class="u-font-14">利用n天商品价格上涨幅度，筛选热点商品，从而选择合适的周期股投资机会。</view>
 					</view>
 				</view>
 				<view class="u-radius-10 u-error-light-bg u-p-20" @click="base.handleGoto('/pages/subscribe/gpt/season')">
@@ -166,7 +166,7 @@
 								</view>
 							</view>
 						</view> 
-						<view class="u-font-14">利用季报周期内商品价格上涨幅度，提前于季报与年报，发现价值周期股买入信号。</view>
+						<view class="u-font-14">利用季报周期内商品价格上涨幅度，提前于季报与年报，发现周期股买入信号。</view>
 					</view>
 				</view>
 			</view>

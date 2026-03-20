@@ -8,7 +8,7 @@
 			    url="/pages/login/resetPwd"
 			></up-cell>
 			<up-cell
-			    title="我的二维码"
+			    title="推广二维码"
 				icon="lock-open"
 			    isLink
 			    url="/pages/my/myqrcode"
@@ -22,6 +22,12 @@
 				icon="edit-pen"
 			    isLink
 			    url="/pages/my/myInfo"
+			> </up-cell>
+			<up-cell
+			    title="首页"
+				icon="home"
+			    isLink
+			    url="/pages/index/index"
 			> </up-cell>
 			<!-- <up-cell
 			    title="打开徽标页"

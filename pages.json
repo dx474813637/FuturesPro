@@ -133,12 +133,12 @@
 				"navigationStyle": "custom" 
 			}
 		},
-		// {
-		// 	"path": "pages/partner/users_partner",
-		// 	"style": { 
-		// 		"navigationBarTitleText": "发展用户"
-		// 	}
-		// },
+		{
+			"path": "pages/partner/users_partner",
+			"style": { 
+				"navigationBarTitleText": "发展用户"
+			}
+		},
 		{
 			"path": "pages/partner/users_product",
 			"style": {
@@ -154,7 +154,7 @@
 		{
 			"path": "pages/my/myqrcode",
 			"style": {
-				"navigationBarTitleText": "我的二维码"
+				"navigationBarTitleText": "推广二维码"
 			}
 		},
 		{
@@ -198,6 +198,12 @@
 			"path": "pages/partner/haibao_center",
 			"style": {
 				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/partner/haibao_detail",
+			"style": {
+				"navigationBarTitleText": "推广海报"
 			}
 		}
 	],

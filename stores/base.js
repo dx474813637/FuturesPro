@@ -318,11 +318,14 @@ export const menusStore = defineStore('menus', {
 			const res = await apis.memu()  
 			if(res.code == 1) {  
 				const user = userStore()
-				const {login, partner, partner_amount, partner_amount2} = toRefs(user)
+				const {login, partner, partner_amount, partner_amount2, share_id, partner_amount_list, partner_amount2_list} = toRefs(user)
 				login.value = res.login 
+				share_id.value = res.share_id 
 				partner.value = res.partner 
 				partner_amount.value = res.partner_amount 
 				partner_amount2.value = res.partner_amount2 
+				partner_amount_list.value = res.partner_amount_list
+				partner_amount2_list.value = res.partner_amount2_list
 				if(res.share_id) uni.setStorageSync('share_id', res.share_id)
 				// user.saveUserInfo(res.info)
 				// user.getUserInfo(res.info)

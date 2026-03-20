@@ -18,6 +18,7 @@ const base = baseStore(pinia)
  const whiteList = [   
  	'/pages/login/login', 
  	'/pages/login/code', 
+ 	'/pages/partner/haibao_detail', 
 	// { pattern: /^\/pages\/login*/ },
 	{ pattern: /^\/pages\/index*/ },
  // 	'/pages_user/index/index', 

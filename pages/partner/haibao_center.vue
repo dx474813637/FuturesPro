@@ -4,18 +4,42 @@
 		</NavBar>
 		<view class="u-p-20 u-flex u-flex-items-center u-flex-between" > 
 			<view class="u-primary u-font-18 text-bold u-p-l-20 u-flex u-flex-items-center"> 
-				<view class=" ">海报中心</view>
+				<view class=" ">推广海报</view>
 			</view>
-			<view class="text-base u-font-14 ">点击下方列表资讯生成海报</view>
+			<view class="text-base u-font-14 ">点击下方资讯下载或转发海报推广</view>
 		</view> 
 	</view>
 	<view >
+		<!-- <view class="u-flex u-flex-between u-flex-items-center u-flex-1  u-p-10 u-p-l-40 u-p-r-20 u-radius-4 bg-white ">
+			<view class="u-m-r-20">商品</view>
+			<view class="u-flex u-flex-items-center u-flex-1" @click="menusShow = true"> 
+				<view class="bg-white u-flex-1" >
+					<up-input 
+						v-model="prod.name" 
+						inputAlign="right"
+						:customStyle="{
+							backgroundColor: '#fff', 
+						}"
+						readonly 
+						shape="circle"
+						placeholder="点击选择商品"
+						suffixIcon="arrow-down"
+					></up-input>
+				</view>  
+			</view>
+		</view> -->
 		<view class="main u-p-20 box-border">
-			<div class="loading-w u-flex u-flex-items-center u-flex-center" style="height: 100%;">
+			<div class="loading-w u-flex u-flex-items-center u-flex-center" style="height: 100%;" v-if="loadstatus == 'loading'">
 				<up-loading-icon :show="loadstatus == 'loading'"></up-loading-icon>
 			</div>
+			
 			<view class="main-list u-p-20 box-border bg-white u-radius-10"> 
-				<view class="u-m-b-12 u-p-15 box-border u-flex u-flex-items-start u-flex-between u-info-light-bg u-radius-6" v-for="item in dataList" :key="item.id">
+				<view 
+					class="u-m-b-12 u-p-15 box-border u-flex u-flex-items-start u-flex-between u-info-light-bg u-radius-6" 
+					v-for="item in dataList" 
+					:key="item.id"
+					@click="base.handleGoto({url: '/pages/partner/haibao_detail', params: {id: item.id, uid: share_id ,login: login }})"
+				>
 					<view class="u-font-14 u-p-r-20">
 						{{item.title}}
 					</view>
@@ -23,11 +47,31 @@
 						<up-icon name="arrow-right" size="12" color="#aaa"></up-icon>
 					</view>
 				</view>
+				
+				<template v-if="dataList.length == 0">
+					<u-empty
+						mode="data"
+						:icon="empty"
+					>
+					</u-empty>
+				</template>
+				<template v-else>
+					<u-loadmore
+						:status="loadstatus"
+					/>
+				</template>
 			</view>
 		</view>
 	</view>
 	<u-safe-bottom></u-safe-bottom>
 	<MenusBar ></MenusBar>
+	 <!-- 商品分类popup -->
+	<!-- <MenusPopup
+		:show="menusShow"
+		title="商品分类"   
+		:onUpdateShow="handleChangeShow2"
+		@confirm="menusConfirm"
+	></MenusPopup> -->
 </template>
 
 <script setup> 
@@ -36,23 +80,12 @@
 	import {useCateStore, baseStore} from '@/stores/base.js' 
 	const user = userStore() 
 	const base = baseStore() 
-	const {themeColor} = toRefs(base)
+	const {themeColor, empty} = toRefs(base)
+	const { login, share_id } = toRefs(user)
 	const $api = inject('$api')  
 	const keyword = ref('')
-	const ceshi = ref({
-		name: '姓名',
-		avatar: 'https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epPSGFKGZia5rYiauxAgxudU3gKzT7iamu4n4GNkPBuyQLHVMpicHu4ehAzt9ic5UP66zCyrnVyxqm0uDQ/132',
-		imgList: ['https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epPSGFKGZia5rYiauxAgxudU3gKzT7iamu4n4GNkPBuyQLHVMpicHu4ehAzt9ic5UP66zCyrnVyxqm0uDQ/132',
-		'https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epPSGFKGZia5rYiauxAgxudU3gKzT7iamu4n4GNkPBuyQLHVMpicHu4ehAzt9ic5UP66zCyrnVyxqm0uDQ/132',
-		'https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epPSGFKGZia5rYiauxAgxudU3gKzT7iamu4n4GNkPBuyQLHVMpicHu4ehAzt9ic5UP66zCyrnVyxqm0uDQ/132',
-		'https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epPSGFKGZia5rYiauxAgxudU3gKzT7iamu4n4GNkPBuyQLHVMpicHu4ehAzt9ic5UP66zCyrnVyxqm0uDQ/132'],
-		content: '内容内容内容内容内容内容内容内容内容内容内容内容内容内容',
-		login: '18757127948',
-		publishtime: '2026-02-26 09:11:59',
-		likenumber: 1,
-		chatnumber: 0,
-	})
-	const pid = ref('')
+	const menusShow = ref(false) 
+	const prod = ref({})
 	const top = ref(true)
 	const bgColor = computed(() => {
 		if(top.value) return 'transparent'
@@ -60,12 +93,12 @@
 	}) 
 	const title = computed(() => {
 		if(top.value) return ''
-		return '海报中心'
+		return '推广海报'
 	}) 
 	const options = computed(() => {
 		return {
 			params: {  
-				pid: pid.value
+				pid: prod.value.id
 				// type: type.value 
 			},
 			api: 'list_chance', 
@@ -94,11 +127,15 @@
 	} = useDataList(options)  
 	 
 	onLoad(async (options) => {   
+		// await initTjData()
 		initDataList() 
 	})  
 	onPageScroll((e) => { 
 		handleScroll(e)
 	})
+	async function initTjData() {
+		const res = await $api.list_chance_recommend()
+	}
 	// 滚动事件处理函数
 	const handleScroll = (e) => {
 		// 直接使用回调提供的滚动信息
@@ -106,6 +143,14 @@
 		// 当滚动距离超过80px时，top设为false，否则设为true
 		top.value = scrollTop < 60
 	} 
+	function handleChangeShow2(data) {
+		menusShow.value = data
+	}
+	function menusConfirm(data) {
+		handleChangeShow2(false)
+		prod.value = data
+		initDataList()
+	}
 </script>
 
 <style lang="scss">
@@ -138,7 +183,7 @@
 		min-height: 30vh;
 		.main-list {
 			position: relative;
-			z-index: 10;
+			z-index: 9;
 		}
 	}
 </style>

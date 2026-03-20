@@ -10,9 +10,12 @@ export const userStore = defineStore('user', {
 			subscription_loading: false,
 			gpt: {},
 			qht: {}, 
+			share_id: '',
 			partner: 0,
 			partner_amount: 0,
-			partner_amount2: 0,
+			partner_amount2: 0, 
+			partner_amount_list: [], 
+			partner_amount2_list: [], 
 			userInfo: uni.getStorageSync('userInfo') || {}
 		};
 	},
@@ -22,6 +25,15 @@ export const userStore = defineStore('user', {
 		},
 		gptVip() {
 			return this.gptExpireTimestamp > new Date().getTime() 
+		},
+		qhtExpireTimestamp(){
+			return new Date(this.qht.expire_date).getTime() || 0
+		},
+		qhtVip() {
+			return this.qhtExpireTimestamp > new Date().getTime() 
+		},
+		subsVip() {
+			return this.gptVip || this.qhtVip
 		}
 	}, 
 	actions: {
@@ -50,7 +62,12 @@ export const userStore = defineStore('user', {
 			this.subscription_loading = false
 		}, 
 		clearLogout() {
+			this.share_id = ''  
 			this.login = ''  
+			this.partner_amount = 0  
+			this.partner_amount2 = 0  
+			this.partner_amount_list = [] 
+			this.partner_amount2_list = [] 
 			this.userInfo = {}
 			this.gpt = {}
 			this.qht = {}

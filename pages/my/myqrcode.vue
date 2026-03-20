@@ -1,6 +1,9 @@
 <template>
 	<view class="wrap u-p-40">  
 		<up-image v-if="qrcode" :src="qrcode" width="100%" height="auto" mode="widthFix"></up-image>
+		<view class="u-text-center u-p-20">
+			长按图片进行保存或者转发
+		</view>
 	</view>
 	<up-loading-page :loading="loading"></up-loading-page>
 </template>
