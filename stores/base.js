@@ -391,12 +391,54 @@ export const useCateStore = defineStore('cate', {
 			cate_list: [], 
 			cate_list2: [],  
 			cate_origin: [],
-			cate_loading: false
+			cate_loading: false,
+			seasonConfig_sdate: [],
+			seasonConfig_loading: false, 
+			qht_position_list: [
+				{
+					name: '10天位置',
+					value: 'ten_day_position', 
+				},
+				{
+					name: '20天位置',
+					value: 'twenty_day_position', 
+				},
+				{
+					name: '30天位置',
+					value: 'thirty_day_position', 
+				},
+				{
+					name: '60天位置',
+					value: 'sixty_day_position', 
+				},
+				{
+					name: '90天位置',
+					value: 'three_monthv', 
+				} ,
+				{
+					name: '一年位置',
+					value: 'one_year_position', 
+				} 
+			]
 		};
 	},
 	getters: { 
 	}, 
 	actions: { 
+		async getSeasonConfigData() {  
+			this.seasonConfig_loading = true
+			try {
+				const res = await apis.gpt_analysis()
+				this.seasonConfig_loading = false
+				if(res.code == 1) { 
+					this.seasonConfig_sdate = res.list.res.list_date.map(ele => ({value: ele.sdate, name: ele.sdate})) 
+				} 
+			} catch (error) { 
+				console.log(error)
+				this.seasonConfig_loading = false
+				return error
+			}
+		},
 		async getCateData() { 
 			this.cate_loading = true
 			try {

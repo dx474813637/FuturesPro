@@ -60,13 +60,13 @@
 			<view class="u-flex u-p-10 u-p-t-30 u-p-b-30 u-radius-20 bg-white text-base u-m-t-40">
 				<view class="u-flex-1 u-text-center ">
 					<view class="text-bold" style="color: #3B4978">股票通</view>
-					<view class="u-m-b-20 u-m-t-20">499元/年</view>
-					<view>帮你赚<text class="u-font-40 text-bold u-error u-p-l-10 u-p-r-4">199</text>元/年</view>
+					<view class="u-m-b-20 u-m-t-20">399元/年</view>
+					<view>帮你赚<text class="u-font-40 text-bold u-error u-p-l-10 u-p-r-4">99</text>元/年</view>
 				</view>
 				<view class="u-flex-1 u-text-center">
 					<view class="text-bold" style="color: #3B4978">期货通</view>
-					<view class="u-m-b-20 u-m-t-20">2999元/年</view>
-					<view>帮你赚<text class="u-font-40 text-bold u-error u-p-l-10 u-p-r-4">999</text>元/年</view>
+					<view class="u-m-b-20 u-m-t-20">1999元/年</view>
+					<view>帮你赚<text class="u-font-40 text-bold u-error u-p-l-10 u-p-r-4">599</text>元/年</view>
 				</view>
 			</view>
  

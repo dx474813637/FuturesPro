@@ -11,7 +11,12 @@
 						<view class="u-radius-25 text-white u-p-12 u-m-l-14 u-p-l-60 u-p-r-60 u-text-center u-font-16 u-primary-bg" @click="base.handleGoto({url: '/pages/analysis/analysis', params: {mode:'2'}} )" >季报选股</view>
 					</view>
 				</template>
-				<view v-else class="u-radius-25 text-white u-p-8 u-p-l-60 u-p-r-60 u-text-center u-font-16 u-primary-bg" @click="gotoGPT" >我要订阅</view>
+				<template v-else>
+					<view class="u-flex u-flex-items-center u-flex-center">
+						<view class="u-radius-25 text-white u-p-12 u-m-r-14 u-p-l-60 u-p-r-60 u-text-center u-font-16 u-primary-bg" @click="gotoGPT" >我要订阅</view>
+						<view class="u-radius-25 text-white u-p-12 u-m-l-14 u-p-l-60 u-p-r-60 u-text-center u-font-16" style="background-color: #81a3ff;" @click="base.handleGoto({url: '/pages/index/hd/hd', params: {mode:'2'}} )" >参加活动免费试用</view>
+					</view>
+				</template>
 			</view>
 		</view>
 		

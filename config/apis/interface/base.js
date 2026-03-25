@@ -85,3 +85,17 @@ export const list_chance = (data) => uni.$u.http.get('list_chance', data)
 export const detail_chance = (data) => uni.$u.http.get('detail_chance', data)
  // haibao  海报生成 参数id
 export const haibao = (data) => uni.$u.http.get('haibao', data)
+
+
+// top_hs  沪深原材料价格涨跌榜接口
+export const top_hs = (data) => uni.$u.http.get('top_hs', data)
+// qxt		期货通接口
+export const qxt = (data) => uni.$u.http.get('qxt', data)
+// qxt_charts_xianqi  期货通现期图/基差图接口
+export const qxt_charts_xianqi = (data) => uni.$u.http.get('qxt_charts_xianqi', data)
+// intelligence  20.商品情报接口
+export const intelligence = (data) => uni.$u.http.get('intelligence', data)
+// dashboard  21.现货通行情分析
+export const dashboard = (data) => uni.$u.http.get('dashboard', data)
+// dashboard_sf  22.现货通现期分析
+export const dashboard_sf = (data) => uni.$u.http.get('dashboard_sf', data)

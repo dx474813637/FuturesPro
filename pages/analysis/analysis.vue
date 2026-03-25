@@ -91,7 +91,10 @@
 					<view class="bg-white u-p-30 u-radius-15">
 						<view class="u-flex u-flex-between u-flex-items-center u-flex-1 u-p-10 u-p-l-12 u-p-r-12 u-radius-4  ">
 							<view class="u-m-r-20">日期</view>
-							<view class="u-flex-1 u-flex u-flex-items-center ">
+							<view class="u-flex-1 u-flex u-flex-items-center " style="position: relative;"> 
+								<view class="loading-w u-flex u-flex-items-center u-flex-center" style="background-color: rgba(255,255,255,.5)" v-if="seasonConfig_loading">
+									 <nut-icon name="loading" size="20" custom-color="#007aff"></nut-icon>
+								</view>
 								<view class="u-flex u-flex-items-center u-border u-p-12 u-radius-4 u-flex-1" @click="sdateShow = true" >
 									<up-icon name="calendar" size="18" color="#666"></up-icon> 
 									<view class="u-flex-1 u-font-13 u-p-5 text-nowrap" >{{sdate}}</view>
@@ -222,7 +225,7 @@
 		:show="sdateShow"
 	 	title="起始日期"
 		safeAreaInsetBottom
-	 	:actions="sdateList"
+	 	:actions="seasonConfig_sdate"
 		closeOnClickOverlay
 		@close="sdateShow = false"
 		@select="(item) => { 
@@ -275,8 +278,10 @@
 	import {useCateStore, baseStore} from '@/stores/base.js' 
 	const $api = inject('$api')  
 	const user = userStore() 
+	const cate = useCateStore() 
+	const {seasonConfig_sdate, seasonConfig_loading} = toRefs(cate) 
 	const base = baseStore() 
-	const {themeColor, analysisModeList} = toRefs(base)
+	const {themeColor, analysisModeList} = toRefs(base) 
 	const top = ref(true)
 	const bgColor = computed(() => {
 		if(top.value) return 'transparent'
@@ -322,26 +327,8 @@
 	])
 	
 	const zf2 = ref('20')
-	const sdate = ref('2026-01-01')
-	const sdateShow = ref(false)
-	const sdateList = ref([
-		{
-			name: '2026-01-01',
-			value: '2026-01-01',
-		}, 
-		{
-			name: '2025-10-01',
-			value: '2025-10-01',
-		}, 
-		{
-			name: '2025-07-01',
-			value: '2025-07-01',
-		}, 
-		{
-			name: '2025-04-01',
-			value: '2025-04-01',
-		}, 
-	])
+	const sdate = ref('')
+	const sdateShow = ref(false) 
 	
 	const edateShow = ref(false)
 	const edate = ref(Number(new Date()) - 60*60*24*1000)
@@ -381,12 +368,14 @@
 		return obj
 	})  
 	const analysisConfig = computed(() => analysisModeList.value.filter(ele => ele.value == mode.value)[0] )
-	onLoad((options) => {
+	onLoad(async (options) => {
 		if(options.hasOwnProperty('mode')) {
 			mode.value = options.mode || '1'
 		}
 		// 初始化riqi值
 		riqi.value = getYesterdayDate()
+		await cate.getSeasonConfigData()
+		sdate.value = seasonConfig_sdate.value[0].value
 		// $api.category()
 	})
 	onPageScroll((e) => {
@@ -398,7 +387,7 @@
 			top.value = false
 		}
 		
-	})
+	}) 
 	// 计算前一天的日期，格式为YYYY-MM-DD
 	function getYesterdayDate() {
 		const date = new Date()

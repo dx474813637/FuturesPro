@@ -389,6 +389,7 @@
 
 
 <script setup>   
+	const $api = inject('$api') 
 import {userStore } from '@/stores/user.js'  
 	const user = userStore() 
 import {useCateStore, baseStore} from '@/stores/base.js'  

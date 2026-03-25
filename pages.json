@@ -137,7 +137,7 @@
 			"path": "pages/partner/users_partner",
 			"style": { 
 				"navigationBarTitleText": "发展用户"
-			}
+			} 
 		},
 		{
 			"path": "pages/partner/users_product",
@@ -204,6 +204,23 @@
 			"path": "pages/partner/haibao_detail",
 			"style": {
 				"navigationBarTitleText": "推广海报"
+			}
+		},
+		{
+			"path": "pages/qht/qht",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/qht/qht_detail",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/index/hd/hd",
+			"style": { 
 			}
 		}
 	],
