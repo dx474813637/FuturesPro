@@ -17,9 +17,9 @@
 				</view>
 			</view>
 			
-			<view class="u-text-center text-white text-thin u-m-b-20" >
+			<!-- <view class="u-text-center text-white text-thin u-m-b-20 " >
 				<template v-if="ppid">
-					<text class="u-font-14">下方股票筛选，可再按股价五档位置及AI财报评分选股。</text>
+					<text class="u-font-14 u-line-1">{{title_sub}}</text>
 				</template>
 				<template v-else>
 					<template v-if="mode == '1'">
@@ -48,10 +48,10 @@
 					<text>个</text> 
 				</template>
 				
-			</view> 
-			<view class="tabs-w u-p-l-20 u-p-r-20" v-if="mode == '1'">
+			</view> -->
+			<view class="tabs-w u-p-l-20 u-p-r-20" >
 				<up-tabs   
-					:list="qht_position_list" 
+					:list="qxt_position_list" 
 					:current="tabIndex"  
 					lineColor="#fff" 
 					lineHeight="1"
@@ -94,7 +94,7 @@
 						@click="productEvent"	
 					>
 						<template #right>
-							<view class="u-flex u-flex-items-center u-p-l-20 text-white u-p-b-10" v-if="productlist.length > 10"  @click="allproductShow = true" > 
+							<view class="u-flex u-flex-items-center u-p-l-20 text-white u-p-b-10"  @click="allproductShow = true" > 
 								<view class=" u-flex" style="position: relative;">
 									<nut-icon name="sort" font-class-name="custom-icon" class-prefix="custom-icon" size="18" ></nut-icon>
 									<up-badge type="warning"  :value="productlist.length" absolute :offset="[-8,-12]"></up-badge>
@@ -105,30 +105,53 @@
 					</up-tabs>
 				</view>
 				
-				<view class="u-p-5 u-p-l-12 u-p-r-12 u-m-t-10" v-if="mode == '1'">
+				<view class="u-p-5 u-p-l-12 u-p-r-12 u-m-t-10" >
 					<view class="bg-white u-radius-12 u-p-12">
-						<view class="u-font-15 u-p-6 u-p-l-15 u-m-b-6  ">生意社价格行情</view>
-						<view class="u-flex u-flex-items-center u-flex-between u-radius-10" style="overflow: hidden;">
-							<view class="u-p-10   u-text-center u-flex-1 box-border"
-								v-for="item in productZfByDay" :key="item.index"
-								:class="{
-									'u-error-light-bg': item.value > 0, 
-									'u-info-light-bg': item.value == 0, 
-									'u-success-light-bg': item.value < 0
-								}"
-							>
-								<view class="u-font-12  u-m-b-10 ">{{item.name}}</view>
-								<view class="u-flex u-flex-items-center u-flex-center"> 
-									<view 
-										class="u-font-20" 
-										:class="{
-											'u-error': item.value > 0, 
-											'text-base': item.value == 0, 
-											'u-success-dark': item.value < 0
-										}"
-										>{{item.value}}%</view>
-								</view>
-							</view> 
+						<view class="u-font-15 u-p-6 u-p-l-15 u-m-b-6  ">{{name_tj}}内价格统计</view>
+						<view class=" u-flex u-flex-wrap u-flex-items-start u-font-13" v-if="RinfoData.id">
+							<view class="u-flex u-flex-items-center u-primary-light-bg u-radius-6 u-m-l-12 u-p-8 u-p-l-16 u-p-r-16 box-border u-m-b-12" style="flex: 0 0 48%; width: 48%;">
+								<view class="text-base">当日价格</view>
+								<view class="u-text-right u-flex-1 u-primary">{{RinfoData.price}}</view>
+							</view>
+							<view class="u-flex u-flex-items-center u-primary-light-bg u-radius-6 u-m-l-12 u-p-8 u-p-l-16 u-p-r-16 box-border u-m-b-12" style="flex: 0 0 48%; width: 48%;">
+								<view class="text-base">日涨跌幅</view>
+								<view class="u-text-right u-flex-1 " :class="{
+									'u-success': RinfoData.zdf.includes('-'),
+									'u-error': !RinfoData.zdf.includes('-')
+								}">{{RinfoData.zdf}}</view>
+							</view>
+							<view class="u-flex u-flex-items-center u-primary-light-bg u-radius-6 u-m-l-12 u-p-8 u-p-l-16 u-p-r-16 box-border u-m-b-12" style="flex: 0 0 48%; width: 48%;">
+								<view class="text-base">{{name_tj}}位置</view>
+								<view class="u-text-right u-flex-1 u-primary">{{RinfoData[`${keys_front}_position`]}}</view>
+							</view>
+							<view class="u-flex u-flex-items-center u-primary-light-bg u-radius-6 u-m-l-12 u-p-8 u-p-l-16 u-p-r-16 box-border u-m-b-12" style="flex: 0 0 48%; width: 48%;">
+								<view class="text-base">最小值</view>
+								<view class="u-text-right u-flex-1 u-primary">{{RinfoData[`${keys_front}_min`]}}</view>
+							</view>
+							<view class="u-flex u-flex-items-center u-primary-light-bg u-radius-6 u-m-l-12 u-p-8 u-p-l-16 u-p-r-16 box-border u-m-b-12" style="flex: 0 0 48%; width: 48%;">
+								<view class="text-base">最大值</view>
+								<view class="u-text-right u-flex-1 u-primary">{{RinfoData[`${keys_front}_max`]}}</view>
+							</view>
+							<view class="u-flex u-flex-items-center u-primary-light-bg u-radius-6 u-m-l-12 u-p-8 u-p-l-16 u-p-r-16 box-border u-m-b-12" style="flex: 0 0 48%; width: 48%;">
+								<view class="text-base">中位值</view>
+								<view class="u-text-right u-flex-1 u-primary">{{RinfoData[`${keys_front}_zw`]}}</view>
+							</view>
+							<view class="u-flex u-flex-items-center u-primary-light-bg u-radius-6 u-m-l-12 u-p-8 u-p-l-16 u-p-r-16 box-border u-m-b-12" style="flex: 0 0 48%; width: 48%;">
+								<view class="text-base">顶位差</view>
+								<view class="u-text-right u-flex-1 u-primary">{{RinfoData[`${keys_front}_dw`]}}</view>
+							</view>
+							<view class="u-flex u-flex-items-center u-primary-light-bg u-radius-6 u-m-l-12 u-p-8 u-p-l-16 u-p-r-16 box-border u-m-b-12" style="flex: 0 0 48%; width: 48%;">
+								<view class="text-base">底位差</view>
+								<view class="u-text-right u-flex-1 u-primary">{{RinfoData[`${keys_front}_xw`]}}</view>
+							</view>
+							<view class="u-flex u-flex-items-center u-primary-light-bg u-radius-6 u-m-l-12 u-p-8 u-p-l-16 u-p-r-16 box-border u-m-b-12" style="flex: 0 0 48%; width: 48%;">
+								<view class="text-base">平均值</view>
+								<view class="u-text-right u-flex-1 u-primary">{{RinfoData[`${keys_front}_avg`]}}</view>
+							</view>
+							<view class="u-flex u-flex-items-center u-primary-light-bg u-radius-6 u-m-l-12 u-p-8 u-p-l-16 u-p-r-16 box-border u-m-b-12" style="flex: 0 0 48%; width: 48%;">
+								<view class="text-base">标准差</view>
+								<view class="u-text-right u-flex-1 u-primary">{{RinfoData[`${keys_front}_std`]}}</view>
+							</view>
 						</view>
 					</view>
 				</view>
@@ -143,7 +166,7 @@
 							<view class="u-flex u-flex-items-center  u-flex-1 " >
 								<view class="text-nowrap u-font-14 u-m-r-20 text-base u-m-l-10">具体档位</view>
 								<view class="u-flex u-flex-items-center u-border u-p-8 u-radius-8 u-flex-1 bg-white u-info"
-									style="width: 200px; flex: 0 0 200px; border-color: #c7e4ff!important" 
+									style="width: 40vw; flex: 0 0 40vw; border-color: #c7e4ff!important" 
 									@click="positionShow = true"
 								>
 									<view class="u-flex-1 u-font-13 u-text-center" 
@@ -165,11 +188,11 @@
 				<view class="content-header">
 					<view class="u-flex u-flex-items-center u-flex-between bg-white u-p-14 u-p-l-30 u-m-t-10" style="border-radius: 15px 15px 0 0">
 						<view class="u-flex u-flex-items-baseline">
-							<view class="u-font-16">生产商</view>
-							<view class="u-font-13 u-m-l-20 u-info">基本面评析</view> 
+							<view class="u-font-16">数据图表</view>
+							<!-- <view class="u-font-13 u-m-l-20 u-info">基本面评析</view> -->
 						</view>
 						<view class="u-flex u-flex-items-center">
-							<view class="u-font-14 u-m-r-8 text-base" @click="prodChart = !prodChart">显示商品走势图</view>
+							<view class="u-font-14 u-m-r-8 text-base" @click="prodChart = !prodChart">显示图表</view>
 							<view><up-switch size="15" activeColor="#ffaa00" v-model="prodChart" ></up-switch></view>
 						</view>
 					</view> 
@@ -181,7 +204,7 @@
 					<view class="loading-w u-flex u-flex-items-start u-flex-center u-p-t-80" style="background-color: rgba(255,255,255,.5)" v-if="loading_product || loading_stock">
 						 <nut-icon name="loading" size="20" custom-color="#007aff"></nut-icon>
 					</view>
-					<view class="main-left">
+					<!-- <view class="main-left">
 						<view class="cpy-list" v-if="cpylist.length > 0">
 							<view 
 								class="cpy-item u-p-10 u-p-t-15 u-p-b-15"
@@ -196,9 +219,9 @@
 								<view class="no u-info u-font-12">{{item.stockcode}}</view>
 							</view>
 						</view>
-					</view>
+					</view> -->
 					<view class="main-right">
-						<view v-if="cpylist.length == 0">
+						<!-- <view v-if="cpylist.length == 0">
 							<view class="u-p-20">
 								<u-empty
 									mode="data"
@@ -209,8 +232,8 @@
 								<view class="u-flex u-flex-center u-p-20"><view class="u-font-13 u-warning" @click="resetSearchEvent">重置条件</view></view>
 								
 							</view>
-						</view>
-						<view class="u-p-15 main-base-info"  v-if="cpyActive">
+						</view> -->
+						<!-- <view class="u-p-15 main-base-info" >
 							<view class="u-flex u-flex-items-start u-flex-between u-m-b-10">
 								<view class="u-font-30 text-nowrap u-p-l-10 u-m-r-10">
 									<view class="">{{cpyActive.stock}}</view>
@@ -241,12 +264,12 @@
 								</view>
 							</view>
 							
-						</view>   
+						</view>   -->
 						<view class="main-data u-m-b-14" style="width: 100%;" >
-							<ProductECharts
+							<ProductPriceECharts
 								:show="prodChart"
 								:chartData="productEChartsBaseData" 
-							></ProductECharts>
+							></ProductPriceECharts>
 						</view>
 						<view class="u-radius-8 u-m-4" style="background: linear-gradient(to bottom, #f6fcff, #fff, #f6fcff);"  v-if="cpyActive">
 							<view class="main-data" style="width: 100%;">
@@ -302,13 +325,13 @@
 	></PriceSeekInfoPopup>
 	<ProductLabelPopup
 		:show="allproductShow"
-		title="商品筛选结果"   
+		title="期货通列表"   
 		:list="productlist"
 		:ppid="productValue"
 		:onUpdateShow="handleChangeShow3"
 		@submit="confirmProductLabel"
 	></ProductLabelPopup>
-	<up-action-sheet 
+	<!-- <up-action-sheet 
 		:show="scoreShow"
 	 	title="PriceSeek评分 大于等于"
 		safeAreaInsetBottom
@@ -319,7 +342,7 @@
 			terms_score = item.value
 		}"
 	>
-	</up-action-sheet>
+	</up-action-sheet> -->
 	<up-action-sheet 
 		:show="positionShow"
 	 	title="档位位置"
@@ -354,7 +377,7 @@
 	const cate = useCateStore() 
 	const base = baseStore() 
 	const {themeColor, analysisModeList, empty} = toRefs(base)
-	const {qht_position_list} = toRefs(cate)
+	const {qxt_position_list, qxt_one, qxt} = toRefs(cate)
 	const top = ref(true)
 	// const gptHotFilterShow = ref(false) 
 	const bgColor = computed(() => {
@@ -366,10 +389,24 @@
 		if (mode.value == '2') return '基差数据分析'
 		return ''
 	})
+	const title_sub = computed(() => {
+		if (mode.value == '1') return KinfoData.value.intro
+		if (mode.value == '2') return '基差数据分析'
+		return ''
+	})
+	
 	const title = computed(() => {
 		if (top.value) return ''
 		return mode_title.value
 	})
+	const originalData = ref({})
+	const FinfoData = computed(() => originalData.value.Finfo || {})
+	const KinfoData = computed(() => originalData.value.Kinfo || {})
+	const RinfoData = computed(() => originalData.value.Rinfo || {})  
+	const productEChartsBaseData = computed(() => originalData.value.charts_price || {})  
+	const keys_front = computed(() => qxt_position_list.value.filter(ele => tabValue.value == ele.value)[0].keys_front)
+	const name_tj = computed(() => qxt_position_list.value.filter(ele => tabValue.value == ele.value)[0].name_tj)
+	
 	const prodChart = ref(true)
 	const loading_product = ref(false)
 	const loading_stock = ref(false)
@@ -383,15 +420,14 @@
 	const edate = ref('')
 	const is_choice = ref('1')
 	const is_hot = ref('')
-	const category = ref('')
-	const ppid = ref('')
+	const category = ref('') 
 	
 	const tabValue = ref('ten_day')
-	const tabIndex = computed(() => qht_position_list.value.findIndex(ele => ele.value == tabValue.value));
+	const tabIndex = computed(() => qxt_position_list.value.findIndex(ele => ele.value == tabValue.value));
 	 
 	
 	const productValue = ref('')
-	const productIndex = computed(() => productlist.value.findIndex(ele => ele.ppid == productValue.value));
+	const productIndex = computed(() => productlist.value.findIndex(ele => ele.value == productValue.value));
 	const productlist = ref([])
 	const productActive = computed(() => {
 		if(productIndex.value != -1) {   
@@ -399,7 +435,7 @@
 		} 
 		return {}
 	});
-	const productEChartsBaseData = ref({})
+	// const productEChartsBaseData = ref({})
 	const cpyKData = ref({})
 	const productZfByDay = computed(() => { 
 		if(productActive.value.pid) {
@@ -459,57 +495,39 @@
 	const positionShow = ref(false)
 	 
 	
-	const terms_score = ref('') 
-	const scoreList = ref([
-		{
-			name: '1分',
-			value: 1,
-		}, 
-		{
-			name: '1.5分',
-			value: 1.5,
-		}, 
-		{
-			name: '2分',
-			value: 2,
-		}, 
-		{
-			name: '2.5分',
-			value: 2.5,
-		}, 
-		{
-			name: '3分',
-			value: 3,
-		}, 
-		{
-			name: '3.5分',
-			value: 3.5,
-		}, 
-		{
-			name: '4分',
-			value: 4,
-		},  
-	])
+	const terms_score = ref('')  
 	const scoreShow = ref(false)
 	onLoad(async (options) => {
 		if(options.hasOwnProperty('m')) {
 			mode.value = options.m || '1'
 		}
 		if(options.hasOwnProperty('ppid')) {
-			ppid.value = options.ppid 
+			// ppid.value = options.ppid 
+			productValue.value = options.ppid 
 		}
 		if(options.hasOwnProperty('position')) {
 			tabValue.value = options.position 
 		}
-		
+		if(qxt.value.length == 0) {
+			cate.getQxtData()
+		} 
 		 
 		
 		// await initData() 
 	})
 	watch(
-		() => [ tabValue.value, ppid.value ],
+		() => [ tabValue.value, productValue.value ],
 		async (n) => {
 			await initData() 
+		},
+		{
+			deep: true, 
+		}
+	) 
+	watch(
+		() => qxt_one.value,
+		async (n) => {  
+			productlist.value = n
 		},
 		{
 			deep: true, 
@@ -560,11 +578,12 @@
 		loading_product.value = true
 		try{
 			const res = await $api.dashboard({params: {
-				ppid: ppid.value,
+				ppid: productValue.value,
 				position_type: tabValue.value , 
 				position_value: terms_position.value,
 			}})
 			if(res.code == 1) {
+				originalData.value = res.list.res
 				// productlist.value = res.list.res.list
 				// productValue.value = productlist.value[0].ppid
 				
@@ -582,7 +601,7 @@
 		loading_product.value = true
 		try{
 			const res = await $api.dashboard_sf({params: {
-				ppid: ppid.value,
+				ppid: productValue.value,
 				position_type: tabValue.value , 
 				position_value: terms_position.value,
 			}})
@@ -599,88 +618,88 @@
 		loading_product.value = false
 		
 	}
-	async function getSeasonData() {
-		if(loading_product.value) return;
-		loading_product.value = true
-		try{
-			const res = await $api.gpt_analysis({
-				zf: zf.value, 
-				sdate: sdate.value, 
-				edate: edate.value,
-				is_choice: is_choice.value,
-				is_hot: is_hot.value,
-				category: category.value,
-				ppid: ppid.value
-			})
-			if(res.code == 1) {
-				if(ppid.value) {
-					productlist.value = [{
-						ppid: ppid.value,
-						name: res.list.res.pname
-					}]
-					productValue.value = ppid.value
-				}
-				else {
-					productlist.value = res.list.res.plist
-					productValue.value = productlist.value[0].ppid
-				}
+	// async function getSeasonData() {
+	// 	if(loading_product.value) return;
+	// 	loading_product.value = true
+	// 	try{
+	// 		const res = await $api.gpt_analysis({
+	// 			zf: zf.value, 
+	// 			sdate: sdate.value, 
+	// 			edate: edate.value,
+	// 			is_choice: is_choice.value,
+	// 			is_hot: is_hot.value,
+	// 			category: category.value,
+	// 			ppid: ppid.value
+	// 		})
+	// 		if(res.code == 1) {
+	// 			if(ppid.value) {
+	// 				productlist.value = [{
+	// 					ppid: ppid.value,
+	// 					name: res.list.res.pname
+	// 				}]
+	// 				productValue.value = ppid.value
+	// 			}
+	// 			else {
+	// 				productlist.value = res.list.res.plist
+	// 				productValue.value = productlist.value[0].ppid
+	// 			}
 				
-				// console.log(res.list.res)
-				// cpylist.value = productlist.value[productIndex.value].stock
-				// cpyValue.value = cpylist.value[0].cid
-			}
-		} catch(e) {
+	// 			// console.log(res.list.res)
+	// 			// cpylist.value = productlist.value[productIndex.value].stock
+	// 			// cpyValue.value = cpylist.value[0].cid
+	// 		}
+	// 	} catch(e) {
 			
-		}
-		loading_product.value = false
+	// 	}
+	// 	loading_product.value = false
 		
-	}
+	// }
 	 
 	 
-	async function getStockData({isSetData=false, isDetail=false}) {
-		if(loading_stock.value) return;
-		loading_stock.value = true
-		let params = {
-			ppid: productActive.value.ppid,
-		}
-		if(isDetail) { 
-			params = {
-				...params,
-				code: cpyActive.value?.stockcode,
-			}
-		} else {
-			params = {
-				...params,
-				terms_score: terms_score.value,
-				terms_position: terms_position.value
-			}
-		}
-		try{
-			const res = await $api.gpt_analysis_detail({params: {
-				...params
-			}})
-			if(res.code == 1) {
-				cpyData.value = res.list.res
-				if(isSetData) {
-					cpylist.value = res.list.res.stock || []
-				}
+	// async function getStockData({isSetData=false, isDetail=false}) {
+	// 	if(loading_stock.value) return;
+	// 	loading_stock.value = true
+	// 	let params = {
+	// 		ppid: productActive.value.ppid,
+	// 	}
+	// 	if(isDetail) { 
+	// 		params = {
+	// 			...params,
+	// 			code: cpyActive.value?.stockcode,
+	// 		}
+	// 	} else {
+	// 		params = {
+	// 			...params,
+	// 			terms_score: terms_score.value,
+	// 			terms_position: terms_position.value
+	// 		}
+	// 	}
+	// 	try{
+	// 		const res = await $api.gpt_analysis_detail({params: {
+	// 			...params
+	// 		}})
+	// 		if(res.code == 1) {
+	// 			cpyData.value = res.list.res
+	// 			if(isSetData) {
+	// 				cpylist.value = res.list.res.stock || []
+	// 			}
 				 
-				productEChartsBaseData.value = res.list.res.charts_ave
-				if(res.list.res.charts_k.code) {
-					cpyKData.value = res.list.res.charts_k
-				}
+	// 			productEChartsBaseData.value = res.list.res.charts_ave
+	// 			if(res.list.res.charts_k.code) {
+	// 				cpyKData.value = res.list.res.charts_k
+	// 			}
 				
 				
-				if(!cpyValue.value) cpyValue.value = cpylist.value[0].cid || ''
-				// productlist.value = res.list.res.list
-				// productValue.value = productlist.value[0].ppid
-			}
-		} catch(e) {
+	// 			if(!cpyValue.value) cpyValue.value = cpylist.value[0].cid || ''
+	// 			// productlist.value = res.list.res.list
+	// 			// productValue.value = productlist.value[0].ppid
+	// 		}
+	// 	} catch(e) {
 			
-		}
-		loading_stock.value = false
+	// 	}
+	// 	loading_stock.value = false
 		
-	}
+	// }
 	async function resetSearchEvent() {
 		cpylist.value = productlist.value[productIndex.value].stock || []
 		cpyValue.value = cpylist.value[0]?.cid || ''
@@ -693,7 +712,7 @@
 	}
 	function resetEvent() {
 		base.handleGoto({
-			url: '/pages/qht/qht',
+			url: '/pages/qxt/qxt',
 			params: {
 				mode: mode.value
 			},
@@ -707,7 +726,7 @@
 	}
 	async function productEvent (obj) {  
 		if(obj.disabled) return
-		productValue.value = obj.ppid 
+		productValue.value = obj.value 
 		init_p_s()
 		if(mode.value == '1') {
 			cpylist.value = productlist.value[productIndex.value].stock

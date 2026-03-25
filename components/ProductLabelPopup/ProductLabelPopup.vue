@@ -9,8 +9,8 @@
 							:key="item.ppid"
 						>
 							<view class="text-nowrap u-font-16 u-p-8 u-p-l-18 u-p-r-18 u-radius-6" :class="{
-								'u-primary-light-bg': ppid == item.ppid,
-								'u-primary': ppid == item.ppid
+								'u-primary-light-bg': ppid == item.value,
+								'u-primary': ppid == item.value
 							}" @click="labelClick(item)">{{item.name}}</view> 
 						</view>
 					</view>

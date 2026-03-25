@@ -391,33 +391,48 @@ export const useCateStore = defineStore('cate', {
 			cate_list: [], 
 			cate_list2: [],  
 			cate_origin: [],
-			cate_loading: false,
+			cate_loading: false, 
+			qxt: [],
+			qxt_one: [],
+			qxt_loading: false,
 			seasonConfig_sdate: [],
 			seasonConfig_loading: false, 
-			qht_position_list: [
+			qxt_position_list: [
 				{
 					name: '10天位置',
 					value: 'ten_day_position', 
+					keys_front: 'ten_day',
+					name_tj: '10天',
 				},
 				{
 					name: '20天位置',
-					value: 'twenty_day_position', 
+					value: 'twenty_day_position',  
+					keys_front: 'twenty_day',
+					name_tj: '20天', 
 				},
 				{
 					name: '30天位置',
-					value: 'thirty_day_position', 
+					value: 'thirty_day_position',  
+					keys_front: 'thirty_day',
+					name_tj: '30天', 
 				},
 				{
 					name: '60天位置',
-					value: 'sixty_day_position', 
+					value: 'sixty_day_position',  
+					keys_front: 'sixty_day',
+					name_tj: '60天', 
 				},
 				{
 					name: '90天位置',
-					value: 'three_monthv', 
+					value: 'three_month_position',  
+					keys_front: 'three_month',
+					name_tj: '90天', 
 				} ,
 				{
 					name: '一年位置',
-					value: 'one_year_position', 
+					value: 'one_year_position',  
+					keys_front: 'one_year' ,
+					name_tj: '一年',
 				} 
 			]
 		};
@@ -447,6 +462,7 @@ export const useCateStore = defineStore('cate', {
 				if(res.code == 1) { 
 					//获取搜索类型数据
 					this.cate_origin = uni.$u.deepClone(res.list)
+					this.cate_list_one = this.cate_origin.reduce((acc, item) => acc.concat(item.children.map(ele => ({...ele, value: ele.id}))), []);
 					this.cate_list = res.list.map(ele => {
 						ele.children.unshift({
 							name: '全部',
@@ -460,6 +476,24 @@ export const useCateStore = defineStore('cate', {
 			} catch (error) { 
 				console.log(error)
 				this.cate_loading = false
+				return error
+			}
+			
+		},
+		async getQxtData() { 
+			this.qxt_loading = true
+			try {
+				const res = await apis.qxt() 
+				this.qxt_loading = false
+				if(res.code == 1) { 
+					//获取搜索类型数据
+					this.qxt = uni.$u.deepClone(res.list.res.listing)
+					this.qxt_one = this.qxt.reduce((acc, item) => acc.concat(item.plist.map(ele => ({...ele, name: ele.product, value: ele.dashboard_ppid}))), []);
+					console.log(this.qxt_one) 
+				}
+			} catch (error) { 
+				console.log(error)
+				this.qxt_loading = false
 				return error
 			}
 			
