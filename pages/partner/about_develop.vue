@@ -35,25 +35,9 @@
 	const menusstore = menusStore()
 	const base = baseStore()   
 	const loading = ref(false) 
-	const img = ref('')
-	onLoad(async () => {  
-		await getData()
-	})   
-	async function getData() { 
-		if(loading.value) return;
-		loading.value = true
-		// await uni.$u.sleep(1800)
-		try{
-			const res = await $api.about( )
-			if(res.code == 1) { 
-				img.value = res.list
-			}
-		} catch(e) {
-			
-		}
-		loading.value = false
-		
-	}   
+	const img = ref('https://cft.100ppi.com/Public/gptguide/lhfz.jpg')
+	onLoad(async () => {   
+	})    
 </script> 
 <style lang="scss" scoped> 
 

@@ -38,7 +38,7 @@
 	const chartInstance = ref(null)
 	// 仅在小程序环境下引入 ECharts
 	// #ifdef MP
-	const echarts = require('../../pages/qxt/static/echarts.min.js') // 根据实际路径调整
+	const echarts = require('../../pages/analysis/static/echarts.min.js') // 根据实际路径调整
 	// #endif
 	// #ifndef MP
 	const echarts = null // H5 和 App 环境不需要手动引入
@@ -68,12 +68,12 @@
 			title: {
 				left: 'center',
 				top: 0,
-				text: `${props.chartData.name}价格走势(${props.chartData.unit})`,
+				text: `${props.chartData.name}日基差图(${props.chartData.unit})`,
 				subtext: props.chartData.spec,
 			},
 			grid: {
-				height: '48%',
-				top: "30%",
+				height: '60%',
+				top: "20%",
 			},
 			color: ['#5da3ff', '#c641ff', '#ff007f', '#ff9945', '#73ffef'],
 			tooltip: {
@@ -99,7 +99,7 @@
 			},
 			legend: {
 				data: yname,
-				top: '16%',  
+				top: '11%',  
 				type: 'scroll'
 			},
 			dataZoom: [

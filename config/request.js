@@ -13,7 +13,7 @@ import {
 const sys = uni.getSystemInfoSync();
 const duration = sys.osName == 'ios' ? 2000 : 3000
 
-export default function($ws = null) { 
+export default function() { 
 	const base = baseStore(pinia)
 	const user = userStore(pinia) 
 	const {urlParams} = toRefs(base)
@@ -31,6 +31,7 @@ export default function($ws = null) {
 	let md5flag = false
 	let requests = [] // 存储无token的请求队列
 	let isRefreshing = false //正在刷新token
+	
 	http.setToken = (obj, md5flag) => {
 		http.config.header = {
 			...http.config.header,
@@ -42,32 +43,7 @@ export default function($ws = null) {
 		// 	uni.setStorageSync('userid', obj.userid) 
 		// }
 
-	}
-	// function get_xcx_code() {
-	// 	return new Promise((resolve, rejected) => {
-	// 		uni.login({
-	// 			success: function (res){
-	// 				resolve(res.code);
-	// 			},
-	// 			fail: err => {
-	// 				md5flag = true
-	// 				rejected(err)
-	// 			}
-	// 		});
-	// 	});
-	// }
-
-	// async function refreshToken() {
-	// 	// token接口获取token值
-	// 	try{
-	// 		let code = await get_xcx_code();
-	// 		console.log('code打印:',code)
-	// 		return http.post('login_cancel',{code:code})
-	// 	}catch(e){
-	// 		return e
-	// 	}
-
-	// }
+	} 
 	// 初始化请求配置
 	http.setConfig((config) => {
 		/* config 为默认全局配置*/
@@ -76,9 +52,12 @@ export default function($ws = null) {
 			...config.header,
 			...base.configHeader
 		}
+		console.log('setConfig', config)
 		return config
 	})
-
+	http.setBaseUrl = (url) => {
+		http.config.baseURL = url 
+	}
 	// 请求拦截
 	http.interceptors.request.use(async (config) => { // 可使用async await 做异步操作
 		// console.log(config)
@@ -94,6 +73,13 @@ export default function($ws = null) {
 			...config.params,
 			share_other: base.share_other
 		} 
+		// #ifdef APP-PLUS
+		// 登录接口和刷新token接口绕过
+		if (config.url.indexOf('app_login') >= 0) {
+			console.log(1,config)
+			return config
+		} 
+		// #endif
 		// #ifdef MP-WEIXIN
 		// 登录接口和刷新token接口绕过
 		if (config.url.indexOf('login_cancel') >= 0) {
@@ -105,14 +91,10 @@ export default function($ws = null) {
 				console.log('刷新token ing', config.url)
 				isRefreshing = true
 				user.refreshToken().then(res => {
-					console.log('获取token成功，存入头部', res)
-					user.saveUserInfo(res)
-					uni.setStorageSync('WebSocketInfo', res) 
-					if ($ws) {
-						$ws.init(base)
-					}
+					console.log('获取token成功，存入头部',res)
+					user.saveUserInfo(res) 
 					let userid = "" 
-					userid = res.userid
+					userid = res.userid 
 					http.setToken({
 						userid: userid
 					}) 
@@ -157,8 +139,10 @@ export default function($ws = null) {
 				}
 			} 
 		}
-		return response.data
+		// console.log(1, response)
+		return response.data 
 	}, (response) => {
+		// console.log(2, response)
 		// 对响应错误做点什么 （statusCode !== 200） 
 		messageManager.showError(response.errMsg); 
 		return Promise.reject(response)

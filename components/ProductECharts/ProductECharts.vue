@@ -38,7 +38,7 @@
 	const chartInstance = ref(null)
 	// 仅在小程序环境下引入 ECharts
 	// #ifdef MP
-	const echarts = require('../../static/echarts.min.js') // 根据实际路径调整
+	const echarts = require('../../pages/analysis/static/echarts.min.js') // 根据实际路径调整
 	// #endif
 	// #ifndef MP
 	const echarts = null // H5 和 App 环境不需要手动引入
@@ -104,18 +104,19 @@
 					bottom: 10
 				}
 			],
-			xAxis: [{
+			xAxis: {
 				type: 'category',
 				axisLine: {
 					lineStyle: {
 						color: '#999999'
 					}
-				},
+				}, 
+				boundaryGap: false,
 				axisLabel: {
 					color: '#666666'
 				},
 				data: xdata
-			}],
+			},
 			yAxis: [{
 					type: 'value',
 					scale: true,

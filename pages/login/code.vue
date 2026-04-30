@@ -50,6 +50,7 @@
 	const show = ref(false)
 	const error = ref(false)
 	const login = ref('')
+	const uid = ref('')
 	const uCode = ref(null)
 	const filterLogin = computed(() => login.value.replace(/^([1-9]{3})[0-9]{4}([0-9]{4})$/, "$1****$2"))
 	onLoad((opt) => { 
@@ -60,6 +61,10 @@
 			uni.redirectTo({
 				url: '/pages/login/login'
 			})
+		}
+		if(opt.hasOwnProperty('uid')) {
+			uid.value = opt.uid
+			// getCode() 
 		}
 	})
 	onReady(() => {
@@ -92,7 +97,7 @@
 		uni.showLoading({
 			title: '验证中...'
 		})
-		let res = await $api.login({params: {cate: 0, login:  login.value, captcha: captcha.value }})
+		let res = await $api.login({params: {cate: 0, login:  login.value, captcha: captcha.value, uid: uid.value }})
 		// uni.hideLoading()
 		if(res.code == 1) {
 			// uni.setStorageSync('login', res.data.back.login)

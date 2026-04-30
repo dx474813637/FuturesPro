@@ -144,7 +144,7 @@
 								股票筛选
 							</view>
 							<view class="u-flex-column u-flex-items-end u-flex-1">
-								<view class="u-flex u-flex-items-center  u-flex-1 u-m-b-10" style="flex: 0 0 40%">
+								<view class="u-flex u-flex-items-center  u-flex-1" style="flex: 0 0 40%">
 									<view class="text-nowrap u-font-14 u-m-r-10 text-base">90天股价位置 ≤ </view>
 									<view class="u-flex u-flex-items-center u-border u-p-4 u-radius-8 u-flex-1 bg-white u-info"
 										style="width: 70px; flex: 0 0 70px; border-color: #c7e4ff!important" 
@@ -154,16 +154,15 @@
 										<!-- <up-icon name="list-dot" size="10" color="#aaa"></up-icon> -->
 									</view>
 								</view>
-								<view class="u-flex u-flex-items-center  u-flex-1  " style="flex: 0 0 40%">
+								<view class="u-flex u-flex-items-center  u-flex-1  u-m-t-10 " style="flex: 0 0 40%">
 									<view class="text-nowrap u-font-14 u-m-r-10 text-base">PriceSeek评分 ≥ </view>
 									<view class="u-flex u-flex-items-center u-border u-p-4 u-radius-8 u-flex-1 bg-white u-info" 
 										style="width: 70px; flex: 0 0 70px; border-color: #c7e4ff!important" 
 										@click="scoreShow = true"
 									>
-										<view class="u-flex-1 u-font-13 u-text-center" :class="{'u-primary': terms_score}">{{terms_score?terms_score+' 分' : '请选择'}}</view>
-										<!-- <up-icon name="list-dot" size="10" color="#aaa"></up-icon> -->
+										<view class="u-flex-1 u-font-13 u-text-center" :class="{'u-primary': terms_score}">{{terms_score?terms_score+' 分' : '请选择'}}</view> 
 									</view>
-								</view> 
+								</view>
 							</view>
 							<view class="u-m-l-30 u-m-r-20">
 								<up-button type="primary" plain  shape="circle" 
@@ -396,7 +395,7 @@
 	</TabBar> -->
 </template>
 
-<script setup>
+<script setup> 
 	import useFilter from '@/composition/useFilter.js' 
 	const zt = computed(() => {
 		return {

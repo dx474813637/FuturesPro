@@ -1,8 +1,24 @@
 <template> 
 	<view class="header bg-white"> 
 		<up-alert title="长按图片进行保存或转发" center  type="error" ></up-alert>
-		<view class="u-p-20" v-if="haibaoData.list">
-			<up-image :src="haibaoData.list" width="100%" height="auto" mode="widthFix"></up-image>
+		<view class="u-p-20" v-if="haibaoData.list"> 
+			<!--  #ifdef  APP-PLUS -->
+			<image  
+				:src="haibaoData.list" 
+				mode="widthFix" 
+				style="width: 100%; height: auto;"
+				@longpress="base.handleLongPress(haibaoData.list)" 
+			/>
+			<!--  #endif -->
+			<!--  #ifdef  H5 || MP-WEIXIN -->
+			<image  
+				:src="haibaoData.list" 
+				mode="widthFix" 
+				show-menu-by-longpress
+				style="width: 100%; height: auto;" 
+			/>
+			<!--  #endif -->
+			<!-- <up-image :src="haibaoData.list" width="100%" height="auto" mode="widthFix"></up-image> -->
 			<view class="u-text-center u-error">长按图片进行保存或转发</view>
 			<view class="u-p-t-40 u-p-b-40 u-flex u-flex-items-center u-flex-between">
 				<!-- <view class="u-flex-2 u-p-5">
@@ -205,7 +221,7 @@
 </style>
 <style lang="scss" scoped>
 	.header { 
-		// background-image: url('https://p.cft.100ppi.com/Public/index-topbj/index-topbj.png');
+		// background-image: url('https://cft.100ppi.com/Public/index-topbj/index-topbj.png');
 		background-size: 100% auto;
 		background-repeat: no-repeat;
 		background-position: 0 0;

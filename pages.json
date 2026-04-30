@@ -12,59 +12,17 @@
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 
 		{
-			"path": "pages/index/gpt",
-			"style": {
-				"navigationStyle": "custom"
-			}
-		},
-		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationStyle": "custom"
 			}
 		},
-		// {
-		// 	"path": "pages/subscribe/center/center",
-		// 	"style": {
-		// 		"navigationStyle": "custom",
-		// 		"navigationBarTitleText": ""
-		// 	}
-		// },
-		// {
-		// 	"path": "pages/subscribe/index/index",
-		// 	"style": {
-		// 		"navigationStyle": "custom",
-		// 		"navigationBarTitleText": ""
-		// 	}
-		// },
-		// {
-		// 	"path": "pages/subscribe/gpt/gpt",
-		// 	"style": {
-		// 		"navigationStyle": "custom", 
-		// 		"navigationBarTitleText": ""
-		// 	}
-		// },
-		// {
-		// 	"path": "pages/subscribe/gpt/hot",
-		// 	"style": {
-		// 		"navigationStyle": "custom",
-		// 		"navigationBarTitleText": ""
-		// 	}
-		// },
-		// {
-		// 	"path": "pages/subscribe/gpt/season",
-		// 	"style": {
-		// 		"navigationStyle": "custom",
-		// 		"navigationBarTitleText": ""
-		// 	}
-		// },
-		// {
-		// 	"path": "pages/subscribe/gpt/analysis",
-		// 	"style": {
-		// 		"navigationStyle": "custom",
-		// 		"navigationBarTitleText": ""
-		// 	}
-		// },
+		{
+			"path": "pages/index/gpt",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}, 
 		{
 			"path": "pages/order/order",
 			"style": {
@@ -99,28 +57,8 @@
 		},
 		{
 			"path": "pages/login/xieyi",
-			"style": {
-			}
-		},
-		// {
-		// 	"path": "pages/subscribe/qht/qht",
-		// 	"style": {
-		// 		"navigationStyle": "custom",
-		// 		"navigationBarTitleText": ""
-		// 	}
-		// },
-		{
-			"path": "pages/analysis/analysis",
-			"style": {
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/analysis/analysis_detail",
-			"style": {
-				"navigationStyle": "custom"
-			}
-		},
+			"style": {}
+		}, 
 		{
 			"path": "pages/my/my",
 			"style": {
@@ -130,14 +68,14 @@
 		{
 			"path": "pages/partner/apply_partner",
 			"style": {
-				"navigationStyle": "custom" 
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/partner/users_partner",
-			"style": { 
+			"style": {
 				"navigationBarTitleText": "发展用户"
-			} 
+			}
 		},
 		{
 			"path": "pages/partner/users_product",
@@ -185,13 +123,13 @@
 		{
 			"path": "pages/index/cfh",
 			"style": {
-				"navigationStyle": "custom" 
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/index/cfh_user",
 			"style": {
-				"navigationStyle": "custom" 
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -207,28 +145,79 @@
 			}
 		},
 		{
-			"path": "pages/qht/qht",
-			"style": {
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/qht/qht_detail",
-			"style": {
-				"navigationStyle": "custom"
-			}
-		},
-		{
 			"path": "pages/index/hd/hd",
-			"style": { 
+			"style": {}
+		},
+		{
+			"path": "pages/index/news_detail",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/index/hot",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/index/app_about",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/partner/about_develop",
+			"style": {
+				"navigationBarTitleText": "如何发展"
 			}
 		}
 	],
+	"subPackages": [{
+		"root": "pages/analysis",
+		"pages": [{
+				"path": "analysis",
+				"style": {
+					"navigationStyle": "custom"
+				}
+			},
+			{
+				"path": "analysis_detail",
+				"style": {
+					"navigationStyle": "custom"
+				}
+			}
+		]
+	}, {
+		"root": "pages/qxt",
+		"pages": [{
+				"path": "qxt",
+				"style": {
+					"navigationStyle": "custom"
+				}
+			},
+			{
+				"path": "qxt_detail",
+				"style": {
+					"navigationStyle": "custom"
+				}
+			} 
+		]
+	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "生意社财富通",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
+	},
+	"preloadRule": {
+		// 当进入首页时触发预加载
+		"pages/index/index": {
+			"network": "all", // 所有网络下都预加载
+			"packages": ["pages/analysis", // 预加载整个分包A
+				"pages/qxt"
+			] // 同时预加载分包B
+		}
 	},
 	"uniIdRouter": {}
 }

@@ -15,12 +15,27 @@ export const baseStore = defineStore('base', {
 	state: () => {
 		return {
 			sys: uni.getSystemInfoSync(),
-			configBaseURL: 'https://p.cft.100ppi.com/Ppi/',
+			// #ifdef APP-PLUS || MP-WEIXIN
+			configBaseURL: `https://p.cft.100ppi.com/Ppi/`,
+			// #endif
+			// #ifdef H5
+			configBaseURL: `${window._url}/Ppi/`,
+			// #endif
 			configHeader: {
 				'content-type': 'application/x-www-form-urlencoded',
 				// 'content-type': 'application/json',
+				// #ifdef APP-PLUS  
+				'appid': 10005,
+				'appsecret': 'cd5dZ01POBjvEGvBZEE83C2ItAHHIw+TT54A1+BKq72XpxbaE7oOmz4',
+				// #endif
+				// #ifdef H5
 				'appid': 10004,
 				'appsecret': '29caD4UaRVtdotmMrRksDcYHOBG2VxunY278w7+6LK6rE/V1VW29fPY',
+				// #endif
+				// #ifdef MP-WEIXIN
+				'appid': 10007,
+				'appsecret': '2db25sAjFfa6ylteMaFHSj09tIAObaIQYwobstvjDn9P0pfBSXLDjBA',
+				// #endif
 				// 'xcxlogin': extConfig.attr.login,
 				// 'xcxappid': extConfig.attr.wxappid,
 				// 'tid2': uni.getStorageSync('tid2') || '',
@@ -101,6 +116,12 @@ export const baseStore = defineStore('base', {
 			this.share_other = data;
 		}, 
 		handleGoto(data, type="") {
+			// #ifdef H5
+			if(type == 'alink') { 
+				window.location.href = data
+				return
+			}
+			// #endif
 			if(type == 'serviceChat') { 
 				if(!data.url || !data.appid) {
 					uni.showToast({ title: '客服参数异常' })
@@ -128,6 +149,53 @@ export const baseStore = defineStore('base', {
 		setNoTokenNeedPermissionRoute(data) {
 			this.noTokenNeedPermissionRoute = data;
 			uni.setStorageSync('noTokenNeedPermissionRoute', data)
+		},
+		handleLongPress(imageUrl){
+			console.log(imageUrl)
+		  uni.showActionSheet({
+		    itemList: ['保存图片到相册'],
+		    success: (res) => { 
+		      if (res.tapIndex === 0) {
+		        this.saveImage(imageUrl)
+		      }
+		    }
+		  })
+		},
+		saveImage(imageUrl){
+		  // 如果是网络图片，需要先下载
+		  if (imageUrl.startsWith('http')) {
+		    uni.downloadFile({
+		      url: imageUrl,
+		      success: (res) => { 
+		        if (res.statusCode === 200) {
+		          this.saveToAlbum(res.tempFilePath)
+		        }
+		      }
+		    })
+		  } else {
+		    this.saveToAlbum(imageUrl)
+		  }
+		},
+		saveToAlbum(filePath){
+		  uni.saveImageToPhotosAlbum({
+		    filePath: filePath,
+		    success: () => {
+		      uni.showToast({ title: '保存成功', icon: 'success' })
+		    },
+		    fail: (err) => {
+		      if (err.errMsg.includes('auth deny')) {
+		        uni.showModal({
+		          title: '提示',
+		          content: '请授权保存相册权限',
+		          success: (res) => {
+		            if (res.confirm) {
+		              uni.openSetting()
+		            }
+		          }
+		        })
+		      }
+		    }
+		  })
 		},
 		async get_regional_list() {
 			if(this.regional_list_loading) return
@@ -167,13 +235,13 @@ export const baseStore = defineStore('base', {
 		},
 		async uploadFilePromise(files, api="upimg") { 
 			return new Promise((resolve, reject) => {  
-				// #ifdef H5
+				// #ifdef APP-PLUS
 				uni.uploadFile({
 					url: `${this.configBaseURL}${api}`,  
 					files: files,  
 					header: {
-						'appid': 10004,
-						'appsecret': '29caD4UaRVtdotmMrRksDcYHOBG2VxunY278w7+6LK6rE/V1VW29fPY',
+						'appid': 10005,
+						'appsecret': 'cd5dZ01POBjvEGvBZEE83C2ItAHHIw+TT54A1+BKq72XpxbaE7oOmz4',
 						'userid': uni.getStorageSync('userid') || '', 
 					},
 					success: (res) => {
@@ -206,14 +274,33 @@ export const baseStore = defineStore('base', {
 					}
 				}); 
 				// #endif
+				// #ifdef H5 
+				uni.uploadFile({
+					url: `${this.configBaseURL}${api}`,  
+					files: files,  
+					header: {
+						'appid': 10004,
+						'appsecret': '29caD4UaRVtdotmMrRksDcYHOBG2VxunY278w7+6LK6rE/V1VW29fPY',
+						'userid': uni.getStorageSync('userid') || '', 
+					},
+					success: (res) => {
+						console.log(res)
+						resolve(JSON.parse(res.data))
+					},
+					fail(error) { 
+						console.log(error)
+						reject(error)
+					}
+				});
+				// #endif
 			})
 		},
 		async wxShare(){
-			// console.log( 'wxShare' )
-			if (!isWeixinBrowser()) return 
+			// console.log( 'wxShare' ) 
+			if (!isWeixinBrowser()) return  
 			let url = window.location.href
 			const res = await apis.get_share_url({params: {url, share_id: uni.getStorageSync('share_id') || ''}})
-			if(res.code == 1) {
+			if(res && res.code == 1) {
 				if(jWeixin && jWeixin.config) {
 					const share_config = res.list
 					jWeixin.config({
@@ -302,7 +389,7 @@ export const menusStore = defineStore('menus', {
 				options: {}
 			},
 			cpy_type_origin: [[]],
-			cpy_type: [[]],
+			cpy_type: [[]]
 		};
 	},
 	getters: {
@@ -318,7 +405,7 @@ export const menusStore = defineStore('menus', {
 			const res = await apis.memu()  
 			if(res.code == 1) {  
 				const user = userStore()
-				const {login, partner, partner_amount, partner_amount2, share_id, partner_amount_list, partner_amount2_list} = toRefs(user)
+				const {shenhe_flag, login, partner, partner_amount, partner_amount2, share_id, partner_amount_list, partner_amount2_list} = toRefs(user)
 				login.value = res.login 
 				share_id.value = res.share_id 
 				partner.value = res.partner 
@@ -326,6 +413,7 @@ export const menusStore = defineStore('menus', {
 				partner_amount2.value = res.partner_amount2 
 				partner_amount_list.value = res.partner_amount_list
 				partner_amount2_list.value = res.partner_amount2_list
+				shenhe_flag.value = res.test
 				if(res.share_id) uni.setStorageSync('share_id', res.share_id)
 				// user.saveUserInfo(res.info)
 				// user.getUserInfo(res.info)
@@ -399,42 +487,76 @@ export const useCateStore = defineStore('cate', {
 			seasonConfig_loading: false, 
 			qxt_position_list: [
 				{
-					name: '10天位置',
+					name: '10天',
 					value: 'ten_day_position', 
 					keys_front: 'ten_day',
 					name_tj: '10天',
 				},
 				{
-					name: '20天位置',
+					name: '20天',
 					value: 'twenty_day_position',  
 					keys_front: 'twenty_day',
 					name_tj: '20天', 
 				},
 				{
-					name: '30天位置',
+					name: '30天',
 					value: 'thirty_day_position',  
 					keys_front: 'thirty_day',
 					name_tj: '30天', 
 				},
 				{
-					name: '60天位置',
+					name: '60天',
 					value: 'sixty_day_position',  
 					keys_front: 'sixty_day',
 					name_tj: '60天', 
 				},
 				{
-					name: '90天位置',
+					name: '90天',
 					value: 'three_month_position',  
 					keys_front: 'three_month',
 					name_tj: '90天', 
 				} ,
 				{
-					name: '一年位置',
+					name: '一年',
 					value: 'one_year_position',  
 					keys_front: 'one_year' ,
 					name_tj: '一年',
 				} 
-			]
+			],
+			info_loading:false,
+			infoConfig: {
+				gpt: {
+					hxyl: {
+						title: '核心原理',
+						content: '',
+					},
+					xgff: [
+						{
+							title: '热点选股',
+							content: '利用n天商品价格上涨幅度，筛选热点商品，从而选择合适的周期股投资机会。'
+						},
+						{
+							title: '季报选股',
+							content: '利用季报周期内商品价格上涨幅度，提前于季报与年报，发现周期股买入信号。'
+						},
+					], 
+					jtff: {
+						title: '具体方法',
+						content: '',
+					},
+				},
+				qxt: {
+					hxyl: {
+						title: '核心原理',
+						content: ''
+					},
+					jtff: {
+						title: '具体方法',
+						content: ''
+					}, 
+					
+				}
+			}
 		};
 	},
 	getters: { 
@@ -453,6 +575,25 @@ export const useCateStore = defineStore('cate', {
 				this.seasonConfig_loading = false
 				return error
 			}
+		},
+		
+		async getInfoData() { 
+			this.info_loading = true
+			try {
+				const res = await apis.about3() 
+				this.info_loading = false
+				if(res.code == 1) { 
+					this.infoConfig.qxt.hxyl.content = res.list.info1
+					this.infoConfig.qxt.jtff.content = res.list.info2 
+					this.infoConfig.gpt.hxyl.content = res.list.info4
+					this.infoConfig.gpt.jtff.content = res.list.info5
+				}
+			} catch (error) { 
+				console.log(error)
+				this.info_loading = false
+				return error
+			}
+			
 		},
 		async getCateData() { 
 			this.cate_loading = true
@@ -524,7 +665,7 @@ export const useCateStore = defineStore('cate', {
 			
 		}
 	}, 
-});
+}) 
 
 
 function exchangeData(data) {

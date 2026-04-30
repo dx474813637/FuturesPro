@@ -10,6 +10,7 @@
 		> --> 
 		<up-navbar 
 			v-bind="$attrs"
+			:title="$attrs.title" 
 		>
 			<template #left>
 				<slot name="left">
@@ -18,7 +19,7 @@
 							<nut-icon name="rect-left" @click="goBack"></nut-icon>
 							<up-line direction="column" :hairline="false" length="20" margin="0 12px"></up-line> 
 						</template> 
-						<nut-icon name="home" @click="base.handleGoto('/pages/index/gpt')"></nut-icon> 
+						<nut-icon name="home" @click="base.handleGoto('/pages/index/index')"></nut-icon> 
 					</view> 
 				</slot>
 			</template>

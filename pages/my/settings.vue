@@ -52,7 +52,7 @@ import {useCateStore, baseStore} from '@/stores/base.js'
 		await user.logout();
 		setTimeout(() => {
 			base.handleGoto({
-				url: '/pages/index/gpt',
+				url: '/pages/index/index',
 				type: 'reLaunch'
 			})
 			

@@ -1,6 +1,24 @@
 <template>
-	<view class="wrap">  
-		<up-image :src="img" width="100%" height="auto" mode="widthFix"></up-image>
+	<view class="wrap u-p-b-80">  
+		<!--  #ifdef  APP-PLUS -->
+		<image 
+			v-if="img" 
+			:src="img" 
+			mode="widthFix" 
+			style="width: 100%; height: auto;"
+			@longpress="base.handleLongPress(img)" 
+		/>
+		<!--  #endif -->
+		<!--  #ifdef  H5 || MP-WEIXIN -->
+		<image 
+			v-if="img" 
+			:src="img" 
+			mode="widthFix" 
+			show-menu-by-longpress
+			style="width: 100%; height: auto;" 
+		/>
+		<!--  #endif -->
+		<!-- <up-image :src="img" width="100%" height="auto" mode="widthFix"></up-image> -->
 		<view class="u-text-center u-p-20">
 			长按图片进行保存或者转发
 		</view>
@@ -33,7 +51,7 @@
 	const menusstore = menusStore()
 	const base = baseStore()   
 	const overlayshow = ref(false) 
-	const img = ref('https://p.cft.100ppi.com/Public/huodong1.jpg')
+	const img = ref('https://cft.100ppi.com/Public/huodong1.jpg')
 	onLoad(async () => {  
 		// await getData()
 	})   

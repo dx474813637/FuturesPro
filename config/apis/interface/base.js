@@ -26,6 +26,8 @@ export const passwd_reset = (data) => uni.$u.http.get('passwd_reset', data)
 export const memu = (data) => uni.$u.http.get('memu', data)
 // login_cancel  小程序获取userid
 export const login_cancel = (data) => uni.$u.http.get('login_cancel', data)
+// app_login  APP获取userid
+export const app_login = (data) => uni.$u.http.get('app_login', data)
 
 // category 商品分类
 export const category = (data) => uni.$u.http.get('category', data)
@@ -43,6 +45,13 @@ export const query_ptp_dy = (data) => uni.$u.http.get('query_ptp_dy', data)
 
  // about 关于合伙人
 export const about = (data) => uni.$u.http.get('about', data)
+
+ // about2 app隐私声明
+export const about2 = (data) => uni.$u.http.get('about2', data)
+ // about3 
+export const about3 = (data) => uni.$u.http.get('about3', data)
+ // about5 
+export const about5 = (data) => uni.$u.http.get('about5', data)
 
 
 // my_subscription 我的订阅
@@ -99,3 +108,11 @@ export const intelligence = (data) => uni.$u.http.get('intelligence', data)
 export const dashboard = (data) => uni.$u.http.get('dashboard', data)
 // dashboard_sf  22.现货通现期分析
 export const dashboard_sf = (data) => uni.$u.http.get('dashboard_sf', data)
+
+// list_chance_recommend_zx  all=1时，付款页面案例接口没有翻页  all=0或其他时，首页动态列表  参数p
+export const list_chance_recommend_zx = (data) => uni.$u.http.get('list_chance_recommend_zx', data)
+
+// list_dy_status 
+export const list_dy_status = (data) => uni.$u.http.get('list_dy_status', data)
+// list_hot_stock  热点股
+export const list_hot_stock = (data) => uni.$u.http.get('list_hot_stock', data)

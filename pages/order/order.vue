@@ -1,62 +1,244 @@
 <template>
 	<view class="w">
 		<up-loading-page :loading="loading"  ></up-loading-page>
-		<view class="row u-flex-column u-flex-items-center u-flex-center text-white u-p-30 bg-primary">
+		 
+		<view class="row u-flex-column u-flex-items-center u-flex-center text-white u-p-20 bg-primary" v-if="!showDateChoose">
 			<up-icon :name="orderDetail.status == 1?'checkmark-circle-fill':'clock-fill' " color="#fff" size="40"></up-icon>
 			<view class="u-font-18 u-m-t-10">{{pay_status}}</view>
 		</view>
 		<view class="card-w u-p-l-20 u-p-r-20 u-p-b-40">
 			<view class="bg"></view>
 			<view class="card bg-white box-border u-radius-20 u-p-12">
-				<view class="row u-flex u-flex-items-center u-flex-between u-p-12 u-p-l-20 u-p-r-20">
-					<view class="text-base">订单ID</view>
-					<view>{{orderDetail.order_id}}</view>
-				</view>
-				<view class="row u-flex u-flex-items-center u-flex-between u-p-12 u-p-l-20 u-p-r-20">
-					<view class="text-base">订阅商品</view>
-					<view>{{orderDetail.name}}</view>
-				</view>
-				<view class="row u-flex u-flex-items-center u-flex-between u-p-12 u-p-l-20 u-p-r-20">
-					<view class="text-base">订阅时间</view>
-					<view>{{orderDetail.choose_date}}</view>
-				</view>
-				<view class="row u-flex u-flex-items-center u-flex-between u-p-12 u-p-l-20 u-p-r-20" v-if="orderDetail.status == 1">
-					<view class="text-base">生效时间</view>
-					<view>{{orderDetail.status_date}}</view>
-				</view>
-				<view class="row u-flex u-flex-items-center u-flex-between u-p-12 u-p-l-20 u-p-r-20" v-if="orderDetail.status == 1">
-					<view class="text-base">到期时间</view>
-					<view>{{orderDetail.expire_date}}</view>
-				</view>
-				<view class="row u-flex u-flex-items-center u-flex-between u-p-12 u-p-l-20 u-p-r-20" v-if="orderPriceInfo.time">
-					<view class="text-base">订阅期限</view>
-					<view>{{orderDetail.time}}</view>
-				</view>
-				<view class="row u-flex u-flex-items-center u-flex-between u-p-12 u-p-l-20 u-p-r-20">
-					<view class="text-base">订阅金额</view>
-					<view class="u-error">
-						<nut-price :price="orderPriceInfo.price || orderDetail.price" size="large" thousands symbol="¥"></nut-price>
+				<view class="row u-flex u-flex-items-center u-flex-between u-p-8 u-p-l-20 u-p-r-20">
+					<view class="text-base u-font-15">订阅商品</view>
+					<view v-if="orderDetail.name">{{orderDetail.name}}</view>
+					<view v-else>
+						<template v-if="type == '2'">期货通</template>
+						<template v-if="type == '3'">股票通</template>
 					</view>
 				</view>
-				<view class="u-p-20" v-if="orderDetail.status == 0">
-					<up-button type="success" size="large" shape="circle" @click="wxpayBtn">微信支付</up-button>
+				<view class="row u-flex u-flex-items-center u-flex-between u-p-8 u-p-l-20 u-p-r-20" v-if="orderDetail.order_id">
+					<view class="text-base u-font-15">订单ID</view>
+					<view>{{orderDetail.order_id}}</view>
 				</view>
-				<view class="u-p-20" v-if="orderDetail.status == 0">
-					<up-button type="primary" plain size="large" shape="circle" @click="base.handleGoto('/pages/my/my')">个人中心</up-button>
-				</view>
-				<view class="u-p-20" v-if="gptVip">
-					<up-button type="primary" size="large" plain  shape="circle" @click="base.handleGoto({url: '/pages/analysis/analysis', type: 'reLaunch'})">我要选股</up-button>
-				</view>
+				<template v-if="showDateChoose">
+					<view class="row u-flex u-flex-items-center u-flex-between u-p-8 u-p-l-20 u-p-r-20" >
+						<view class="text-base u-font-15">订阅期限</view>
+						<view>
+							<up-radio-group
+							    v-model="dy_mode"
+							    placement="row"
+								@change="dyChange"
+							  >
+							    <up-radio
+							      :customStyle="{marginBottom: '8px'}"
+							      v-for="(item, index) in dy_mode_list"
+							      :key="item.value"
+							      :label="item.name"
+							      :name="item.value" 
+							    >
+							    </up-radio>
+							  </up-radio-group>
+						</view>
+					</view>
+					<view class="row u-flex u-flex-items-center u-flex-between u-p-8 u-p-l-20 u-p-r-20" v-if="orderPriceInfo.price">
+						<view class="text-base u-font-15 u-flex-1">订阅金额</view>
+						<view class="u-error u-flex u-flex-items-center">
+							<nut-price :price="orderPriceInfo.price " size="large" thousands symbol="¥"></nut-price>
+							<text class="  u-p-l-10">元/<template v-if="dy_mode == 'y'">年</template><template v-if="dy_mode == 'm'">月</template></text>
+						</view> 
+					</view>
+					<view class="u-m-t-10">
+						<!-- <view class="u-p-12" >
+							<up-button type="primary" size="large" shape="circle" @click="getOrderBtn">确 认</up-button>
+						</view> -->
+						<view class="u-p-12" v-if="orderPriceInfo.order_id">
+							<up-button type="success" size="large" shape="circle" @click="wxpayBtn">立即支付 享7天无忧退</up-button>
+						</view>
+						<view class="u-p-12" >
+							<!-- #ifdef H5 -->
+							<up-button type="primary" plain size="large" shape="circle" @click="base.handleGoto(`${baseUrl}/#/pages/my/my`, 'alink')">个人中心</up-button>
+							<!-- #endif -->
+							<!-- #ifndef H5 -->
+							<up-button type="primary" plain size="large" shape="circle" @click="base.handleGoto('/pages/my/my')">个人中心</up-button>
+							<!-- #endif -->
+						</view> 
+					</view>
+				</template>
+				<template v-else> 
+					<view class="row u-flex u-flex-items-center u-flex-between u-p-8 u-p-l-20 u-p-r-20">
+						<view class="text-base u-font-15">订阅时间</view>
+						<view>{{orderDetail.choose_date}}</view>
+					</view>
+					<view class="row u-flex u-flex-items-center u-flex-between u-p-8 u-p-l-20 u-p-r-20" v-if="orderDetail.status == 1">
+						<view class="text-base u-font-15">生效时间</view>
+						<view>{{orderDetail.status_date}}</view>
+					</view>
+					<view class="row u-flex u-flex-items-center u-flex-between u-p-8 u-p-l-20 u-p-r-20" v-if="orderDetail.status == 1">
+						<view class="text-base u-font-15">到期时间</view>
+						<view>{{orderDetail.expire_date}}</view>
+					</view>
+					<view class="row u-flex u-flex-items-center u-flex-between u-p-8 u-p-l-20 u-p-r-20" v-if="orderPriceInfo.time">
+						<view class="text-base u-font-15">订阅期限</view>
+						<view>{{orderDetail.time}}</view>
+					</view>
+					<view class="row u-flex u-flex-items-center u-flex-between u-p-8 u-p-l-20 u-p-r-20">
+						<view class="text-base u-font-15 u-flex-1">订阅金额</view>
+						<view class="u-error u-flex u-flex-items-center">
+							<nut-price :price="orderPriceInfo.price || orderDetail.price" size="large" thousands symbol="¥"></nut-price>
+							<text class="  u-p-l-10">元/{{dy_mode_name}}</text>
+						</view>
+						<!-- <view class="u-m-l-20">
+							<up-button 
+								shape="circle" 
+								type="primary" 
+								plain 
+								:customStyle="{padding: '5px 12px', height: '30px'}" 
+								@click="showDateChoose = true"
+							>修改期限</up-button>
+						</view> -->
+					</view>
+					<view class="u-m-t-10">
+						<view class="u-p-12" v-if="orderDetail.status == 0">
+							<!-- #ifdef H5 -->
+							<up-button type="primary" plain size="large" shape="circle" @click="base.handleGoto(`${baseUrl}/#/pages/my/my`, 'alink')">个人中心</up-button>
+							<!-- #endif -->
+							<!-- #ifndef H5 -->
+							<up-button type="primary" plain size="large" shape="circle" @click="base.handleGoto('/pages/my/my')">个人中心</up-button>
+							<!-- #endif -->
+						</view>
+						<view class="u-p-12" v-if="gptVip && type == '3'">
+							<!-- #ifdef H5 -->
+							<up-button type="primary" size="large" plain  shape="circle" @click="base.handleGoto(`${baseUrl}/#/pages/analysis/analysis`, 'alink')">我要选股</up-button>
+							<!-- #endif -->
+							<!-- #ifndef H5 -->
+							<up-button type="primary" size="large" plain  shape="circle" @click="base.handleGoto({url: '/pages/analysis/analysis', type: 'reLaunch'})">我要选股</up-button>
+							<!-- #endif -->
+						</view>
+						<view class="u-p-12" v-if="qhtVip && type == '2'"> 
+							<!-- #ifdef H5 -->
+							<up-button type="primary" size="large" plain  shape="circle" @click="base.handleGoto(`${baseUrl}/#/pages/qxt/qxt`, 'alink')">查看期货通</up-button>
+							<!-- #endif -->
+							<!-- #ifndef H5 -->
+							<up-button type="primary" size="large" plain  shape="circle" @click="base.handleGoto({url: '/pages/qxt/qxt', type: 'reLaunch'})">查看期货通</up-button>
+							<!-- #endif -->
+						</view> 
+					</view>
+				</template>
+				
 
 			</view>
-			<view class="title  u-m-t-30  ">
-				<view class="u-font-15 bg-white u-p-25 u-radius-15">
-					<view class="  text-base">生意社股票通具体功能：</view>
-					<view class="u-radius-5 bg-white u-m-t-12">1、热点选股与季报选股2种方法</view>
-					<view class="u-radius-5 bg-white u-m-t-12">2、股价90天内5档位置（高位、中高位、中位、中低位与低位）</view>
-					<view class="u-radius-5 bg-white u-m-t-12">3、AI大模型财报评级与K线分析</view>
-				</view>
+			<view class="u-m-t-12 u-radius-10" style="overflow: hidden;" v-if="notice2.length > 0">
+				<up-notice-bar 
+					:text="notice2" 
+					color="#ff0000" 
+					bgColor="#ffebe9" 
+					direction="column"  
+					speed="250" 
+				></up-notice-bar>
 			</view>
+			<template v-if="type == '2'">
+				<view class="u-radius-20 bg-white u-m-t-12" style="overflow: hidden;">
+					<image src="https://cft.100ppi.com/Public/gptguide/qhzftitle.png" style="width: 100%;height: auto; display: block;" mode="widthFix"></image>
+				</view>
+				<view class="u-radius-20 bg-white u-m-t-12" style="overflow: hidden;">
+					<view class="tabs-content-item u-p-20 u-p-l-30 u-p-r-30 u-p-b-40 u-radius-16">
+						<view class="u-flex u-flex-items-center u-flex-center u-m-b-20">
+							<view class="text-bold u-font-16" style="color: #1254B3;">{{infoConfig.qxt.hxyl.title}}</view>
+						</view>
+						<view class="u-font-14" style="color: #67799f;">
+							<u-parse :content="infoConfig.qxt.hxyl.content"></u-parse>
+							<!-- <rich-text v-for="(item, index) in infoConfig.qxt.hxyl.content" :nodes="item" :key="index"> </rich-text> -->
+						</view>
+					</view> 
+				</view>
+				<view class="u-radius-20 bg-white u-m-t-12" style="overflow: hidden;">
+					<view class="tabs-content-item u-p-20 u-p-l-30 u-p-r-30 u-p-b-40 u-radius-16">
+						<view class="u-flex u-flex-items-center u-flex-center u-m-b-20">
+							<view class="text-bold u-font-16" style="color: #1254B3;">{{infoConfig.qxt.jtff.title}}</view>
+						</view>
+						<view class="u-font-14" style="color: #67799f;">
+							<u-parse :content="infoConfig.qxt.jtff.content"></u-parse> 
+						</view>
+					</view> 
+				</view>
+				<!-- <view class="u-font-15 bg-white u-p-20 u-radius-15 u-m-t-12">
+					<view class="u-p-10 u-text-center  ">基差与期货价格呈反方向运行案例</view>
+					<view class="tabs-list u-flex u-flex-items-center u-flex-between  u-p-10 box-border">
+						<view class="tabs-item u-flex-1 u-flex u-flex-items-center u-flex-center  u-m-10 u-p-12 u-radius-16 "
+							:class="{
+								'u-primary-light-bg': tabValue == item.value,
+								'u-info-light-bg': tabValue != item.value,
+								'u-primary': tabValue == item.value,
+								'text-base': tabValue != item.value
+							}"
+							v-for="item in tabslist"  
+							:key="item.value"
+							@click="tabsEvent(item)"
+						>{{item.name}}</view> 
+					</view> 
+					<image :src="tabslist[tabIndex].img" style="width: 100%;height: auto; display: block;" mode="widthFix"></image>
+				</view> 
+				<view class="u-radius-20 bg-white u-m-t-12" style="overflow: hidden;">
+					<view class="tabs-content-item u-p-20 u-p-l-30 u-p-r-30 u-p-b-40 u-radius-16">
+						<view class="u-flex u-flex-items-center u-flex-center u-m-b-20">
+							<view class="text-bold u-font-16" style="color: #1254B3;">{{infoConfig.qxt.jtff.title}}</view>
+						</view>
+						<view class="u-font-14" style="color: #67799f;">
+							<view v-for="(item, index) in infoConfig.qxt.jtff.content" :key="index">{{item}}</view>
+						</view>
+					</view> 
+				</view>
+				<view class="u-font-15 bg-white u-p-20 u-radius-15 u-m-t-12">
+					<image style="width: 100%; height: auto" mode="widthFix" src="https://cft.100ppi.com/Public/gptguide/qh1.png" />
+				</view>
+				<view class="u-font-15 bg-white u-p-20 u-radius-15 u-m-t-12">
+					<image style="width: 100%; height: auto" mode="widthFix" src="https://cft.100ppi.com/Public/gptguide/qh2.png" />
+				</view>
+				<view class="u-radius-20 bg-white u-m-t-12" style="overflow: hidden;">
+					<view class="tabs-content-item u-p-20 u-p-l-30 u-p-r-30 u-p-b-40 u-radius-16">
+						<view class="u-flex u-flex-items-center u-flex-center u-m-b-20">
+							<view class="text-bold u-font-16" style="color: #1254B3;">{{infoConfig.qxt.zj.title}}</view>
+						</view>
+						<view class="u-font-14" style="color: #67799f;">
+							<view v-for="(item, index) in infoConfig.qxt.zj.content" :key="index">{{item}}</view>
+						</view>
+					</view> 
+				</view> -->
+			</template>
+			<template v-if="type == '3'">
+				
+				<view class="title  u-m-t-12  " >
+					<view class="u-font-15   u-p-20 u-radius-15" style="background: linear-gradient(to bottom, #ffdddb, #fff3f3 60%, #ffdddb )">
+						<!-- <view class="  u-primary text-bold u-font-16 u-p-10 u-text-center">商品价格与股票价格的上涨“时间差”案例</view> -->
+						<view class="u-flex u-flex-center u-m-b-20">
+							<image src="https://cft.100ppi.com/Public/gptguide/zftitle.png" style="width: 100%;" mode="widthFix"></image>
+						</view>
+						
+						<!-- #ifdef H5 -->
+						<view class="u-radius-8 bg-white u-p-15 u-m-t-12"
+							v-for="item in recommend"
+							:key="item.id"
+							@click="base.handleGoto(`${baseUrl}/#/pages/index/news_detail?id=${item.id}&al=1`, 'alink')"
+						>
+						<!-- #endif -->
+						<!-- #ifndef H5 -->
+						<view class="u-radius-8 bg-white u-p-15 u-m-t-12"
+							v-for="item in recommend"
+							:key="item.id"
+							@click="base.handleGoto({url: '/pages/index/news_detail', params: {id: item.id, al: 1}})"
+						>
+						<!-- #endif -->
+						
+							<view>
+								{{item.title2 || item.title}}
+								<!-- <text class="u-info">（{{item.pubDate}}）</text> -->
+							</view>
+						</view> 
+					</view>
+				</view>
+			</template>
+			
 
 			<view class="card bg-white box-border u-radius-20 u-p-20 u-m-t-30"
 				style="background: linear-gradient(to bottom, #fff 60%, #cbe6ff );" v-if="false">
@@ -98,6 +280,13 @@
 </template>
 
 <script setup>
+	// #ifdef H5
+	// import setHttp from '@/config/request.js' 
+	// const baseUrl = ref(window._url3)
+	// setHttp(window._url2+'/Ppi/') 
+	// uni.$u.http.setBaseUrl(window._url2+'/Ppi/')
+	// #endif
+	import { timeFrom } from 'uview-plus';
 	import useFilter from '@/composition/useFilter.js' 
 	const zt = computed(() => {  
 		return {
@@ -110,13 +299,16 @@
 		plot_status
 	} = useFilter(zt)
 	import {userStore } from '@/stores/user.js'  
-	import {useCateStore, baseStore} from '@/stores/base.js' 
+	import {useCateStore, baseStore} from '@/stores/base.js'  
 	const user = userStore() 
-	const {gpt, qht, gptVip} = toRefs(user)
+	const {gpt, qht, gptVip, qhtVip} = toRefs(user)
+	const cate = useCateStore() 
+	const {infoConfig} = toRefs(cate)
 	const base = baseStore() 
 	const $api = inject('$api')  
-	const loading = ref(false) 
+	const loading = ref(false)  
 	const orderPriceInfo = ref({})
+	const showDateChoose = ref(true)
 	const orderDetail = computed(() => {
 		if(type.value == '3') {
 			return gpt.value
@@ -124,6 +316,25 @@
 		if(type.value == '2') {
 			return qht.value
 		}
+		return {}
+	})
+	const dy_mode_list = ref([
+		{
+		    name: '年付',
+		    value: 'y',
+		    disabled: false,
+		},
+		{
+		    name: '月付',
+		    value: 'm',
+		    disabled: false,
+		},
+	])
+	const dy_mode = ref('y')
+	const dy_mode_name = computed(() => {
+		if(orderDetail.value.dy_mode == 'y') return '年'
+		else if(orderDetail.value.dy_mode == 'm') return '月'
+		return ''
 	})
 	const form = ref({
 		name: '',
@@ -132,7 +343,25 @@
 		ccc: '',
 		ddd: '',
 		eee: '',
+	}); 
+	
+	const tabIndex = computed(() => {
+		return tabslist.value.findIndex(ele => ele.value == tabValue.value)
 	});
+	const tabValue = ref('1');
+	
+	const tabslist = ref([
+		{
+			name: '基差从高到低',
+			value: '1',  
+			img: 'https://cft.100ppi.com/Public/gptguide/gxd.png'
+		}, 
+		{
+			name: '基差从低到高',
+			value: '2', 
+			img: 'https://cft.100ppi.com/Public/gptguide/dxg.png'
+		},   
+	])
 	const radiolist1 = [{
 		name: '增值税普票',
 		disabled: false
@@ -171,21 +400,85 @@
 	};
 	const uFormRef = ref(null);
 	const type = ref('') 
+	const notice = ref([])
+	const notice2 = computed(() => {
+		if(notice.value.length == 0) return []
+		return notice.value.map(ele => {
+			let name = ele.type == 3 ? '股票通' :'期货通' //支付${ele.price}
+			return `${timeFrom(new Date(ele.choose_date).getTime())}：${ele.poster}支付${ele.price}元订阅${name}`
+		})
+	})
+	const recommend = ref([]) 
 	onLoad(async (options) => { 
+		// #ifdef H5
+		await user.getUserData()
+		console.log(options)
+		// #endif
+		
 		if(options.hasOwnProperty('type')) {
 			type.value = options.type || '2'
 		} 
 		await user.getUserSubscription()
-		if(!gpt.value.order_id) {
+		// console.log(type.value == '2' && !qhtVip.value, type.value == '3' && !gptVip.value, qhtVip.value, gptVip.value)
+		// if((type.value == '2' && !qhtVip.value) || (type.value == '3' && !gptVip.value)) {
+		// 	await getOrder() 
+		// 	await user.getUserSubscription()
+		// } 
+		getRecommend()
+		getNoticeData()
+			// await getOrder() 
+		if(gpt.value.status != '1' && type.value == '3') {
+			// dy_mode.value = gpt.value.dy_mode
 			await getOrder() 
-			await user.getUserSubscription()
-			
+			// await user.getUserSubscription() 
+		} 
+		if(qht.value.status != '1' && type.value == '2') {
+			// dy_mode.value = qht.value.dy_mode
+			await getOrder() 
+			// await user.getUserSubscription() 
 		}
+		// $api.list_dy_status()
 		
-	}) 
+	})  
+	// #ifdef H5
+	onUnload(() => {
+		console.log('onUnload')
+		// setHttp()
+		uni.$u.http.setBaseUrl(window._url3+'/Ppi/')
+	})
+	// #endif
+	watch(
+		() => orderDetail.value.status,
+		(n) => {
+			console.log(n)
+			if(n != 0) showDateChoose.value = false
+		} 
+	)
 	onReady(() => {
 		// uFormRef.value.setRules(rules)
 	})
+	async function dyChange(data) {
+		// console.log(data)
+		// dy_mode.value = data
+		await getOrder() 
+	}
+	async function getNoticeData() {  
+		const res = await $api.list_dy_status()
+		if(res.code == 1) {
+			notice.value = res.list 
+		} 
+	}
+	async function getRecommend() {  
+		const res = await $api.list_chance_recommend_zx({ params: { all: 1 } })
+		if(res.code == 1) {
+			recommend.value = res.list.res.pw_rec_list
+		} 
+	}
+	async function getOrderBtn() {
+		// await getOrder()
+		showDateChoose.value = false
+		await user.getUserSubscription() 
+	}
 	async function getOrder() {
 		if(loading.value) return
 		loading.value = true
@@ -193,6 +486,7 @@
 			const res = await $api.get_order({
 				params: {
 					type: type.value,
+					dy_mode: dy_mode.value
 				}
 			})
 			if(res.code == 1) {
@@ -225,8 +519,8 @@
 		try{ 
 			const res = await $api.weixin_pay({
 				params: {
-					id: (orderPriceInfo.value.order_id || orderDetail.value.order_id),
-					price: (orderPriceInfo.value.price || orderDetail.value.price)*100, 
+					id: orderPriceInfo.value.order_id,
+					price: orderPriceInfo.value.price*100, 
 				}
 			})
 			if(res.code == 1) {
@@ -244,7 +538,7 @@
 			// #ifdef H5
 			wxpayEvent(res.pay)
 			// #endif
-			// #ifdef MP-WEIXIN
+			// #ifdef MP-WEIXIN || APP-PLUS
 			uni.requestPayment({
 			    provider: 'wxpay',
 			    timeStamp: String(res.pay.timeStamp),
@@ -260,10 +554,16 @@
 						icon: 'none'
 					})
 					setTimeout(() => {
+						
+						 // #ifdef H5 
+						base.handleGoto(`${baseUrl}/#/pages/my/my`, 'alink')
+						// #endif 
+						// #ifndef H5 
 						base.handleGoto({
 							url: '/pages/my/my',
 							type: 'reLaunch', 
 						})
+						// #endif 
 					}, 2000)
 					
 					
@@ -357,6 +657,14 @@
 				})
 			}
 		  });
+	}
+	function tabsEvent (obj) { 
+		console.log(obj)
+		if(obj.disabled) {
+			// messageManager.showText('敬请期待'); 
+			return
+		}  
+		tabValue.value = obj.value
 	}
 </script>
 

@@ -32,6 +32,10 @@
 		show: {
 			type: Boolean,
 			default: true
+		},
+		type: {
+			type: String,
+			default: '2'
 		}
 	})
 	const chartRef = ref(null)
@@ -47,7 +51,11 @@
 	const position = ref([])
 	const paramsRef = ref([])
 	const showTip = ref(false)
-
+	const type_name = computed(() => {
+		if(props.type == '2') return '日基差图'
+		if(props.type == '1') return '现期图'
+		return ''
+	})
 	const optionRef = computed(() => {
 		if (!props.chartData.data_data) return false
 		let yname = Object.keys(props.chartData.data_data) 
@@ -68,12 +76,12 @@
 			title: {
 				left: 'center',
 				top: 0,
-				text: `${props.chartData.name}价格走势(${props.chartData.unit})`,
+				text: `${props.chartData.name}${type_name.value}(${props.chartData.unit})`,
 				subtext: props.chartData.spec,
 			},
 			grid: {
-				height: '48%',
-				top: "30%",
+				height: '60%',
+				top: "20%",
 			},
 			color: ['#5da3ff', '#c641ff', '#ff007f', '#ff9945', '#73ffef'],
 			tooltip: {
@@ -93,13 +101,13 @@
 					const y = point[1] + offsetY
 					position.value = [x, y]
 					paramsRef.value = params
-					// console.log(paramsRef.value)
+					console.log(paramsRef.value)
 				},
 				formatter: (params, ticket, callback) => {},
 			},
 			legend: {
 				data: yname,
-				top: '16%',  
+				top: '11%',  
 				type: 'scroll'
 			},
 			dataZoom: [

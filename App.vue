@@ -12,7 +12,7 @@
 		toRefs
 	} from 'vue'
 	import {
-		baseStore
+		baseStore, useCateStore
 	} from '@/stores/base';
 	import {
 		userStore
@@ -25,6 +25,7 @@
 	// const $ws = inject('$ws') 
 	const $http = inject('$http')
 	const base = baseStore()
+	const cate = useCateStore()
 	const userS = userStore()
 	const {
 		user
@@ -33,6 +34,7 @@
 		urlParams
 	} = toRefs(base)
 	onLaunch(async () => {
+		
 		// #ifdef H5
 		if (window._userid) {
 			uni.setStorageSync('userid', window._userid)
@@ -77,8 +79,9 @@
 		urlParams.value = launchInfo.query
 		routingIntercept({
 			$http
-		})
+		}) 
 		await userS.getUserData()
+		cate.getInfoData()
 		let params = ''
 		for (let key in launchInfo.query) {
 			if (!params) params += '?'
@@ -90,8 +93,10 @@
 		}, {
 			$http
 		})
+		
 	});
 	onShow(async (options) => {
+		// window.parent.postMessage({ hello: 'world112' }, 'http://localhost:3001');
 		// if(!isWeixinBrowser()) {
 		// 	uni.reLaunch({
 		// 		url: '/pages/noWxBrowser/noWxBrowser'

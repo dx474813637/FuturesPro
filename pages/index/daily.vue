@@ -2,132 +2,81 @@
 	<view class="header bg-white">
 		<NavBar :bgColor="bgColor" :title="title" customColor="#000" :titleStyle="`color: ${themeColor}`" placeholder>
 		</NavBar>
-		<view class="    u-p-b-10">
-			<up-image src="https://view.cft.100ppi.com/Public/index-topbj/cfhlogo.png" width="100%" height="auto"
-				mode="widthFix"></up-image>
-		</view>
-	</view>
+		<image class="" style=" height: 70px" mode="heightFix" src="https://cft.100ppi.com/Public/index-logo.png" />
+	</view> 
 	<view class=" ">
-		<view class=" ">
-			<nut-steps direction="vertical">
-				<view class="ww">
-					<nut-step>
-						<template #icon>
-							<view class="text-base u-p-l-40">2026.03.18</view>
-						</template> 
-					</nut-step>
+		<view  class=" u-m-10 box-border"> 
+			<!--  #ifdef  APP-PLUS -->
+			<image  
+				src="https://cft.100ppi.com/Public/gptguide/dinyue.png" 
+				mode="widthFix" 
+				style="width: 100%; height: auto; display: block;"
+				@longpress="base.handleLongPress('https://cft.100ppi.com/Public/gptguide/dinyue.png')" 
+			/>
+			<!--  #endif -->
+			<!--  #ifdef  H5 || MP-WEIXIN -->
+			<image  
+				src="https://cft.100ppi.com/Public/gptguide/dinyue.png" 
+				mode="widthFix" 
+				show-menu-by-longpress
+				style="width: 100%; height: auto; display: block;" 
+			/>
+			<!--  #endif -->
+		</view>
+		<view class=" "> 
+			<nut-steps direction="vertical"  >
+				<view
+					v-for="item in dataList2"
+					:key="item.id || item.stitle"
+					:class="{
+						'ww': item.stitle
+					}"
+				>
+					<template v-if="item.id">
+						<nut-step  @click="base.handleGoto({url: '/pages/index/news_detail', params: {id: item.id}})" >
+							<template #icon>
+								<view>
+									<view class="text-base text-nowrap u-font-15">{{item.days}}日</view>
+									<!-- <view class="text-nowrap u-font-14 u-info-light-bg u-primary   u-p-l-12 u-p-r-12 u-radius-4">
+										<template v-if="item.type == '1'">快讯</template>
+										<template v-else-if="item.type == '2'">案例</template>
+									</view> -->
+								</view>
+							</template> 
+							<template #title>
+								<!-- <view class="u-info u-font-14">{{item.pubDate}}</view> -->
+								<view class="text-black u-p-t-4 u-font-15 ">{{item.title}}</view>
+							</template>
+							<template #content>
+								<view class="u-m-b-30 u-font-16 u-p-t-10 text-base">{{item.content}}</view> 
+							</template>
+						</nut-step>
+					</template>
+					<template v-else>  
+						<nut-step>
+							<template #icon>
+								<view class="text-base text-nowrap u-p-l-80 u-m-l-40 u-p-t-10 u-font-19 ">{{item.stitle}}</view>
+							</template> 
+						</nut-step> 
+					</template>
 				</view> 
-				<nut-step>
-					<template #icon>
-						<view class="u-info">18:54</view>
-					</template> 
-					<template #content>
-						<view class="u-m-b-20 u-font-13 u-p-t-10 text-base">港交所文件显示，小米集团于3月18日回购290万股B类股份，耗资1亿港元。港交所文件显示，小米集团于3月18日回购290万股B类股份，耗资1亿港元。</view> 
-					</template>
-				</nut-step>
-				<nut-step>
-					<template #icon>
-						<view class="u-info">18:54</view>
-					</template> 
-					<template #content>
-						<view class="u-m-b-20 u-font-13 u-p-t-10 text-base">港交所文件显示，小米集团于3月18日回购290万股B类股份，耗资1亿港元。</view> 
-					</template>
-				</nut-step>
-				<nut-step>
-					<template #icon>
-						<view class="u-info">18:54</view>
-					</template> 
-					<template #content>
-						<view class="u-m-b-20 u-font-13 u-p-t-10 text-base">【以防长称“所有伊朗人都是打击目标”】以色列国防部长卡茨18日表示，以军前一晚对伊朗首都德黑兰发动袭击，伊朗情报部长伊斯梅尔·哈提卜在袭击中身亡，以军“对伊朗的袭击强度正在增加”，“所有伊朗人都是打击目标”。港交所文件显示，小米集团于3月18日回购290万股B类股份，耗资1亿港元。</view> 
-					</template>
-				</nut-step>
-				<nut-step>
-					<template #icon>
-						<view class="u-info">18:54</view>
-					</template> 
-					<template #content>
-						<view class="u-m-b-20 u-font-13 u-p-t-10 text-base">港交所文件显示，小米集团于3月18日回购290万股B类股份，耗资1亿港元。港交所文件显示，小米集团于3月18日回购290万股B类股份，耗资1亿港元。</view> 
-					</template>
-				</nut-step>
-				<nut-step>
-					<template #icon>
-						<view class="u-info">18:54</view>
-					</template> 
-					<template #content>
-						<view class="u-m-b-20 u-font-13 u-p-t-10 text-base">港交所文件显示，小米集团于3月18日回购290万股B类股份，耗资1亿港元。</view> 
-					</template>
-				</nut-step>
-				<nut-step>
-					<template #icon>
-						<view class="u-info">18:54</view>
-					</template> 
-					<template #content>
-						<view class="u-m-b-20 u-font-13 u-p-t-10 text-base">【以防长称“所有伊朗人都是打击目标”】以色列国防部长卡茨18日表示，以军前一晚对伊朗首都德黑兰发动袭击，伊朗情报部长伊斯梅尔·哈提卜在袭击中身亡，以军“对伊朗的袭击强度正在增加”，“所有伊朗人都是打击目标”。港交所文件显示，小米集团于3月18日回购290万股B类股份，耗资1亿港元。</view> 
-					</template>
-				</nut-step>
-				<view class="ww">
-					<nut-step>
-						<template #icon>
-							<view class="text-base u-p-l-40">2026.03.17</view>
-						</template> 
-					</nut-step>
-				</view>
 				
-				<nut-step>
-					<template #icon>
-						<view class="text-base ">18:54</view>
-					</template> 
-					<template #content>
-						<view class="u-m-b-20 u-font-13 u-p-t-10 text-base">【以防长称“所有伊朗人都是打击目标”】以色列国防部长卡茨18日表示，以军前一晚对伊朗首都德黑兰发动袭击，伊朗情报部长伊斯梅尔·哈提卜在袭击中身亡，以军“对伊朗的袭击强度正在增加”，“所有伊朗人都是打击目标”。港交所文件显示，小米集团于3月18日回购290万股B类股份，耗资1亿港元。</view> 
-					</template>
-				</nut-step>
-				<nut-step>
-					<template #icon>
-						<view class="text-base ">18:54</view>
-					</template> 
-					<template #content>
-						<view class="u-m-b-20 u-font-13 u-p-t-10 text-base">【以防长称“所有伊朗人都是打击目标”】以色列国防部长卡茨18日表示，以军前一晚对伊朗首都德黑兰发动袭击，伊朗情报部长伊斯梅尔·哈提卜在袭击中身亡，以军“对伊朗的袭击强度正在增加”，“所有伊朗人都是打击目标”。港交所文件显示，小米集团于3月18日回购290万股B类股份，耗资1亿港元。</view> 
-					</template>
-				</nut-step>
-				<nut-step>
-					<template #icon>
-						<view class="text-base ">18:54</view>
-					</template> 
-					<template #content>
-						<view class="u-m-b-20 u-font-13 u-p-t-10 text-base">【以防长称“所有伊朗人都是打击目标”】以色列国防部长卡茨18日表示，以军前一晚对伊朗首都德黑兰发动袭击，伊朗情报部长伊斯梅尔·哈提卜在袭击中身亡，以军“对伊朗的袭击强度正在增加”，“所有伊朗人都是打击目标”。港交所文件显示，小米集团于3月18日回购290万股B类股份，耗资1亿港元。</view> 
-					</template>
-				</nut-step>
-				<nut-step>
-					<template #icon>
-						<view class="text-base ">18:54</view>
-					</template> 
-					<template #content>
-						<view class="u-m-b-20 u-font-13 u-p-t-10 text-base">【以防长称“所有伊朗人都是打击目标”】以色列国防部长卡茨18日表示，以军前一晚对伊朗首都德黑兰发动袭击，伊朗情报部长伊斯梅尔·哈提卜在袭击中身亡，以军“对伊朗的袭击强度正在增加”，“所有伊朗人都是打击目标”。港交所文件显示，小米集团于3月18日回购290万股B类股份，耗资1亿港元。</view> 
-					</template>
-				</nut-step>
-				<nut-step>
-					<template #icon>
-						<view class="text-base ">18:54</view>
-					</template> 
-					<template #content>
-						<view class="u-m-b-20 u-font-13 u-p-t-10 text-base">【以防长称“所有伊朗人都是打击目标”】以色列国防部长卡茨18日表示，以军前一晚对伊朗首都德黑兰发动袭击，伊朗情报部长伊斯梅尔·哈提卜在袭击中身亡，以军“对伊朗的袭击强度正在增加”，“所有伊朗人都是打击目标”。港交所文件显示，小米集团于3月18日回购290万股B类股份，耗资1亿港元。</view> 
-					</template>
-				</nut-step>
-				<nut-step>
-					<template #icon>
-						<view class="u-info">18:54</view>
-					</template>
-					<!-- <template #title>
-						<view class="text-black u-m-t-5">小标题</view> 
-					</template> -->
-					<template #content>
-						<view class="u-m-b-20 u-font-13 u-p-t-10 text-base">【以防长称“所有伊朗人都是打击目标”】以色列国防部长卡茨18日表示，以军前一晚对伊朗首都德黑兰发动袭击，伊朗情报部长伊斯梅尔·哈提卜在袭击中身亡，以军“对伊朗的袭击强度正在增加”，“所有伊朗人都是打击目标”。港交所文件显示，小米集团于3月18日回购290万股B类股份，耗资1亿港元。</view> 
-					</template>
-				</nut-step>
 			</nut-steps>
 		</view>
 		
 	</view>
+		<template v-if="dataList.length == 0">
+			<u-empty
+				mode="data"
+				:icon="empty"
+			>
+			</u-empty>
+		</template>
+		<template v-else>
+			<u-loadmore
+				:status="loadstatus"
+			/>
+		</template>
 	<u-safe-bottom></u-safe-bottom>
 	<MenusBar ></MenusBar>
 </template>
@@ -147,44 +96,32 @@
 		themeColor
 	} = toRefs(base)
 	const $api = inject('$api')
-	const keyword = ref('')
-	const ceshi = ref({
-		name: '姓名',
-		avatar: 'https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epPSGFKGZia5rYiauxAgxudU3gKzT7iamu4n4GNkPBuyQLHVMpicHu4ehAzt9ic5UP66zCyrnVyxqm0uDQ/132',
-		imgList: [
-			'https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epPSGFKGZia5rYiauxAgxudU3gKzT7iamu4n4GNkPBuyQLHVMpicHu4ehAzt9ic5UP66zCyrnVyxqm0uDQ/132',
-			'https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epPSGFKGZia5rYiauxAgxudU3gKzT7iamu4n4GNkPBuyQLHVMpicHu4ehAzt9ic5UP66zCyrnVyxqm0uDQ/132',
-			'https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epPSGFKGZia5rYiauxAgxudU3gKzT7iamu4n4GNkPBuyQLHVMpicHu4ehAzt9ic5UP66zCyrnVyxqm0uDQ/132',
-			'https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epPSGFKGZia5rYiauxAgxudU3gKzT7iamu4n4GNkPBuyQLHVMpicHu4ehAzt9ic5UP66zCyrnVyxqm0uDQ/132'
-		],
-		content: '内容内容内容内容内容内容内容内容内容内容内容内容内容内容',
-		login: '18757127948',
-		publishtime: '2026-02-26 09:11:59',
-		likenumber: 1,
-		chatnumber: 0,
-	})
+	const keyword = ref('') 
 	const top = ref(true)
+	const dataList2 = ref([])
 	const bgColor = computed(() => {
 		if (top.value) return 'transparent'
 		return '#d4e5ff'
 	})
 	const title = computed(() => {
 		if (top.value) return ''
-		return '7x24'
+		return '快讯'
 	})
 	const options = computed(() => {
 		return {
-			params: {
-				// type: type.value 
+			params: { 
+				all: 0
 			},
-			api: 'query_ptp_statist',
+			api: 'list_chance_recommend_zx',
 			getDataCallBack: (res) => {
 				if (res.code == 1) {
-					dataList.value = [...dataList.value, ...res.list]
+					dataList.value = [...dataList.value, ...res.list.res.pw_rec_list]
+					let list = changeList(res.list.res.pw_rec_list)
+					dataList2.value = [...dataList2.value, ...list ] 
 					// tuan.value = res.tuan
 					// kg.value = res.kg
-
-					if (dataList.value.length >= res.list.length) {
+					
+					if (dataList.value.length >= res.list.res.pw_rec_total) {
 						loadstatus.value = 'nomore'
 					} else {
 						loadstatus.value = 'loadmore'
@@ -193,7 +130,7 @@
 			}
 		}
 	})
-
+	 
 	const {
 		dataList,
 		curP,
@@ -204,17 +141,60 @@
 	} = useDataList(options)
 
 	onLoad(async (options) => {
-		// initDataList() 
+		initDataList()  
 	})
 	onPageScroll((e) => {
 		handleScroll(e)
-	})
+	}) 
 	// 滚动事件处理函数
 	const handleScroll = (e) => {
 		// 直接使用回调提供的滚动信息
 		const scrollTop = e.scrollTop
 		// 当滚动距离超过80px时，top设为false，否则设为true
 		top.value = scrollTop < 60
+	}
+	function changeList(data) {
+		let key = 'pubDate'
+		if (!Array.isArray(data) || data.length === 0) return []
+		
+		const result = []
+		let lastMonth = null
+		
+		// 处理每个数据项
+		data.forEach((item, index) => {
+			const postDate = item[key]
+			
+			if (!postDate) {
+				result.push(item)
+				return
+			}
+			// 解析日期，处理年份格式（如 '026' -> '2026'）
+			const dateParts = postDate.split(' ')[0].split('-')
+			let year = dateParts[0]
+			const month = dateParts[1]
+			const days = dateParts[2]
+			
+			
+			// 修复年份格式
+			if (year.length === 3 && year.startsWith('0')) {
+				year = '2' + year
+			} else if (year.length === 2) {
+				year = '20' + year
+			}
+			
+			const currentMonth = `${year}-${month}`
+			const stitle = `${year}年${month}月`
+			let isHave = dataList2.value.some(ele => ele.stitle == stitle)
+			// 第一个数据项或月份不同时，插入年月标题
+			if ((index === 0 || currentMonth !== lastMonth) && !isHave) {
+				result.push({ stitle })
+				lastMonth = currentMonth
+			}
+			
+			result.push({...item, days})
+		})
+		
+		return result
 	}
 </script>
 
@@ -226,6 +206,7 @@
 			.nut-step.nut-step-wait .nut-step-icon.is-icon {
 				background-color: transparent!important;
 				border: 0!important;
+				align-items: start;
 			}
 			.nut-steps-vertical .nut-step-line {
 				background: #eee!important;
@@ -247,7 +228,9 @@
 		.ww {
 			position: sticky;
 			top: 44px;
-			z-index: 100;
+			z-index: 20;
+			transform: translateZ(0);
+        	will-change: position;
 			::v-deep {  
 				.nut-step {
 					background-color: #ebf1fc!important;

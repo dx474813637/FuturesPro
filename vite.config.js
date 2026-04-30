@@ -14,7 +14,7 @@ export default defineConfig({
 		hmr: true,
 		proxy: { 
 			'/Ppi': { // 匹配请求路径，
-				target: 'https://wx.rawmex.cn/', // 代理的目标地址
+				target: 'https://p.cft.100ppi.com/', // 代理的目标地址
 				// 开发模式，默认的127.0.0.1,开启后代理服务会把origin修改为目标地址
 				changeOrigin: true,
 				// secure: true, // 是否https接口
@@ -30,7 +30,7 @@ export default defineConfig({
 		minify: 'terser',
 		terserOptions: {
 			compress: {
-				drop_console: true,
+				drop_console: false,
 			},
 		},
 		rollupOptions: {

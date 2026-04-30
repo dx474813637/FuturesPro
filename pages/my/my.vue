@@ -2,11 +2,24 @@
 
 	<view> 
 		<NavBar :bgColor="bgColor"  title="个人中心" :backBtn="false" :titleStyle="`color: ${themeColor}`" placeholder >
+			<!-- #ifndef MP-WEIXIN -->
 			<template #right>
 				<view @click="base.handleGoto('/pages/my/settings')">
 					<up-icon name="setting" size="20"></up-icon>
 				</view>
 			</template>
+			<!-- #endif -->
+			<!-- #ifdef MP-WEIXIN -->
+			<template #left>
+				<view class="u-nav-slot u-flex" >
+					<nut-icon name="home" @click="base.handleGoto('/pages/index/index')"></nut-icon> 
+					<up-line direction="column" :hairline="false" length="20" margin="0 12px"></up-line> 
+					<view @click="base.handleGoto('/pages/my/settings')">
+						<up-icon name="setting" size="20"></up-icon>
+					</view>
+				</view> 
+			</template>
+			<!-- #endif -->
 		</NavBar>
 		<view class="header">
 			<view class="u-p-10 "> 
@@ -59,7 +72,7 @@
 				</view>
 			</view>
 			
-			<view class="u-p-l-20 u-p-r-20 u-p-b-20  box-border  " v-if="partner == 1">
+			<view class="u-p-l-20 u-p-r-20 u-p-b-20  box-border  " v-if="partner == 1 && shenhe_flag != 1">
 				<view class="u-radius-12   u-p-20 box-border   bg-white u-flex u-flex-items-center text-base" >
 					<view class="u-flex-1 u-flex u-flex-items-baseline u-flex-center " @click="amountBtn('1')">
 						<view class="u-m-r-10">可用</view>
@@ -75,9 +88,17 @@
 			<view class="u-p-l-20 u-p-r-20 u-p-b-20  box-border  ">
 				<view class="u-radius-12   u-p-25 box-border   bg-white" >
 					<view class="u-flex u-flex-items-center u-flex-between u-m-b-20">
-						<view class="u-flex u-flex-items-center u-p-l-10">
-							<view class="u-flex u-primary-bg text-white u-radius-30 u-flex-items-center u-flex-center u-p-2"><nut-icon name="hangye" font-class-name="custom-icon" class-prefix="custom-icon" size="14" ></nut-icon></view>
-							<view class="text-bold u-m-l-12 ">合伙人中心</view>
+						<view class="u-flex u-flex-items-center u-flex-1">
+							<view class="u-flex u-flex-items-center u-p-l-10">
+								<view class="u-flex u-primary-bg text-white u-radius-30 u-flex-items-center u-flex-center u-p-2"><nut-icon name="hangye" font-class-name="custom-icon" class-prefix="custom-icon" size="14" ></nut-icon></view>
+								<view class="text-bold u-m-l-12 ">合伙人中心</view>
+							</view>
+							<view class="u-flex u-flex-items-center u-m-l-40" @click="base.handleGoto('/pages/partner/about_develop')"> 
+								<view class=" text-base u-m-r-5 u-font-14">如何发展</view>
+								<view class="u-flex u-primary-light-bg text-white u-radius-30 u-flex-items-center u-flex-center u-p-6">
+									<up-icon name="question" color="#007aff" size="12"></up-icon>
+								</view> 
+							</view>
 						</view>
 						<view class="u-flex u-flex-items-center" @click="base.handleGoto('/pages/partner/about_partner')"> 
 							<view class=" text-base u-m-r-5 u-font-14">关于合伙人</view>
@@ -174,12 +195,12 @@
 		</view> 
 			 
 		<view class="tabs-content u-p-20" v-if="tabValue == 'gp'">
-			
+			 
 			<view 
 				class="vip-card u-p-20 u-radius-10 u-m-b-12" 
 				@click="base.handleGoto({url: '/pages/order/order', params: {type: '3'}})"
 				v-if="gpt.order_id"
-			>
+			> 
 				<view class="u-flex u-flex-items-center u-flex-between">
 					<view class="u-flex u-flex-items-center">
 						<view class="u-font-18" style="color: #29455f">股票通</view>
@@ -239,7 +260,7 @@
 							<view class="u-flex u-flex-items-center u-flex-between u-m-b-10">
 								<view class="u-font-17  u-flex u-flex-items-center u-warning ">
 									<nut-icon name="huore" font-class-name="custom-icon" class-prefix="custom-icon" ></nut-icon>
-									<view class="u-m-l-10 text-black">热点选股</view>
+									<view class="u-m-l-10 text-black">{{infoConfig.gpt.xgff[0].title}}</view>
 								</view>
 								<view>
 									<view class="u-primary-bg text-white u-radius-15 u-flex u-flex-items-center u-p-4 u-p-l-14 u-p-r-20" >
@@ -248,7 +269,7 @@
 									</view>
 								</view>
 							</view> 
-							<view class="u-font-14">利用n天商品价格上涨幅度，筛选热点商品，从而选择合适的周期股投资机会。</view>
+							<view class="u-font-14">{{infoConfig.gpt.xgff[0].content}}</view>
 						</view>
 					</view>
 					<view class="u-radius-10 u-primary-light-bg u-p-20" @click="base.handleGoto({url:'/pages/analysis/analysis',params:{mode:'2'}})">
@@ -256,7 +277,7 @@
 							<view class="u-flex u-flex-items-center u-flex-between u-m-b-10">
 								<view class="u-font-17  u-flex u-flex-items-center u-primary "> 
 									<nut-icon name="tongji" font-class-name="custom-icon" class-prefix="custom-icon" size="20" ></nut-icon> 
-									<view class="u-m-l-10 text-black">季报选股</view>
+									<view class="u-m-l-10 text-black">{{infoConfig.gpt.xgff[1].title}}</view>
 								</view>
 								<view>
 									<view class="u-primary-bg text-white u-radius-15 u-flex u-flex-items-center u-p-4 u-p-l-14 u-p-r-20" >
@@ -265,7 +286,7 @@
 									</view>
 								</view>
 							</view> 
-							<view class="u-font-14">利用季报周期内商品价格上涨幅度，提前于季报与年报，发现周期股买入信号。</view>
+							<view class="u-font-14">{{infoConfig.gpt.xgff[1].content}}</view>
 						</view>
 					</view>
 				</view>
@@ -275,7 +296,37 @@
 		<!-- 期货内容 -->
 		<view class="tabs-content u-p-20" v-else-if="tabValue == 'qh'">
 			
-			<view class="vip-card u-p-20 u-radius-10 u-m-b-12" @click="base.handleGoto('/pages/subscribe/center/center?tabValue=qh')">
+			<view class="vip-card u-p-20 u-radius-10 u-m-b-12" v-if="qht.order_id"> 
+				<view class="u-flex u-flex-items-center u-flex-between" @click="base.handleGoto({url: '/pages/order/order', params: {type: '2'}})">
+					<view class="u-flex u-flex-items-center">
+						<view class="u-font-18" style="color: #29455f">期货通</view>
+						<view class="tags-w u-flex u-m-l-10">
+							<nut-tag round custom-color="linear-gradient(45deg, #F9FDE1, #FFD385)" text-color="#8D4E0D">
+								<view class="u-p-l-8 u-p-r-8 u-flex u-flex-items-center u-flex-center">
+									<nut-icon name="f-vip" font-class-name="custom-icon" class-prefix="custom-icon" size="24"></nut-icon> 
+								</view> 
+							</nut-tag> 
+						</view> 
+					</view>
+					<view class="u-flex u-flex-items-center"> 
+						<view class="u-font-14 " style="color: #9f5200">
+							<template v-if="qht.status == 1">
+								{{qht.expire_date}}到期
+							</template>
+							<template v-else-if="qht.status == 0">
+								待支付
+							</template>
+						</view>
+						<view class="tags-w u-flex u-m-l-10">
+							<up-icon name="arrow-right" size="14" color="#9f5200"></up-icon> 
+						</view> 
+					</view>
+				</view> 
+				<view class="u-m-t-20">
+					<view class=" u-warning-light-bg text-primary u-p-12 u-radius-18 u-font-16 u-text-center" @click="base.handleGoto('/pages/qxt/qxt')">查 看</view>
+				</view>
+			</view>
+			<view class="vip-card u-p-20 u-radius-10 u-m-b-12"   @click="base.handleGoto('/pages/qxt/qxt')" v-else>
 				<view class="u-flex u-flex-items-center u-flex-between">
 					<view class="u-flex u-flex-items-center">
 						<view class="u-font-18" style="color: #29455f">订阅期货通</view>
@@ -298,57 +349,36 @@
 					<view class=" u-warning u-p-12 u-radius-8 u-font-13" style="background-color: rgba(255,255,255,.8)">关注基差变化，把握投资机会！一年只需1999元，即可关注50+期货商品。</view>
 				</view>
 			</view>
-			<view class="vip-card u-p-20 u-radius-10 u-m-b-12">
-				<view class="u-flex u-flex-items-center u-flex-between" @click="base.handleGoto('/pages/order/order')">
-					<view class="u-flex u-flex-items-center">
-						<view class="u-font-18" style="color: #29455f">期货通</view>
-						<view class="tags-w u-flex u-m-l-10">
-							<nut-tag round custom-color="linear-gradient(45deg, #F9FDE1, #FFD385)" text-color="#8D4E0D">
-								<view class="u-p-l-8 u-p-r-8 u-flex u-flex-items-center u-flex-center">
-									<nut-icon name="f-vip" font-class-name="custom-icon" class-prefix="custom-icon" size="24"></nut-icon> 
-								</view> 
-							</nut-tag> 
-						</view> 
-					</view>
-					<view class="u-flex u-flex-items-center"> 
-						<view class="u-font-14 " style="color: #9f5200">待支付 / 2028-03-07 到期</view>
-						<view class="tags-w u-flex u-m-l-10">
-							<up-icon name="arrow-right" size="14" color="#9f5200"></up-icon> 
-						</view> 
-					</view>
-				</view> 
-				<view class="u-m-t-20">
-					<view class=" u-warning-light-bg text-primary u-p-12 u-radius-18 u-font-16 u-text-center" @click="base.handleGoto('/pages/subscribe/qht/qht')">查 看</view>
-				</view>
-			</view>
 			 
 			<view class="tabs-content-item u-p-20 u-p-l-30 u-p-r-30 u-p-b-40 u-radius-16">
 				<view class="u-flex u-flex-items-center u-flex-between u-m-b-20">
-					<view class="text-bold u-font-18" style="color: #1254B3;">核心原理</view>
+					<view class="text-bold u-font-16" style="color: #1254B3;">{{infoConfig.qxt.hxyl.title}}</view>
 				</view>
-				<view class="" style="color: #67799f;">
-					现货价格决定期货价格，期货价格影响现货价格；因此关注基差变化（基差=现货价格-期货价格），发现期货投资机会。
+				<view class="u-font-14" style="color: #67799f;">
+					<u-parse :content="infoConfig.qxt.hxyl.content"></u-parse>
+					<!-- <rich-text v-for="(item, index) in infoConfig.qxt.hxyl.content" :nodes="item" :key="index"> </rich-text> -->
 				</view>
 			</view> 
 			<view class="tabs-content-item u-p-20 u-p-l-30 u-p-r-30 u-p-b-40 u-radius-16">
 				<view class="u-flex u-flex-items-center u-flex-between u-m-b-20">
-					<view class="text-bold u-font-18" style="color: #1254B3;">投资策略</view>
+					<view class="text-bold u-font-16" style="color: #1254B3;">{{infoConfig.qxt.jtff.title}}</view>
 				</view>
-				<view class="" style="color: #67799f;">
-					利用1个关键指标+1个辅助指标，发现期货开仓方向。1个关键指标是指不同周期的基差5档位置，1个辅助指标是现货价格的30/60/90周期5档位置。
+				<view class="u-font-14" style="color: #67799f;">
+					<u-parse :content="infoConfig.qxt.jtff.content"></u-parse>
+					<!-- <view v-for="(item, index) in infoConfig.qxt.jtff.content" :key="index">{{item}}</view> -->
 				</view>
-			</view> 
+			</view>  
 		</view>
 		
 	</view>
 	
 	
-	<view class="u-p-20  box-border  ">
+	<!-- <view class="u-p-20  box-border  " v-if=" shenhe_flag != 1">
 		<view class="u-radius-12   u-p-25 box-border   bg-white" >
 			<view class="u-flex u-flex-items-center u-flex-between u-m-b-20">
 				<view class="u-flex u-flex-items-center u-p-l-10">
 					<view class="u-flex u-primary-bg text-white u-radius-30 u-flex-items-center u-flex-center u-p-2"><nut-icon name="moneybagfill" font-class-name="custom-icon" class-prefix="custom-icon" size="14" ></nut-icon></view>
-					<view class="text-bold u-m-l-12 ">财富号</view>
+					<view class="text-bold u-m-l-12 ">财富通</view>
 				</view>
 				<view class="u-flex u-flex-items-center" @click="base.handleGoto('/pages/index/cfh')"> 
 					<view class=" text-base u-m-r-5 u-font-14">发现</view>
@@ -373,7 +403,7 @@
 				</view> 
 			</view>
 		</view>
-	</view>
+	</view> -->
 	<view class="u-p-20 u-p-l-40 u-p-r-40" v-if="login && login != '0'"><u-button type="primary" plain shape="circle" @click="user.logout">退出登录</u-button></view>
 	<u-safe-bottom></u-safe-bottom>
 	
@@ -388,16 +418,21 @@
 </template>
 
 
-<script setup>   
+<script setup>    
 	const $api = inject('$api') 
 import {userStore } from '@/stores/user.js'  
 	const user = userStore() 
 import {useCateStore, baseStore} from '@/stores/base.js'  
+	const cate = useCateStore() 
+	const {infoConfig} = toRefs(cate)
 	const base = baseStore() 
 	const {themeColor} = toRefs(base)
 	const {
 		gpt, 
-		gptVip, 
+		gptVip,
+		shenhe_flag,
+		qht, 
+		qhtVip, 
 		subsVip,
 		userInfo, 
 		partner, 
@@ -410,6 +445,9 @@ import {useCateStore, baseStore} from '@/stores/base.js'
 	} = toRefs(user)
 	const top = ref(true)
 	const amountShow = ref(false)
+	// #ifdef H5
+	// const baseUrl = ref(window._url2)
+	// #endif
 	const bgColor = computed(() => {
 		// if(top.value) return '#BEDAFF'
 		return '#BEDAFF'
@@ -440,7 +478,7 @@ import {useCateStore, baseStore} from '@/stores/base.js'
 		{
 			name: '期货通',
 			value: 'qh', 
-			disabled: true,
+			disabled: false,
 			icon: 'tongji'
 		}, 
 		// {

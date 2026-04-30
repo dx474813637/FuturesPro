@@ -163,12 +163,10 @@
 			<nut-collapse v-model="activeNames" >
 			    <nut-collapse-item :name="1" :border="false"> 
 					<template #title>
-						<view class="text-black u-font-16">核心原理</view> 
+						<view class="text-black u-font-16">{{infoConfig.gpt.hxyl.title}}</view> 
 				    </template>
-					<view>
-						商品价格影响上市公司利润，且商品价格上涨时间 T+n(n=5/10/20/30天)领先于股票价格上涨时间，
-						因此关注商品价格，提前发现股票买入机会。
-					</view>
+					<u-parse :content="infoConfig.gpt.hxyl.content"></u-parse>
+					<!-- <view>{{infoConfig.gpt.hxyl.content}}</view> -->
 			    </nut-collapse-item> 
 			</nut-collapse>
 		</view>
@@ -179,8 +177,7 @@
 						<view class="text-black u-font-16">选股方法</view> 
 				    </template>
 					<view>
-						<view>1.热点选股：利用n天商品价格上涨幅度，筛选热点商品，从而选择合适的周期股投资机会。</view>
-						<view>2.季报选股：利用季报周期内商品价格上涨幅度，提前于季报与年报，发现周期股买入信号。</view>
+						<view v-for="(item, index) in infoConfig.gpt.xgff" :key="index">{{`${index+1}、${item.title}：${item.content}`}}</view>
 					</view>
 			    </nut-collapse-item> 
 			</nut-collapse>
@@ -189,11 +186,10 @@
 			<nut-collapse v-model="activeNames3" >
 			    <nut-collapse-item :name="1" :border="false"> 
 					<template #title>
-						<view class="text-black u-font-16">投资策略</view> 
+						<view class="text-black u-font-16">{{infoConfig.gpt.jtff.title}}</view> 
 				    </template>
-					<view>
-						投资者利用"1个关键指标+2个辅助指标"规则进行选股投资，1个关键指标是指商品价格周期涨幅(如5/5，即5天涨幅超5%)，2个辅助指标是指股价90天内的5档位置与AI大模型财报评级。
-					</view>
+					<u-parse :content="infoConfig.gpt.jtff.content"></u-parse>
+					<!-- <view>{{infoConfig.gpt.jtff.content}}</view> -->
 			    </nut-collapse-item> 
 			</nut-collapse>
 		</view>
@@ -279,7 +275,7 @@
 	const $api = inject('$api')  
 	const user = userStore() 
 	const cate = useCateStore() 
-	const {seasonConfig_sdate, seasonConfig_loading} = toRefs(cate) 
+	const {seasonConfig_sdate, seasonConfig_loading, infoConfig} = toRefs(cate) 
 	const base = baseStore() 
 	const {themeColor, analysisModeList} = toRefs(base) 
 	const top = ref(true)

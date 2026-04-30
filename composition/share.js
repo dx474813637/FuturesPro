@@ -45,8 +45,9 @@ export function share(config={}) {
 				title: res.title
 			})
 		} 
+		// #ifdef H5
 		base.wxShare(res)
-		
+		// #endif
 	}
  
 	return {

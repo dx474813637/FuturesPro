@@ -6,7 +6,10 @@
 			<view class="u-primary u-font-18 text-bold u-p-l-20 u-flex u-flex-items-center"> 
 				<view class=" ">推广海报</view>
 			</view>
-			<view class="text-base u-font-14 ">点击下方资讯下载或转发海报推广</view>
+			<view class="text-base u-font-14 u-text-right u-flex-1">点击下方资讯下载或转发海报推广</view>
+			<view class="u-font-13 u-error u-m-l-10 u-error-light-bg u-p-l-12 u-p-r-12 u-radius-4"
+				@click="base.handleGoto({url: '/pages/partner/haibao_detail', params: {id: 'al', uid: share_id ,login: login }})"
+			>案例海报</view>
 		</view> 
 	</view>
 	<view >
@@ -29,6 +32,13 @@
 			</view>
 		</view> -->
 		<view class="main u-p-20 box-border">
+			<view class="bg-white u-radius-8 u-m-b-20 u-p-12 box-border">
+				<image
+					src="https://cft.100ppi.com/Public/gptguide/anlitop.png" 
+					mode="widthFix" 
+					style="width: 100%; height: auto;display: block;" 
+				/>
+			</view>
 			<div class="loading-w u-flex u-flex-items-center u-flex-center" style="height: 100%;" v-if="loadstatus == 'loading'">
 				<up-loading-icon :show="loadstatus == 'loading'"></up-loading-icon>
 			</div>
@@ -161,7 +171,7 @@
 </style>
 <style lang="scss" scoped>
 	.header { 
-		background-image: url('https://p.cft.100ppi.com/Public/index-topbj/index-topbj.png');
+		background-image: url('https://cft.100ppi.com/Public/index-topbj/index-topbj.png');
 		background-size: 100% auto;
 		background-repeat: no-repeat;
 		background-position: 0 0;

@@ -41,7 +41,13 @@ export default {
 			messageManager.registerToast(proxy.$refs.globalToast)
 			// console.log('GlobalToast实例已注册到消息管理器')
 		}
-		base.wxShare()
+		// #ifdef H5
+		try{
+			base.wxShare()
+		}
+		catch(e) {console.log(e)}
+		
+		// #endif
 	},
 	methods: {
 		// 全局方法

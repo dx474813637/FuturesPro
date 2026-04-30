@@ -6,7 +6,7 @@ import {
 	baseStore
 } from '@/stores/base'; 
 import pinia  from '@/stores/index.js'; 
-import {inject, nextTick} from 'vue'
+import {inject, nextTick} from 'vue' 
 
 	// const $ws = inject('$ws')
 const user = userStore(pinia)
@@ -19,6 +19,7 @@ const base = baseStore(pinia)
  	'/pages/login/login', 
  	'/pages/login/code', 
  	'/pages/partner/haibao_detail', 
+ 	'/pages/qxt/qxt', 
 	// { pattern: /^\/pages\/login*/ },
 	{ pattern: /^\/pages\/index*/ },
  // 	'/pages_user/index/index', 
@@ -46,6 +47,11 @@ const base = baseStore(pinia)
 const gptStateList = [
 	{ pattern: /^\/pages\/analysis*/ }
 ]
+const appTokenWhitePages = [
+	'/pages/index/index', 
+	'/pages/index/gpt', 
+	'/pages/qxt/qxt', 
+]
  
 export function permissionBase(e, data) {
 		
@@ -65,7 +71,7 @@ export function permissionBase(e, data) {
 	 			return url === item
 	 		})  
 			// 不是白名单并且没有token
-			if (!pass && login.value == 0) { 
+			if (!pass && (login.value == 0 || login.value === null)) { 
 				uni.setStorageSync('prePage', e.url)
 				uni.navigateTo({
 					url: "/pages/login/login",
@@ -118,7 +124,7 @@ export function permissionBase(e, data) {
 	 	// 	return false
 	 	// }
 	 	
-	 	if (!pass) { 
+	 	if (pass) { 
 	 		// if (user.myCpy.hasOwnProperty('state') && user.myCpy
 	 		// 	.state == 0) { 
 	 		// 	uni.showToast({
@@ -148,6 +154,17 @@ export function permissionBase(e, data) {
 	 		// 	return false
 	 		// } 
 	 	} 
+		// #ifdef APP-PLUS 
+		// let isflag = !appTokenWhitePages.some((item) => {
+		// 	if (typeof(item) === 'object' && item.pattern) { 
+		// 		return item.pattern.test(url)
+		// 	}
+		// 	return url === item
+		// })  
+		// if(isflag && !uni.getStorageSync('userid')) {
+		// 	await user.getNewAppToken()
+		// }
+		// #endif
 	 	//记录路径参数数据 底部菜单跳转判断买卖盘用
 	 	let paramsObj = {}
 	 	e.url.split('?')[1]?.split('&').forEach(item => {
@@ -170,11 +187,20 @@ export function permissionBase(e, data) {
  
 export async function routingIntercept(data) {
 	// console.log($ws)   
-	const list = ['navigateTo', 'redirectTo', 'reLaunch', 'switchTab'] 
+	const list = ['navigateTo', 'redirectTo', 'reLaunch', 'switchTab', 'navigateBack'] 
 	// 用遍历的方式分别为,uni.navigateTo,uni.redirectTo,uni.reLaunch,uni.switchTab这4个路由方法添加拦截器
 	list.forEach(item => {
 		uni.addInterceptor(item, {
-			invoke(e) {  
+			invoke(e) {    
+				// if(item == 'navigateBack') {
+				// 	let from = getCurrentPages()[getCurrentPages().length - 1]
+				// 	let to = getCurrentPages()[getCurrentPages().length - 2]
+				// 	if(from.route == 'pages/order/order') {
+				// 		window.location.href = window._url3 + to.$page.fullPath
+				// 		return false
+				// 	} 
+				// }
+				// console.log(getCurrentPages())
 				// const r = uni.getStorageSync('WebSocketInfo')
 				// data.$ws.send('{"type":"xcx2","client_name":"' + r.w_login + '","rawmex_login":"' +
 				// 	r.login + '","room_id":"wstm_xcx","token":"' + r.w_token +

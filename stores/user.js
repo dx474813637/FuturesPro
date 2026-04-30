@@ -9,7 +9,8 @@ export const userStore = defineStore('user', {
 			login: '', 
 			subscription_loading: false,
 			gpt: {},
-			qht: {}, 
+			qht: {},  
+			shenhe_flag: 0,
 			share_id: '',
 			partner: 0,
 			partner_amount: 0,
@@ -37,7 +38,14 @@ export const userStore = defineStore('user', {
 		}
 	}, 
 	actions: {
-		async getUserData() {
+		async getUserData() { 
+			 
+			// #ifdef APP-PLUS 
+			// uni.removeStorageSync('userid') 
+			if(!uni.getStorageSync('userid')) {
+				await this.getNewAppToken()
+			}
+			// #endif
 			const menus = menusStore()
 			await menus.getMenusData()
 			if(this.login && this.login != '0') {
@@ -117,6 +125,16 @@ export const userStore = defineStore('user', {
 				});
 			});
 		},
+		async refreshAppToken() {
+			try{
+				// let code = await this.get_xcx_code();
+				// console.log('code打印:',code) 
+				let data = uni.getSystemInfoSync() 
+				return apis.app_login({params: {id: data.deviceId}}) 
+			}catch(e){
+				return e
+			}
+		},
 		async refreshToken() {
 			try{
 				let code = await this.get_xcx_code();
@@ -128,6 +146,17 @@ export const userStore = defineStore('user', {
 		},
 		async getNewToken() {
 			this.refreshToken().then(res => {
+				console.log('获取token成功，存入头部',res)
+				this.saveUserInfo(res) 
+				let userid = "" 
+				userid = res.userid
+				uni.$u.http.setToken({
+					userid: userid
+				}) 
+			}) 
+		},
+		async getNewAppToken() {
+			this.refreshAppToken().then(res => {
 				console.log('获取token成功，存入头部',res)
 				this.saveUserInfo(res) 
 				let userid = "" 

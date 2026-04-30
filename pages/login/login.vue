@@ -51,6 +51,21 @@
 					</up-form-item>
 				</template>
 			</up-form>
+			<!--  #ifdef  APP-PLUS -->
+			<view class="u-flex u-flex-items-center u-p-l-20">
+				<up-checkbox-group 
+					v-model="agree"
+					placement="row"
+					@change="agreeChange"
+					>
+					<up-checkbox shape="circle" name="agree"></up-checkbox>
+				</up-checkbox-group>
+				<view class="hint u-flex-1 u-p-l-5 text-base">
+					已同意
+					<text @click="base.handleGoto('/pages/index/app_about')" class="u-primary">《服务协议》及《隐私政策》</text>
+				</view>
+			</view>
+			<!--  #endif -->
 			<!-- <view class="tips" v-if="logintype == 1">未注册的手机号验证后将自动注册</view> -->
 			<view class="u-m-t-30">
 				<up-button type="primary" :ripple="true" @click="submit" shape="circle"  :customStyle="{height: '50px'}">
@@ -80,7 +95,7 @@
 			<up-parse :content="denglu_info[logintype == 1? 'info1' : 'info2']"></up-parse>
 		</view> -->
 		<!-- <view class="buttom safe-area-inset-bottom ">
-			<view class="u-flex u-flex-items-center u-p-20 u-p-l-40">
+			<view class="u-flex u-flex-items-center  u-p-20 u-p-l-40">
 				<up-checkbox-group 
 					v-model="agree"
 					placement="row"
@@ -89,8 +104,8 @@
 					<up-checkbox name="agree"></up-checkbox>
 				</up-checkbox-group>
 				<view class="hint u-flex-1 u-p-l-5">
-					注册/登录前请先阅读并勾选同意
-					<text @click="base.handleGoto('/pages/login/xieyi')" class="link">《注册服务协议》</text>
+					已同意
+					<text @click="base.handleGoto('/pages/login/xieyi')" class="link">《服务协议》及《隐私政策》</text>
 				</view>
 			</view>
 			<up-safe-bottom></up-safe-bottom>
@@ -112,7 +127,9 @@
 		login: '',
 		passwd: '',
 	})
+	const agree = ref([])
 	const passwordType = ref(true)
+	const uid = ref('')
 	const denglu_info = ref({})
 	const rules = computed(() => {
 		if(logintype.value == 2) {
@@ -150,7 +167,13 @@
 		return {}
 	})
 	
-	onLoad(() => {
+	onLoad((options) => {
+		if(options.hasOwnProperty('type')) {
+			logintype.value = options.type
+		}
+		if(options.hasOwnProperty('uid')) {
+			uid.value = options.uid
+		}
 		// const res = await $api.denglu_info()
 		// if(res.code == 1) {
 		// 	denglu_info.value = res.list
@@ -163,13 +186,15 @@
 		uForm.value.setRules(rules.value)
 	} 
 	function submit() {
-		// if(this.agree.length == 0) {
-		// 	uni.showToast({
-		// 		title: '请先阅读并勾选底部协议',
-		// 		icon: 'none'
-		// 	})
-		// 	return
-		// }
+		// #ifdef APP-PLUS
+		if(agree.value.length == 0) {
+			uni.showToast({
+				title: '请先阅读并勾选《服务协议》及《隐私政策》',
+				icon: 'none'
+			})
+			return
+		}
+		// #endif 
 		uForm.value.validate().then(valid => {
 			if (valid) {
 				// console.log('验证通过');
@@ -187,7 +212,7 @@
 	} 
 	function getCode() {
 		uni.navigateTo({
-			url: `/pages/login/code?login=${form.value.login}`
+			url: `/pages/login/code?login=${form.value.login}&uid=${uid.value}`
 		})
 	} 
 	async function getLogin() {
@@ -196,7 +221,7 @@
 		})
 		// await uni.$u.sleep(1800)
 		let res = await $api.login({
-			params: {...form.value, cate: logintype.value == 2? 1:0}
+			params: {...form.value, cate: logintype.value == 2? 1:0, uid: uid.value}
 		})
 		if(res.code == 1) {
 			// uni.setStorageSync('login', res.data.back.login)
